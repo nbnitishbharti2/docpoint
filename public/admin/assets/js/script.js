@@ -317,6 +317,51 @@
 			}
 		});
 	});
+
+	// Chnage Speciality Status
+	$('.speciality').on("change", function(){
+		var status = '';
+		var speciality_id = $(this).attr("data-id");
+		if ($(this).prop('checked')==true){ 
+			status = "active";
+		} else {
+			status = "Inactive";
+		}
+		$.ajax({
+			url: change_speciality_status,
+			method: 'POST',
+			cache: false,
+			data: {speciality_id:speciality_id,status:status},
+			success: function(data) {
+				if(data.status == true){
+					$.toast({
+						heading: 'Success',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'success',
+						position : 'top-right'
+					});
+				} else {
+					$.toast({
+						heading: 'Error',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'error',
+						position : 'top-right'
+					});
+				}
+			},
+			error: function(error) {
+				$.toast({
+					heading: 'Error',
+					text: error,
+					showHideTransition: 'slide',
+					icon: 'error',
+					position : 'top-right'
+				});
+			}
+		});
+	});
 })(jQuery);
 
 //Delete doctor show popup function

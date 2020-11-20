@@ -4,13 +4,13 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Mydocpoint</title>
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap.min.css') }}">
+    <title>Mydocpoint</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/icofont.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/slick.css') }}">
-	<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css') }}">
-	<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/media.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/media.css') }}">
   </head>
 <body>
 <!-- header -->
@@ -20,14 +20,14 @@
       <div class="col-md-4">
         <!-- logo -->
         <div class="logo">
-          <a href="#"><h2>Mydocpoint</h2></a>  
+          <a href="{!! url('/') !!}"><h2>Mydocpoint</h2></a>  
         </div>
         <!-- logo end -->
       </div>
       <div class="col-md-8">
         <!-- top text -->
         <div class="top-txt">
-          <p>List your practice on Mydocpoint</p><span> | </span>
+          <p><a href="{!! route('doctor.login') !!}">List your practice on Mydocpoint</a></p><span> | </span>
           <!-- dropdown -->
           <div class="dropdown">
             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -36,8 +36,8 @@
             </a>
           
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="#">Login</a>
-              <a class="dropdown-item" href="#">Signup</a>
+              <a class="dropdown-item" href="{!! route('user.login') !!}">Login</a>
+              <a class="dropdown-item" href="{!! route('user.registration') !!}">Signup</a>
             </div>
           </div>
           <!-- dropdown end -->

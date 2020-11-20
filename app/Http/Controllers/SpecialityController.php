@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Speciality;
 use Validator;
+use Response;
 use Log;
 
 class SpecialityController extends Controller 
@@ -138,6 +139,25 @@ class SpecialityController extends Controller
         } catch(\Exception $e) {
             Log::error("Error in edit on SpecialityController ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to change Speciality status
+     * @param Illuminate\Http\Request $request
+     * @return Response array
+     * 
+     */
+    public function changeStatus(Request $request)
+    {
+        try {
+            $speciality = Speciality::find($request->speciality_id);
+            $speciality->status = ($request->status == "active") ? 'Active' : 'Inactive';
+            $speciality->save();
+            return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
+        } catch(\Exception $e) {
+            Log::error("Error in changeStatus on SpecialityController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
 }

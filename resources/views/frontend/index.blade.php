@@ -61,86 +61,18 @@
                     <div class="col-lg-12">
                         <h3 class="special-heading">Top specialties on Mydocpoint:</h3>
                     </div>
+                    @foreach($speciality as $key => $value)
                     <div class="col-lg-3 col-md-4 col-6">
                         <!-- special item -->
                         <a href="#">
                             <div class="spcl-item">
-                                <img src="{{ asset('public/storage/frontend/img/md1.png') }}" alt="icon">
-                                <p>Primary Care</p>
+                                <img src="{{ ($value->pic && file_exists('public/storage/images/specialities/'.$value->pic)) ? asset('public/storage/images/specialities/'.$value->pic) : asset('public/storage/images/specialities/speciality-icon.png') }}" alt="{{ $value->name }}">
+                                <p>{{ $value->spec_name }}</p>
                             </div>
                         </a>
                         <!-- special item end -->
                     </div>
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <!-- special item -->
-                        <a href="#">
-                            <div class="spcl-item">
-                                <img src="{{ asset('public/storage/frontend/img/md2.png') }}" alt="icon">
-                                <p>OBGYN</p>
-                            </div>
-                        </a>
-                        <!-- special item end -->
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <!-- special item -->
-                        <a href="#">
-                            <div class="spcl-item">
-                                <img src="{{ asset('public/storage/frontend/img/md3.png') }}" alt="icon">
-                                <p>Dentist</p>
-                            </div>
-                        </a>
-                        <!-- special item end -->
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <!-- special item -->
-                        <a href="#">
-                            <div class="spcl-item">
-                                <img src="{{ asset('public/storage/frontend/img/md4.png') }}" alt="icon">
-                                <p>Dermatologist</p>
-                            </div>
-                        </a>
-                        <!-- special item end -->
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <!-- special item -->
-                        <a href="#">
-                            <div class="spcl-item">
-                                <img src="{{ asset('public/storage/frontend/img/md5.png') }}" alt="icon">
-                                <p>Psychiatrist</p>
-                            </div>
-                        </a>
-                        <!-- special item end -->
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <!-- special item -->
-                        <a href="#">
-                            <div class="spcl-item">
-                                <img src="{{ asset('public/storage/frontend/img/md6.png') }}" alt="icon">
-                                <p>Eye Doctor</p>
-                            </div>
-                        </a>
-                        <!-- special item end -->
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <!-- special item -->
-                        <a href="#">
-                            <div class="spcl-item">
-                                <img src="{{ asset('public/storage/frontend/img/md7.png') }}" alt="icon">
-                                <p>ENT</p>
-                            </div>
-                        </a>
-                        <!-- special item end -->
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <!-- special item -->
-                        <a href="#">
-                            <div class="spcl-item">
-                                <img src="{{ asset('public/storage/frontend/img/md8.png') }}" alt="icon">
-                                <p>Gastroenterologist</p>
-                            </div>
-                        </a>
-                        <!-- special item end -->
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -341,7 +273,7 @@
                                 <li>Build and strengthen your online reputation</li>
                                 <li>Deliver a premium experience patients love</li>
                             </ul>
-                            <a class="star-doc-btn" href="#">List your practice on Mydocpoint</a>
+                            <a class="star-doc-btn" href="{{ Route('doctor.registration') }}">List your practice on Mydocpoint</a>
                         </div>
                         <!-- star doctor end -->
                     </div>
@@ -349,20 +281,20 @@
                     <div class="col-lg-12">
                         <h3 class="find-doc-heading">Find doctors and dentists by city</h3>
                     </div>
-
+                    @foreach($country as $key=> $value)
                     <div class="col-lg-3 col-md-4 col-6">
                         <!-- doctor city -->
                         <div class="doctor-city">
                             <select>
-                                <option>New York City</option>
-                                <option>city 1</option>
-                                <option>city 2</option>
-                                <option>city 3</option>
+                                <option>{{ $value->name }} City</option>
+                                {{-- @foreach($value->city as $key2 => $value2)
+                                    <option>{{ $value2->name }}</option>
+                                @endforeach  --}}
                             </select>
                         </div>
                         <!-- doctor city end -->
                     </div>
-
+                    @endforeach
                     <div class="col-lg-3 col-md-4 col-6">
                         <!-- doctor city -->
                         <div class="doctor-city">
@@ -596,20 +528,6 @@
                         </div>
                         <!-- doctor city end -->
                     </div>
-
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <!-- doctor city -->
-                        <div class="doctor-city">
-                            <select>
-                                <option>San Diego</option>
-                                <option>city 1</option>
-                                <option>city 2</option>
-                                <option>city 3</option>
-                            </select>
-                        </div>
-                        <!-- doctor city end -->
-                    </div>
-
                 </div>
             </div>
         </div>

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Speciality;
+use App\Models\Country;
+use App\Models\Doctor;
+use Log;
 
 class HomeController extends Controller
 {
@@ -24,20 +27,31 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('frontend.index');
+        try {
+            $country = Country::get();
+            $speciality = Speciality::get()->where('status', 'Active');
+            return view('frontend.index', ['country' => $country, 'speciality'=>$speciality]);
+        } catch(\Exception $e) {
+            Log::error("Error in index on HomeController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
     }
+
     /**
      * dashboard page
      * @param void
      * @author Chetan Jha
      * 
      */
-
-    public function dashboard(){
-        $data = array();
-        $docData = DB::table('doctors')->get();
-        $data['doc-count'] = count($docData);
-        return view('dashboard',['data' => $data]);
-
+    public function dashboard()
+    {
+        try {
+            $docData = Doctor::get()->where('status', 'Active');
+            $data['doc-count'] = count($docData);
+            return view('dashboard',['data' => $data]);
+        } catch(\Exception $e) {
+            Log::error("Error in dashboard on HomeController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
     }
 }

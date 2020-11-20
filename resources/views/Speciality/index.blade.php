@@ -32,7 +32,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="{{route('Speciality.edit',['id'=>$speciality->id])}}">Edit Speciality</a>
+                                    <a href="{{route('Speciality.edit', ['id'=>$speciality->id])}}">Edit Speciality</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -43,5 +43,9 @@
         </div>
     </div>			
 </div>
-
+@endsection
+@section('script')
+<script>
+    var change_speciality_status = "{{ route('change.speciality.status') }}";
+</script>
 @endsection

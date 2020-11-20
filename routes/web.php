@@ -15,12 +15,27 @@ Route::get('/', 'HomeController@index')->name('index');
 
 Auth::routes();
 
+/* Start user auth */
+Route::get('/user-registration', 'UserController@userRegistration')->name('user.registration');
+Route::get('/user-login', 'UserController@userLogin')->name('user.login');
+/*  End user auth */
+
+/* Start doctor auth */
+Route::get('/doctor-registration', 'UserController@doctorRegistration')->name('doctor.registration');
+Route::get('/doctor-login', 'UserController@doctorLogin')->name('doctor.login');
+
+
+/*  End doctor auth */
+
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/auth', 'AuthController@authenticateUserAndRedirect')->name('auth');
+
 /**
  * Please add all the action that is accessible after valid login to this group.
  */
 Route::group(['middleware' => ['auth']], function () {
+
+    // Check user & redirect
+    Route::get('/auth', 'AuthController@authenticateUserAndRedirect')->name('auth');
 
     //Change Password Routes
     Route::post('update-password/{user_id}', 'UserController@updatePassword')->name('update.password');
@@ -78,4 +93,5 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('change-doctor-status', 'DoctorController@changeStatus')->name('change.doctor.status');
     Route::post('change-user-status', 'UserController@changeStatus')->name('change.user.status');
+    Route::post('change-speciality-status', 'SpecialityController@changeStatus')->name('change.speciality.status');
 });

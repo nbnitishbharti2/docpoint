@@ -12,7 +12,63 @@ use Log;
 class UserController extends Controller
 {
     /**
-     * method to update user password
+     * Method to show User registration form
+     * @return View
+     */
+    public function userRegistration()
+    {
+        try {
+            return view('frontend.user.registration');
+        } catch(\Exception $e) {
+            Log::error("Error in userRegistration on UserController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to show User Login form
+     * @return View
+     */
+    public function userLogin()
+    {
+        try {
+            return view('frontend.user.login');
+        } catch(\Exception $e) {
+            Log::error("Error in userLogin on UserController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to show Doctor registration form
+     * @return View
+     */
+    public function doctorRegistration()
+    {
+        try {
+            return view('frontend.doctor.registration');
+        } catch(\Exception $e) {
+            Log::error("Error in doctorRegistration on UserController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+    
+    /**
+     * Method to show Doctor Login form
+     * @return View
+     */
+    public function doctorLogin()
+    {
+        try {
+            return view('frontend.doctor.login');
+        } catch(\Exception $e) {
+            Log::error("Error in doctorLogin on UserController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to update user password
      * @return View
      */
     public function updatePassword(UpdatePasswordRequest $request, $user_id = 0)
@@ -42,7 +98,7 @@ class UserController extends Controller
     public function listUsers()
     {
         try {
-            $data['users'] = User::get();
+            $data['users'] = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')->where('user_roles.role_id', 3)->get();
             return view('UserGroup.list_users', $data);
         } catch(\Exception $e) {
             Log::error("Error in listUsers on UserController ". $e->getMessage());
