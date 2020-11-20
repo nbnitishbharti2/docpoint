@@ -1,0 +1,7 @@
+.error {
+    padding: 5px;
+    color: red;
+}
+.login-form {
+    height: 65px !important;
+}

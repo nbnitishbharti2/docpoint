@@ -1,0 +1,10 @@
+India,IN,IND,91,1,INR,91,"2020-09-26 02:43:56","2020-09-26 02:43:56"
+India1,IN,IND,914,1,1INR,91,"2020-09-26 02:43:56","2020-09-26 02:43:56"
+<div class="flash-message">
+		  		  		  	  <p class="alert alert-success">Countries added successfully</p>
+	  		  	</div>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_token" value="yYvs225CzzsDpVcKrDvlI33zgeHb9f5Fsjp8kc8e">    <input type="file" name="file"  action="http://localhost/zoc-doc/public/country-import">
+        <input type="submit">
+</form>
