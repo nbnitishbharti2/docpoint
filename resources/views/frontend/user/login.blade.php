@@ -19,7 +19,7 @@
                                         {{ Session::pull('error') }}
                                     </div>
                                 @endif
-                                <form method="POST" action="{{ route('login') }}">
+                                <form method="POST" id="login" action="{{ route('login') }}">
                                     @csrf
                                     <div class="form-group form-focus login-form">
                                         <input type="email" class="form-control floating" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>

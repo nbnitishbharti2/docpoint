@@ -4,9 +4,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card" style="margin-bottom: 30px;">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header">{{ __('Doctor Register') }}</div>
                 <div class="card-body">
-                    <form method="POST" id="user-registration" action="{{ route('create.user') }}">
+                    <form method="POST" id="doctor-registration" action="{{ route('create.user') }}">
                         @csrf
                         <div class="form-group row registraion-form-input">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
@@ -56,10 +56,10 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary register">
                                     {{ __('Register') }}
                                 </button>
-                                 &nbsp;&nbsp;<a href="{{ Route('user.login') }}">Login</a>
+                                 &nbsp;&nbsp;<a href="{{ Route('doctor.login') }}">Login</a>
                             </div>
                         </div>
                     </form>

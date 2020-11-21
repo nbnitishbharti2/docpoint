@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/media.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css') }}">
   </head>
 <body>
 <!-- header -->

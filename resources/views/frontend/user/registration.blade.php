@@ -8,7 +8,6 @@
                 <div class="card-body">
                     <form method="POST" id="user-registration" action="{{ route('create.user') }}">
                         @csrf
-
                         <div class="form-group row registraion-form-input">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
                             <div class="col-md-6">
@@ -57,7 +56,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary register">
                                     {{ __('Register') }}
                                 </button>
                                  &nbsp;&nbsp;<a href="{{ Route('user.login') }}">Login</a>
