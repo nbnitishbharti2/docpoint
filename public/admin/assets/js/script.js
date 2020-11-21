@@ -319,6 +319,188 @@
 		});
 	});
 
+//change country status
+	$('.country').on("change", function(){
+		var status = '';
+		var user_id = $(this).attr("data-id");
+		if ($(this).prop('checked')==true){ 
+			status = "active";
+		} else {
+			status = "Inactive";
+		}
+		$.ajax({
+			url: change_country_status,
+			method: 'POST',
+			cache: false,
+			data: {user_id:user_id,status:status},
+			success: function(data) {
+				if(data.status == true){
+					$.toast({
+						heading: 'Success',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'success',
+						position : 'top-right'
+					});
+				} else {
+					$.toast({
+						heading: 'Error',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'error',
+						position : 'top-right'
+					});
+				}
+			},
+			error: function(error) {
+				$.toast({
+					heading: 'Error',
+					text: error,
+					showHideTransition: 'slide',
+					icon: 'error',
+					position : 'top-right'
+				});
+			}
+		});
+	});
+
+	//change state status
+	$('.state').on("change", function(){
+		var status = '';
+		var user_id = $(this).attr("data-id");
+		if ($(this).prop('checked')==true){ 
+			status = "active";
+		} else {
+			status = "Inactive";
+		}
+		$.ajax({
+			url: change_state_status,
+			method: 'POST',
+			cache: false,
+			data: {user_id:user_id,status:status},
+			success: function(data) {
+				if(data.status == true){
+					$.toast({
+						heading: 'Success',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'success',
+						position : 'top-right'
+					});
+				} else {
+					$.toast({
+						heading: 'Error',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'error',
+						position : 'top-right'
+					});
+				}
+			},
+			error: function(error) {
+				$.toast({
+					heading: 'Error',
+					text: error,
+					showHideTransition: 'slide',
+					icon: 'error',
+					position : 'top-right'
+				});
+			}
+		});
+	});
+
+
+//change city status
+	$('.city').on("change", function(){
+		var status = '';
+		var user_id = $(this).attr("data-id");
+		if ($(this).prop('checked')==true){ 
+			status = "active";
+		} else {
+			status = "Inactive";
+		}
+		$.ajax({
+			url: change_city_status,
+			method: 'POST',
+			cache: false,
+			data: {user_id:user_id,status:status},
+			success: function(data) {
+				if(data.status == true){
+					$.toast({
+						heading: 'Success',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'success',
+						position : 'top-right'
+					});
+				} else {
+					$.toast({
+						heading: 'Error',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'error',
+						position : 'top-right'
+					});
+				}
+			},
+			error: function(error) {
+				$.toast({
+					heading: 'Error',
+					text: error,
+					showHideTransition: 'slide',
+					icon: 'error',
+					position : 'top-right'
+				});
+			}
+		});
+	});
+
+
+//change location status
+	$('.location').on("change", function(){
+		var status = '';
+		var user_id = $(this).attr("data-id");
+		if ($(this).prop('checked')==true){ 
+			status = "active";
+		} else {
+			status = "Inactive";
+		}
+		$.ajax({
+			url: change_location_status,
+			method: 'POST',
+			cache: false,
+			data: {user_id:user_id,status:status},
+			success: function(data) {
+				if(data.status == true){
+					$.toast({
+						heading: 'Success',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'success',
+						position : 'top-right'
+					});
+				} else {
+					$.toast({
+						heading: 'Error',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'error',
+						position : 'top-right'
+					});
+				}
+			},
+			error: function(error) {
+				$.toast({
+					heading: 'Error',
+					text: error,
+					showHideTransition: 'slide',
+					icon: 'error',
+					position : 'top-right'
+				});
+			}
+		});
+	});
+
 	// Chnage Speciality Status
 	$('.speciality').on("change", function(){
 		var status = '';
@@ -387,4 +569,33 @@ function confirm_speciality_delete(speciality_id) {
 	delete_url = delete_url.replace(/\d+/g, '') + speciality_id;
 	$('#delete-speciality').attr('href', delete_url);
 	$('#modal-speciality-delete').modal('show');
+}
+
+//Delete country show popup function
+function confirm_country_delete(country_id) {
+	var delete_url = $('#delete-country').attr('href');
+	delete_url = delete_url.replace(/\d+/g, '') + country_id;
+	$('#delete-country').attr('href', delete_url);
+	$('#modal-country-delete').modal('show');
+}
+//Delete state show popup function
+function confirm_state_delete(state_id) {
+	var delete_url = $('#delete-state').attr('href');
+	delete_url = delete_url.replace(/\d+/g, '') + state_id;
+	$('#delete-state').attr('href', delete_url);
+	$('#modal-state-delete').modal('show');
+}
+//Delete city show popup function
+function confirm_city_delete(city_id) {
+	var delete_url = $('#delete-city').attr('href');
+	delete_url = delete_url.replace(/\d+/g, '') + city_id;
+	$('#delete-city').attr('href', delete_url);
+	$('#modal-city-delete').modal('show');
+}
+//Delete location show popup function
+function confirm_location_delete(location_id) {
+	var delete_url = $('#delete-location').attr('href');
+	delete_url = delete_url.replace(/\d+/g, '') + location_id;
+	$('#delete-location').attr('href', delete_url);
+	$('#modal-location-delete').modal('show');
 }

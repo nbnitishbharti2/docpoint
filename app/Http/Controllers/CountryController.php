@@ -5,6 +5,10 @@ use Illuminate\Http\Request;
 use Validator;
 use Session;
 use Illuminate\Support\Facades\DB;
+use App\Models\Country;
+use App\Http\Requests\EditCountry;
+use Response;
+use Log;
 
 
 class CountryController extends Controller{
@@ -126,9 +130,75 @@ class CountryController extends Controller{
    }
 
    public function index(){
-      $countryData = DB::table('countries')->get();
+      $countryData = Country::get();
       return view('Country.index',['data' => $countryData]);
    }
+    public function edit(int $country_id = 0)
+    {
+        try {
+            $country = Country::find($country_id);
+            if($country == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            return view('Country.edit',['data' => $country]);
+        } catch(\Exception $e) {
+            Log::error("Error in delete on CountryController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function update(EditCountry $request, $country_id = 0)
+    {
+
+        try {
+            $country = Country::find($country_id);
+            $country->iso_numeric=$request->dailing_code; 
+            $country->name=$request->name;
+            $country->iso_alpha_2=$request->iso_alpha_2;
+            $country->iso_alpha_3=$request->iso_alpha_3;
+            $country->currency_code=$request->currency_code;
+            $country->dailing_code=$request->dailing_code;
+
+            if($country == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            if($country->save()){
+               return redirect('countries')->with('message', 'Record Updated successfully');
+            }
+             return redirect()->back()->with('error', 'Record Not Updated successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in delete on CountryController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+   public function delete(int $country_id = 0)
+    {
+        try {
+            $country = Country::find($country_id);
+            if($country == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            $country->delete();
+            return redirect()->back()->with('error', 'Record deleted successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in delete on CountryController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function changeStatus(Request $request)
+    {
+       try {
+            $country = Country::find($request->user_id);
+            if($country != null) {
+                $country->active = ($request->status == "active") ? 1 : 0;
+                $country->save();
+                return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
+            }
+            return Response::json(array('status' => false, 'msg' => 'Country not found.'));
+        } catch(\Exception $e) {
+            Log::error("Error in changeStatus on CountryController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
 
 
 }

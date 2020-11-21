@@ -6,6 +6,8 @@ use Validator;
 use Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\State;
+use App\Http\Requests\EditState;
+use Response;
 use Log;
 
 class StateController extends Controller{
@@ -121,9 +123,41 @@ class StateController extends Controller{
    }
 
    public function index($id){
-      $stateData = DB::table('states')->where('country_id',$id)->get();
+      $stateData = State::where('country_id',$id)->get();
       return view('State.index',['data' => $stateData,'id'=>$id]);
    }
+   public function edit(int $state_id = 0)
+    {
+        try {
+            $state = State::find($state_id);
+            if($state == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            return view('State.edit',['data' => $state]);
+        } catch(\Exception $e) {
+            Log::error("Error in delete on StateController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function update(EditState $request, $state_id = 0)
+    {
+
+        try {
+            $state = State::find($state_id); 
+            $state->name=$request->name;
+            $state->alias= str_replace(" ","-",strtolower($request->name));
+            if($state == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            if($state->save()){ 
+               return redirect('states/'.$state->country_id)->with('message', 'Record Updated successfully');
+            }
+             return redirect()->back()->with('error', 'Record Not Updated successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in delete on StateController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
 
    /**
     * Method to get all states of country
@@ -139,6 +173,36 @@ class StateController extends Controller{
          Log::error("Error in getStateOfCountry on StateController ". $e->getMessage());
       }
    }
+
+   public function delete(int $state_id = 0)
+    {
+        try {
+            $state = State::find($state_id);
+            if($state == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            $state->delete();
+            return redirect()->back()->with('error', 'Record deleted successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in delete on StateController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function changeStatus(Request $request)
+    {
+       try {
+            $state = State::find($request->user_id);
+            if($state != null) {
+                $state->active = ($request->status == "active") ? 1 : 0;
+                $state->save();
+                return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
+            }
+            return Response::json(array('status' => false, 'msg' => 'State not found.'));
+        } catch(\Exception $e) {
+            Log::error("Error in changeStatus on StateController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
 
 
 }

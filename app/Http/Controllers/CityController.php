@@ -6,6 +6,8 @@ use Validator;
 use Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\City;
+use App\Http\Requests\EditCity;
+use Response;
 use Log;
 
 class CityController extends Controller{
@@ -119,10 +121,41 @@ class CityController extends Controller{
    }
 
    public function index($countryid,$stateid){
-      $cityData = DB::table('cities')->where([['country_id',$countryid],['state_id',$stateid]])->get();
+      $cityData = City::where([['country_id',$countryid],['state_id',$stateid]])->get();
       return view('City.index',['data' => $cityData,'country_id'=>$countryid,'state_id'=>$stateid]);
    }
 
+ public function edit(int $city_id = 0)
+    {
+        try {
+            $city = City::find($city_id);
+            if($city == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            return view('City.edit',['data' => $city]);
+        } catch(\Exception $e) {
+            Log::error("Error in delete on CityController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function update(EditCity $request, $city_id = 0)
+    { 
+        try {
+            $city = City::find($city_id);
+            $city->name=$request->name;
+            $city->alias= str_replace(" ","-",strtolower($request->name));
+            if($city == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            if($city->save()){
+               return redirect('cities/'.$city->country_id.'/'.$city->state_id)->with('message', 'Record Updated successfully');
+            }
+             return redirect()->back()->with('error', 'Record Not Updated successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in delete on CityController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
    /**
     * Method to get all cities of states
     * @param Illuminate\Http\Request $request
@@ -136,6 +169,35 @@ class CityController extends Controller{
        } catch(\Exception $e) {
           Log::error("Error in getCityOfState on StateController ". $e->getMessage());
        }
+    }
+    public function delete(int $city_id = 0)
+    {
+        try {
+            $city = City::find($city_id);
+            if($city == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            $city->delete();
+            return redirect()->back()->with('error', 'Record deleted successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in delete on CityController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function changeStatus(Request $request)
+    {
+       try {
+            $city = City::find($request->user_id);
+            if($city != null) {
+                $city->active = ($request->status == "active") ? 1 : 0;
+                $city->save();
+                return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
+            }
+            return Response::json(array('status' => false, 'msg' => 'City not found.'));
+        } catch(\Exception $e) {
+            Log::error("Error in changeStatus on CityController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
     }
 }
 

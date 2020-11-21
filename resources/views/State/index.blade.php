@@ -1,5 +1,6 @@
 @extends('layouts.backend')
 @section('content')
+@include('layouts.message')
 <div class="page-header">
     <div class="row">
         <div class="col-sm-12">
@@ -37,10 +38,13 @@
                             @foreach($data as $state)
                             <tr>
                                 <td>{{$state->name}}</td>
-                                <td>{{$state->alias}}</td>
-                                @php($active = $state->active == 1 ? "Yes" : "No")
-                                <td>{{$active}}</td>
-                                <td><a href="{{route('cities',['countryid'=>$state->country_id,'stateid'=>$state->id])}}">Manage Cities</a></td>
+                                <td>{{$state->alias}}</td> 
+                                <td><input type="checkbox" id="status_{{ $state->id }}" data-id = "{{ $state->id }}" class="state check" {{ ($state->active == '1')? 'checked': '' }}>
+                                            <label for="status_{{ $state->id }}" class="checktoggle">checkbox</label>
+                                        </div></td>
+                                <td><a href="{{route('cities',['countryid'=>$state->country_id,'stateid'=>$state->id])}}">Manage Cities</a>
+                                     <a class="btn-sm btn btn-info" title="Edit" href="{{route('state.edit',['id'=>$state->id])}}"><i class="fa fa-pencil"></i></a>
+                                    <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_state_delete({{ $state->id }})"><i class="fa fa-trash"></i></button></td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -50,5 +54,30 @@
         </div>
     </div>			
 </div>
+<!-- /.delete confirmation modal -->
+<div class="modal fade" id="modal-state-delete">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Delete state</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to Delete?</p>
+        </div>
+        <div class="modal-footer">
+            <a href="{{ url('/state-delete/11') }}" id="delete-state" class="btn btn-danger">Delete</a>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script>
+    var change_state_status = "{{ route('change.state.status') }}";
+</script>
 
 @endsection

@@ -135,6 +135,24 @@ $(document).ready(function(){
 			website : {
 				url: true
 			},
+			iso_alpha_2: {
+				required: true,
+				minlength: 2,
+				maxlength:2
+			},
+			iso_alpha_3: {
+				required: true,
+				minlength: 3,
+				maxlength:3
+			},
+			currency_code: {
+				required: true,
+				minlength: 2
+			},
+			currency_code: {
+				required: true,
+				digits: true
+			},
 		}, 
 		submitHandler: function(form) {
 			// do other things for a valid form

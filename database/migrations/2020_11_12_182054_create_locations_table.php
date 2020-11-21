@@ -15,7 +15,7 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('countrie_id');
+            $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('state_id');
             $table->unsignedBigInteger('city_id');
             $table->string('name', 50);
@@ -24,7 +24,7 @@ class CreateLocationsTable extends Migration
             $table->timestamps();
         });
         Schema::table('locations', function($table){
-             $table->foreign('countrie_id')->references('id')->on('countries')->onDelete('cascade');
+             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
            Schema::table('locations', function($table){
             $table->foreign('state_id')->references('id')->on('states')->onDelete('cascade'); 

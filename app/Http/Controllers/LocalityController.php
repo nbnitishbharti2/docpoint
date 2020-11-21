@@ -5,7 +5,10 @@ use Illuminate\Http\Request;
 use Validator;
 use Session;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Location;
+use App\Http\Requests\EditLocation;
+use Response;
+use Log;
 
 class LocalityController extends Controller{
     
@@ -86,8 +89,7 @@ class LocalityController extends Controller{
          }else{
             foreach($insertDatas as $insertData){
                $insertData['active'] = $insertData['active'] == "yes" ? 1:0;
-               DB::table('localities')
-               ->updateOrInsert(
+               Location::updateOrInsert(
                ['name' => $insertData['name']],
                $insertData
             );
@@ -105,7 +107,7 @@ class LocalityController extends Controller{
         header("Content-Type: text/csv");
         header("Content-Disposition: attachment; filename=localities.csv");
         $output = fopen("php://output", "wb");
-        $localities = DB::table('localities')->where([['country_id',$countryid],['state_id',$stateid],['city_id',$cityId]])->select('name','pincode','active')->get()->toArray();
+        $localities = Location::where([['country_id',$countryid],['state_id',$stateid],['city_id',$cityId]])->select('name','pincode','active')->get()->toArray();
         $heading = array('name','pincode','active');
         array_unshift($localities,$heading);
         $i=0;
@@ -121,9 +123,70 @@ class LocalityController extends Controller{
    }
 
    public function index($countryid,$stateid,$cityId){
-      $localityData = DB::table('localities')->where([['country_id',$countryid],['state_id',$stateid],['city_id',$cityId]])->select('name','pincode','active')->get();
+      $localityData = Location::where([['country_id',$countryid],['state_id',$stateid],['city_id',$cityId]])->select('id','name','pincode','active')->get();
       return view('Locality.index',['data' => $localityData]);
    }
+   public function edit(int $country_id = 0)
+    {
+        try {
+            $location = Location::find($country_id);
+            if($location == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            return view('Locality.edit',['data' => $location]);
+        } catch(\Exception $e) {
+            Log::error("Error in delete on LocationController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function update(EditLocation $request, $country_id = 0)
+    {
+
+        try {
+            $location = Location::find($country_id);
+            $location->pincode=$request->pincode; 
+            $location->name=$request->name; 
+            if($location == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            if($location->save()){
+               return redirect('locality-index/'.$location->country_id.'/'.$location->state_id.'/'.$location->city_id)->with('message', 'Record Updated successfully');
+            }
+             return redirect()->back()->with('error', 'Record Not Updated successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in delete on LocationController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function delete(int $country_id = 0)
+    {
+        try {
+            $location = Location::find($country_id);
+            if($location == null) { // If details not found then return
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            $location->delete();
+            return redirect()->back()->with('error', 'Record deleted successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in delete on LocationController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function changeStatus(Request $request)
+    {
+       try {
+            $location = Location::find($request->user_id);
+            if($location != null) {
+                $location->active = ($request->status == "active") ? 1 : 0;
+                $location->save();
+                return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
+            }
+            return Response::json(array('status' => false, 'msg' => 'Location not found.'));
+        } catch(\Exception $e) {
+            Log::error("Error in changeStatus on LocationController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
 
 
 }
