@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/media.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css') }}">
   </head>
 <body>
 <!-- header -->
@@ -26,22 +27,31 @@
       </div>
       <div class="col-md-8">
         <!-- top text -->
-        <div class="top-txt">
-          <p><a href="{!! route('doctor.login') !!}">List your practice on Mydocpoint</a></p><span> | </span>
-          <!-- dropdown -->
-          <div class="dropdown">
-            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Log in/Sing up
-              <img src="{{ asset('public/storage/frontend/img/down-arrow.png') }}" alt="down arrow">
-            </a>
-          
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="{!! route('user.login') !!}">Login</a>
-              <a class="dropdown-item" href="{!! route('user.registration') !!}">Signup</a>
+        @if(Auth::guest())
+          <div class="top-txt">
+            <p><a href="{!! route('doctor.login') !!}">List your practice on Mydocpoint</a></p><span> | </span>
+            <!-- dropdown -->
+            <div class="dropdown">
+              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Log in/Sing up
+                <img src="{{ asset('public/storage/frontend/img/down-arrow.png') }}" alt="down arrow">
+              </a>
+            
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="{!! route('user.login') !!}">Login</a>
+                <a class="dropdown-item" href="{!! route('user.registration') !!}">Signup</a>
+              </div>
             </div>
+            <!-- dropdown end -->
           </div>
-          <!-- dropdown end -->
-        </div>
+        @else
+          <div class="top-txt">
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              {{ csrf_field() }}
+            </form>
+            <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
+          </div>
+        @endif
         <!-- top text end -->
       </div>
     </div>
@@ -157,6 +167,9 @@
   <script src="{{ asset('public/storage/frontend/js/popper.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/bootstrap.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/slick.js') }}"></script>
+  <script src="{{ asset('public/admin/assets/plugins/validation/jquery.validate.min.js') }}"></script>
+  <script src="{{ asset('public/admin/assets/plugins/validation/additional-methods.min.js') }}"></script>
+  <script src="{{ asset('public/storage/frontend/js/custom.js') }}"></script>
   <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function() {

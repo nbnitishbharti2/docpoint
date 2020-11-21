@@ -14,6 +14,7 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}" />
 		<script src="{{ URL::asset('public/admin/assets/js/jquery-3.2.1.min.js') }}"></script>
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/datatables/datatables.min.css')}}">
+		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/datatables/dataTables.jqueryui.min.css')}}"/>
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/toast/jquery.toast.css')}}">
     </head>
     <body>

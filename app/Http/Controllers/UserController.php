@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdatePasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserRequest;
+use App\Helpers\CommanHelper;
 use App\Models\User;
+use App\Models\Role;
 use Response;
+use Auth;
 use Log;
 
 class UserController extends Controller
@@ -21,6 +25,38 @@ class UserController extends Controller
             return view('frontend.user.registration');
         } catch(\Exception $e) {
             Log::error("Error in userRegistration on UserController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to create User
+     * @return View
+     */
+    public function createUser(UserRequest $request)
+    {
+        try {
+            $userData = array(
+                'name' => $request->name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'password' => Hash::make($request->password),
+                'status' => 'Active',
+                'pic' => '',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            );
+            $user = User::create($userData);
+
+            // Attach role to user
+            $user_role = Role::where('name', 'User')->first();
+            if($user_role != null) {
+                CommanHelper::attachRole($user, $user_role);
+            }
+            Auth::loginUsingId($user->id);
+            return redirect('/');
+        } catch(\Exception $e) {
+            Log::error("Error in createUser on UserController ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
         }
     }
@@ -98,7 +134,7 @@ class UserController extends Controller
     public function listUsers()
     {
         try {
-            $data['users'] = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')->where('user_roles.role_id', 3)->get();
+            $data['users'] = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')->select('users.*')->where('user_roles.role_id', 3)->get();
             return view('UserGroup.list_users', $data);
         } catch(\Exception $e) {
             Log::error("Error in listUsers on UserController ". $e->getMessage());
@@ -116,9 +152,12 @@ class UserController extends Controller
     {
         try {
             $user = User::find($request->user_id);
-            $user->status = ($request->status == "active") ? 'Active' : 'Inactive';
-            $user->save();
-            return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
+            if($user != null) {
+                $user->status = ($request->status == "active") ? 'Active' : 'Inactive';
+                $user->save();
+                return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
+            }
+            return Response::json(array('status' => false, 'msg' => 'User not found.'));
         } catch(\Exception $e) {
             Log::error("Error in changeStatus on UserController ". $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));

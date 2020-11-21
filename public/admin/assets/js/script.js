@@ -107,8 +107,9 @@
 
     if ($('.datatable').length > 0) {
         $('.datatable').DataTable({
-			"bFilter": false,
-			"sort":false
+			"bFilter": true,
+			"sort":false,
+			"filter": true,
         });
     }
 	
@@ -378,4 +379,12 @@ function confirm_user_delete(user_id) {
 	delete_url = delete_url.replace(/\d+/g, '') + user_id;
 	$('#delete-user').attr('href', delete_url);
 	$('#modal-user-delete').modal('show');
+}
+
+//Delete speciality show popup function
+function confirm_speciality_delete(speciality_id) {
+	var delete_url = $('#delete-speciality').attr('href');
+	delete_url = delete_url.replace(/\d+/g, '') + speciality_id;
+	$('#delete-speciality').attr('href', delete_url);
+	$('#modal-speciality-delete').modal('show');
 }

@@ -32,7 +32,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="{{route('Speciality.edit', ['id'=>$speciality->id])}}">Edit Speciality</a>
+                                    <a href="{{ route('Speciality.edit', ['id' => $speciality->id]) }}" title="Edit Speciality" class="btn-sm btn btn-primary"><i class="fa fa-pencil"></i></a>
+                                    <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_speciality_delete({{ $speciality->id }})"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
                             @endforeach
@@ -43,6 +44,29 @@
         </div>
     </div>			
 </div>
+<!-- /.delete confirmation modal -->
+<div class="modal fade" id="modal-speciality-delete">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Delete Speciality</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to Delete?</p>
+        </div>
+        <div class="modal-footer">
+            <a href="{{ url('/speciality-delete/11') }}" id="delete-speciality" class="btn btn-danger">Delete</a>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.End delete confirmation modal -->
 @endsection
 @section('script')
 <script>

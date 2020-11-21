@@ -160,4 +160,24 @@ class SpecialityController extends Controller
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
+
+    /**
+     * Method to delete Speciality
+     * @param int $speciality_id
+     * @return redirect
+     */
+    public function delete(int $speciality_id = 0)
+    {
+        try {
+            $speciality = Speciality::find($speciality_id);
+            if($speciality == null) { // If details not found then return
+                return redirect('speciality-index')->with('error', 'Details not found');
+            }
+            $speciality->delete();
+            return redirect('speciality-index')->with('error', 'Record deleted successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in delete on SpecialityController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
 }
