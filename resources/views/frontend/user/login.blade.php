@@ -1,4 +1,5 @@
 @extends('layouts.frontend')
+@section('title', 'Login | MyDocPoint')
 @section('content')
     <div class="content">
         <div class="container-fluid">

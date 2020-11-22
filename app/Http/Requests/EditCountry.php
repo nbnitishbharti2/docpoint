@@ -24,14 +24,13 @@ class EditCountry extends FormRequest
      */
     public function rules()
     {
-         $input = Input::all();
-         
+        $input = Input::all();
         return [
-            'name' => 'required|min:3|max:50',
-            'iso_alpha_2' => 'required|min:2|max:2',
-            'iso_alpha_3' => 'required|min:3|max:3',
-            'currency_code' => 'required',
-            'dailing_code' => 'required|integer',
+            'name' => 'required|min:3|max:50|unique:countries,name,'.$input['id'],
+            'iso_alpha_2' => 'required|min:2|max:2|unique:countries,iso_alpha_2,'.$input['id'],
+            'iso_alpha_3' => 'required|min:3|max:3|unique:countries,iso_alpha_3,'.$input['id'],
+            'currency_code' => 'required|unique:countries,currency_code,'.$input['id'],
+            'dailing_code' => 'required|integer|unique:countries,dailing_code,'.$input['id'],
         ];
     }
 }

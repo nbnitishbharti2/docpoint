@@ -1,4 +1,5 @@
 @extends('layouts.frontend')
+@section('title', 'MyDocPoint | Home')
 @section('content')
     <!-- banner -->
     <section class="p-0 bg-light-grey">

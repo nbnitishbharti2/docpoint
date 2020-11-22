@@ -4,8 +4,9 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Mydocpoint</title>
+    <title>@yield('title')</title>
     <!-- Bootstrap CSS -->
+    <link href="{{ asset('public/storage/frontend/img/doc-point-logo.ico') }}" rel="icon">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/icofont.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/slick.css') }}">
@@ -28,7 +29,7 @@
         <!-- top text -->
         @if(Auth::guest())
           <div class="top-txt">
-            <p><a href="{!! route('doctor.login') !!}">List your practice on Mydocpoint</a></p><span> | </span>
+            <p><a href="{!! route('doctor.registration') !!}">List your practice on Mydocpoint</a></p><span> | </span>
             <!-- dropdown -->
             <div class="dropdown">
               <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
