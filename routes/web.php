@@ -95,10 +95,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/locality-edit/{location_id}', 'LocalityController@update')->name('locality.update');
     Route::get('/location-delete/{user_id}', 'LocalityController@delete')->name('location.delete');
     
+    // User routes
     Route::get('/user_groups', 'UserGroupController@index')->name('user_groups');;
     Route::get('/users', 'UserController@listUsers')->name('users');;
     Route::get('/user_groups_add/', 'UserGroupController@add')->name('user_groups_add');
     Route::post('/user_groups_add/', 'UserGroupController@add')->name('user_groups_add');
+    Route::get('/log-history/{user_id}', 'UserController@logHistory')->name('log.history');
 
 
     // Ajax Routes
@@ -106,6 +108,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('get-city', 'CityController@getCityOfState')->name('get.state.city');
 
     Route::post('change-doctor-status', 'DoctorController@changeStatus')->name('change.doctor.status');
+    Route::post('change-doctor-sponsored-status', 'DoctorController@changeSponsoredStatus')->name('change.doctor.sponsored.status');
     Route::post('change-user-status', 'UserController@changeStatus')->name('change.user.status');
     Route::post('change-speciality-status', 'SpecialityController@changeStatus')->name('change.speciality.status');
     Route::post('change-country-status', 'CountryController@changeStatus')->name('change.country.status');

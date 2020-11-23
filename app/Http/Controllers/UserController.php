@@ -179,8 +179,22 @@ class UserController extends Controller
             $user->delete();
             return redirect('users')->with('error', 'Record deleted successfully');
         } catch(\Exception $e) {
-            Log::error("Error in delete on DoctorController ". $e->getMessage());
-            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+            Log::error("Error in delete on UserController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to show user log history
+     */
+    public function logHistory(int $user_id = 0)
+    {
+        try {
+            $data['logs'] = User::find($user_id)->authentications;
+            return view('UserGroup.log-history', $data);
+        } catch(\Exception $e) {
+            Log::error("Error in logHistory on UserController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
         }
     }
 }

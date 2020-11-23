@@ -13,9 +13,9 @@
                                 <th>Speciality</th>
                                 <th>Mobile</th>
                                 <th>Email</th>
-                                <th>Account Status</th>
+                                <th>Status</th>
+                                <th>Sponsored</th>
                                 <th>Action</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -39,7 +39,14 @@
                                         </div>
                                     </td>
                                     <td>
+                                        <div class="status-toggle">
+                                            <input type="checkbox" id="sponsored_{{ $doctor->id }}" data-id = "{{ $doctor->id }}" class="sponsored check" {{ ($doctor->sponsored == 'Yes')? 'checked': '' }}>
+                                            <label for="sponsored_{{ $doctor->id }}" class="checktoggle">checkbox</label>
+                                        </div>
+                                    </td>
+                                    <td>
                                         <a href="{{ route('doctor.edit', ['id' => $doctor->id]) }}" title="Edit" class="btn-sm btn btn-primary"><i class="fa fa-pencil"></i></a>
+                                        <a href="{{ route('log.history', ['user_id' => $doctor->user_id]) }}" title="Log History" class="btn-sm btn btn-primary"><i class="fa fa-history"></i></a>
                                         <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_doctor_delete({{ $doctor->id }})"><i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>
@@ -78,5 +85,6 @@
 @section('script')
 <script>
     var change_doctor_status = "{{ route('change.doctor.status') }}";
+    var change_doctor_sponsored_status = "{{ route('change.doctor.sponsored.status') }}";
 </script>
 @endsection

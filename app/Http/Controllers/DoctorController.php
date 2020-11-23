@@ -249,6 +249,28 @@ class DoctorController extends Controller
     }
 
     /**
+     * Method to change Doctor Sponsored status
+     * @param Illuminate\Http\Request $request
+     * @return Response array
+     * 
+     */
+    public function changeSponsoredStatus(Request $request)
+    {
+        try {
+            $doctor = Doctors::find($request->doctor_id);
+            if($doctor == null) { // If details not found then return
+                return redirect('doctor-list')->with('error', 'Details not found');
+            }
+            $doctor->sponsored = $request->sponsored;
+            $doctor->save();
+            return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
+        } catch(\Exception $e) {
+            Log::error("Error in changeSponsoredStatus on DoctorController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+
+    /**
      * Method to delete Doctor
      * @param int $doctor_id
      * @return redirect

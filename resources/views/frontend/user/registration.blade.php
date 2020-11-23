@@ -1,4 +1,5 @@
 @extends('layouts.frontend')
+@section('title', 'MyDocPoint | Register User')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

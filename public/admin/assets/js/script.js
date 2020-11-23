@@ -230,7 +230,7 @@
 			return false;
 		}
 	});
-	
+	// Change Doctor Status
 	$('.doctor').on("change", function(){
 		var status = '';
 		var doctor_id = $(this).attr("data-id");
@@ -244,6 +244,51 @@
 			method: 'POST',
 			cache: false,
 			data: {doctor_id:doctor_id,status:status},
+			success: function(data) {
+				if(data.status == true){
+					$.toast({
+						heading: 'Success',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'success',
+						position : 'top-right'
+					});
+				} else {
+					$.toast({
+						heading: 'Error',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'error',
+						position : 'top-right'
+					});
+				}
+			},
+			error: function(error) {
+				$.toast({
+					heading: 'Error',
+					text: error,
+					showHideTransition: 'slide',
+					icon: 'error',
+					position : 'top-right'
+				});
+			}
+		});
+	});
+
+	// Change Doctor Sponsored Status
+	$('.sponsored').on("change", function(){
+		var sponsored = '';
+		var doctor_id = $(this).attr("data-id");
+		if ($(this).prop('checked')==true){ 
+			sponsored = "Yes";
+		} else {
+			sponsored = "No";
+		}
+		$.ajax({
+			url: change_doctor_sponsored_status,
+			method: 'POST',
+			cache: false,
+			data: {doctor_id:doctor_id,sponsored:sponsored},
 			success: function(data) {
 				if(data.status == true){
 					$.toast({
@@ -319,7 +364,7 @@
 		});
 	});
 
-//change country status
+	//change country status
 	$('.country').on("change", function(){
 		var status = '';
 		var user_id = $(this).attr("data-id");
@@ -410,7 +455,7 @@
 	});
 
 
-//change city status
+	//change city status
 	$('.city').on("change", function(){
 		var status = '';
 		var user_id = $(this).attr("data-id");
@@ -456,7 +501,7 @@
 	});
 
 
-//change location status
+	//change location status
 	$('.location').on("change", function(){
 		var status = '';
 		var user_id = $(this).attr("data-id");
