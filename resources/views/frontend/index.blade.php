@@ -11,7 +11,7 @@
                         <div class="banner-cont">
                             <h2>Find your doctor in your location</h2>
                             <!-- search form -->
-                            <form class="needs-validation" novalidate>
+                            <form class="needs-validation" method="post" novalidate action="{{ url('doctor-lists') }}">
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
                                         <input type="text" class="form-control" placeholder="Condition, Procedur..."

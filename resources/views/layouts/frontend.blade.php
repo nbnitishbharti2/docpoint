@@ -9,6 +9,7 @@
     <link href="{{ asset('public/storage/frontend/img/doc-point-logo.ico') }}" rel="icon">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/icofont.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/media.css') }}">
@@ -166,6 +167,7 @@
   <script src="{{ asset('public/storage/frontend/js/jquery-3.3.1.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/popper.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/bootstrap.min.js') }}"></script>
+   <script src="{{ asset('public/storage/frontend/js/owl.carousel.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/slick.js') }}"></script>
   <script src="{{ asset('public/admin/assets/plugins/validation/jquery.validate.min.js') }}"></script>
   <script src="{{ asset('public/admin/assets/plugins/validation/additional-methods.min.js') }}"></script>

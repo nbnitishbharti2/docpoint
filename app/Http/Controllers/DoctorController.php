@@ -291,4 +291,11 @@ class DoctorController extends Controller
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
+    public function liest(Request $request)
+    {
+        //dd($request);
+        # code...
+        $doctors=Doctors::get();
+        return view('frontend.doctors', $doctors);
+    }
 }

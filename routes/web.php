@@ -29,6 +29,11 @@ Route::get('/doctor-login', 'UserController@doctorLogin')->name('doctor.login');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+/*website */
+Route::any('/doctor-lists', 'DoctorController@liest')->name('doctor.list');
+
+
 /**
  * Please add all the action that is accessible after valid login to this group.
  */
@@ -96,12 +101,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/location-delete/{user_id}', 'LocalityController@delete')->name('location.delete');
     
     // User routes
-    Route::get('/user_groups', 'UserGroupController@index')->name('user_groups');;
-    Route::get('/users', 'UserController@listUsers')->name('users');;
+    Route::get('/user_groups', 'UserGroupController@index')->name('user_groups');
+    Route::get('/users', 'UserController@listUsers')->name('users');
     Route::get('/user_groups_add/', 'UserGroupController@add')->name('user_groups_add');
     Route::post('/user_groups_add/', 'UserGroupController@add')->name('user_groups_add');
     Route::get('/log-history/{user_id}', 'UserController@logHistory')->name('log.history');
 
+    // review for admin
+    Route::get('/review', 'ReviewController@index')->name('review');
+    Route::get('/change-status/{id}/{status}', 'ReviewController@changeStatus')->name('change-review');
 
     // Ajax Routes
     Route::post('get-state', 'StateController@getStateOfCountry')->name('get.country.state');

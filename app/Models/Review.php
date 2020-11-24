@@ -9,7 +9,7 @@ class Review extends Model
     //
     public function doctor()
     {
-        return $this->belongsTo('App\Doctor');
+        return $this->belongsTo('App\Models\Doctor');
     }
     public function patient()
     {
