@@ -557,7 +557,7 @@
 			status = "Inactive";
 		}
 		$.ajax({
-			url: change_location_status,
+			url: change_appoinmrnt_slot_status,
 			method: 'POST',
 			cache: false,
 			data: {user_id:user_id,status:status},

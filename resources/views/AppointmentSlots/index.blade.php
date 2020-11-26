@@ -81,6 +81,6 @@
     <!-- /.modal-dialog -->
 </div>
 <script>
-    var change_city_status = "{{ route('change.appointment.slots.status') }}";
+    var change_appoinmrnt_slot_status = "{{ route('change.appointment.slots.status') }}";
 </script>
 @endsection

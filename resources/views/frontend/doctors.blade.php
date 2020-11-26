@@ -174,7 +174,9 @@ $location_blank = array();
               <div class="row no-gutters">
                 <div class="col-lg-6 pl-md-4">
                   <img class="user-img d-phone" src="img/user-card.png" alt="doctor">
-                  <h5>{{ $value->name }}<i class="icofont-check"></i> <span class="distance">1.5 Km</span></h5>
+                  <h5>{{ $value->name }}<i class="icofont-check"></i>
+                  <br> <i class="icofont-map-pins"></i><span id="distance-total{{$key }}"></span> 
+                    {{-- <span class="distance">1.5 Km</span> --}}</h5>
                   <h6>{{ $value->speciality->spec_name }}</h6>
                   <!-- address -->
                   <div class="address">
@@ -246,89 +248,7 @@ $location_blank = array();
           <!-- doctor list end -->
           @endforeach
           <!-- doctor list -->
-          <div class="doctor-list">
-            <!-- user card -->
-            <div class="user-card">
-              <img class="user-img d-desktop-for-phone" src="img/user-card.png" alt="doctor">
-              <div class="row no-gutters">
-                <div class="col-lg-6 pl-md-4">
-                  <img class="user-img d-phone" src="img/user-card.png" alt="doctor">
-                  <h5>Dr. Mohan Kumar DDS <i class="icofont-check"></i> <span class="distance">1.5 Km</span></h5>
-                  <h6>Dentist</h6>
-                  <!-- address -->
-                  <div class="address">
-                    <h5>Sector 15,Faridabad</h5>
-                    <p>Deep Dental Care & Treatment Centre Rs.400 Consultation fee at clinic</p>
-                  </div>
-                  <!-- address end -->
-
-                  <!-- rating -->
-                  <div class="rating">
-                    <span>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
-                    <p class="total-rating">4</p>
-                    <p class="rating-count">(969)</p>
-                  </div>
-                  <!-- rating end -->
-                </div>
-                <div class="col-lg-6 pl-md-4 pl-lg-0">
-                  <!-- time buttons -->
-                  <ul class="time-btns d-desktop-for-tab">
-                    <li><a href="#">09:00 AM</a></li>
-                    <li><a href="#">09:00 AM</a></li>
-                    <li><a href="#">09:00 AM</a></li>
-                    <li><a href="#" class="empty">--</a></li>
-                    <li><a href="#">11:00 AM</a></li>
-                    <li><a href="#">11:00 AM</a></li>
-                    <li><a href="#">11:00 AM</a></li>
-                    <li><a href="#" class="empty">--</a></li>
-                    <li><a href="#">12:00 AM</a></li>
-                    <li><a href="#">12:00 AM</a></li>
-                    <li><a href="#">12:00 AM</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                  </ul>
-                  <!-- time buttons end -->
-
-                  <ul class="time-btns d-tab">
-                    <li><a href="#">09:00 AM</a></li>
-                    <li><a href="#">11:00 AM</a></li>
-                    <li><a href="#">12:00 AM</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                  </ul>
-                </div>
-                <div class="col-lg-12 pl-md-4">
-                  <div class="inr-line-btn">
-                    <a class="blue-anchor" href="#">
-                      <!-- calendar icon -->
-                      <svg id="Layer_1" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
-                        <g>
-                          <path d="m446 40h-46v-24c0-8.836-7.163-16-16-16s-16 7.164-16 16v24h-224v-24c0-8.836-7.163-16-16-16s-16 7.164-16 16v24h-46c-36.393 0-66 29.607-66 66v340c0 36.393 29.607 66 66 66h380c36.393 0 66-29.607 66-66v-340c0-36.393-29.607-66-66-66zm34 406c0 18.778-15.222 34-34 34h-380c-18.778 0-34-15.222-34-34v-265c0-2.761 2.239-5 5-5h438c2.761 0 5 2.239 5 5z"/>
-                        </g>
-                      </svg>
-                      <!-- calendar icon end -->
-                      View all availability
-                    </a>
-                    <a class="blue-anchor" href="#">
-                      <!-- user icon -->
-                      <svg id="Layer_1" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
-                          <g>
-                            <path d="m256 512c-60.615 0-119.406-21.564-165.543-60.721-10.833-9.188-20.995-19.375-30.201-30.275-38.859-46.06-60.256-104.657-60.256-165.004 0-68.381 26.628-132.668 74.98-181.02s112.639-74.98 181.02-74.98 132.668 26.628 181.02 74.98 74.98 112.639 74.98 181.02c0 60.348-21.397 118.945-60.251 164.998-9.211 10.906-19.373 21.093-30.209 30.284-46.134 39.154-104.925 60.718-165.54 60.718zm0-480c-123.514 0-224 100.486-224 224 0 52.805 18.719 104.074 52.709 144.363 8.06 9.543 16.961 18.466 26.451 26.516 40.364 34.256 91.801 53.121 144.84 53.121s104.476-18.865 144.837-53.119c9.493-8.052 18.394-16.976 26.459-26.525 33.985-40.281 52.704-91.55 52.704-144.356 0-123.514-100.486-224-224-224z" />
-                            <path d="m256 256c-52.935 0-96-43.065-96-96s43.065-96 96-96 96 43.065 96 96-43.065 96-96 96zm0-160c-35.29 0-64 28.71-64 64s28.71 64 64 64 64-28.71 64-64-28.71-64-64-64z" />
-                              <path d="m411.202 455.084c-1.29 0-2.6-.157-3.908-.485-8.57-2.151-13.774-10.843-11.623-19.414 2.872-11.443 4.329-23.281 4.329-35.185 0-78.285-63.646-142.866-141.893-143.99l-2.107-.01-2.107.01c-78.247 1.124-141.893 65.705-141.893 143.99 0 11.904 1.457 23.742 4.329 35.185 2.151 8.571-3.053 17.263-11.623 19.414s-17.263-3.052-19.414-11.623c-3.512-13.989-5.292-28.448-5.292-42.976 0-46.578 18.017-90.483 50.732-123.63 32.683-33.114 76.285-51.708 122.774-52.358.075-.001.149-.001.224-.001l2.27-.011 2.27.01c.075 0 .149 0 .224.001 46.489.649 90.091 19.244 122.774 52.358 32.715 33.148 50.732 77.053 50.732 123.631 0 14.528-1.78 28.987-5.292 42.976-1.823 7.262-8.343 12.107-15.506 12.108z" />
-                            </g>
-                      </svg>
-                      <!-- user icon end -->
-                      View profile
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- user card end -->
-          </div>
+       
           <!-- doctor list end -->
         </div>
         <div class="col-lg-4">
@@ -354,12 +274,14 @@ $location_blank = array();
       function initMap() { 
         var bounds = new google.maps.LatLngBounds; 
         var markersArray = []; 
-         var origin2 = "{{ \Illuminate\Support\Facades\Session::get('booking.search')}}";
+         //var origin2 = "{{ \Illuminate\Support\Facades\Session::get('booking.search')}}";
+         var origin2='Noida';
         var destinationIcon = 'https://chart.googleapis.com/chart?' +
             'chst=d_map_pin_letter&chld=B|f5ac32|000000';
         var originIcon = 'https://chart.googleapis.com/chart?' +
             'chst=d_map_pin_letter&chld=O|FFFF00|000000';
-            var image = "https://galaxywebsolution.in/wp-content/uploads/2017/07/cropped-gws2-copy.jpg";
+            var image = "http://galaxydemo.in/m3.jpg";
+            // var image = {{ asset('public/storage/images/logo/logo-map.jpg') }};
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 28.53, lng: 77.39},
           zoom: 10
@@ -373,7 +295,8 @@ $location_blank = array();
           origins: [origin2],
           destinations: locations,
           travelMode: 'DRIVING',
-          unitSystem: google.maps.UnitSystem.IMPERIAL,
+         // unitSystem: google.maps.UnitSystem.IMPERIAL,
+          unitSystem: google.maps.UnitSystem.METRIC,
           avoidHighways: false,
           avoidTolls: false
         }, function(response, status) {
@@ -415,7 +338,7 @@ $location_blank = array();
                 }
                 geocoder.geocode({'address': destinationList[j]},
                     showGeocodedAddressOnMap(true,locations[j]['title']));  
-                     $("#distance-total"+count).html(results[j].distance.text+'les From '+originList[0]); 
+                     $("#distance-total"+count).html(results[j].distance.text+' From '+originList[0]); 
                      count++;
               }
             }
