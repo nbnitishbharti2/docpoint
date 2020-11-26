@@ -546,6 +546,52 @@
 		});
 	});
 
+
+	//change appoinment sloat status
+	$('.appointment-sloat').on("change", function(){
+		var status = '';
+		var user_id = $(this).attr("data-id");
+		if ($(this).prop('checked')==true){ 
+			status = "active";
+		} else {
+			status = "Inactive";
+		}
+		$.ajax({
+			url: change_location_status,
+			method: 'POST',
+			cache: false,
+			data: {user_id:user_id,status:status},
+			success: function(data) {
+				if(data.status == true){
+					$.toast({
+						heading: 'Success',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'success',
+						position : 'top-right'
+					});
+				} else {
+					$.toast({
+						heading: 'Error',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'error',
+						position : 'top-right'
+					});
+				}
+			},
+			error: function(error) {
+				$.toast({
+					heading: 'Error',
+					text: error,
+					showHideTransition: 'slide',
+					icon: 'error',
+					position : 'top-right'
+				});
+			}
+		});
+	});
+
 	// Chnage Speciality Status
 	$('.speciality').on("change", function(){
 		var status = '';
@@ -643,4 +689,11 @@ function confirm_location_delete(location_id) {
 	delete_url = delete_url.replace(/\d+/g, '') + location_id;
 	$('#delete-location').attr('href', delete_url);
 	$('#modal-location-delete').modal('show');
+}
+//Delete appoinment sloats show popup function
+function confirm_appoinment_sloats_delete(location_id) {
+	var delete_url = $('#delete-appointment-sloat').attr('href');
+	delete_url = delete_url.replace(/\d+/g, '') + location_id;
+	$('#delete-appointment-sloat').attr('href', delete_url);
+	$('#modal-appointment-sloat-delete').modal('show');
 }

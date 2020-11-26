@@ -55,6 +55,9 @@
                  <li>
                     <a href="{{ route('review') }}"><i class="fe fe-layout"></i> <span>Manage Review</span></a>
                 </li>
+                 <li>
+                    <a href="{{ route('appointment.slots') }}"><i class="fe fe-layout"></i> <span>Appoinment Slots</span></a>
+                </li>
                 {{-- <li>
                     <a href="{{ route('user_groups') }}"><i class="fe fe-layout"></i> <span>Manage User Group</span></a>
                 </li>

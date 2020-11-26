@@ -153,6 +153,9 @@ $(document).ready(function(){
 				required: true,
 				digits: true
 			},
+			slot_time: {
+				required: true, 
+			},
 		}, 
 		submitHandler: function(form) {
 			// do other things for a valid form

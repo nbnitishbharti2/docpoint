@@ -41,4 +41,8 @@ class Doctor extends Model
     {
         return $this->belongsTo('App\Models\Gender');
     }
+    public function AppointmentSlots()
+    {
+        return $this->hasMany('App\Models\AppointmentSlots');
+    }
 }

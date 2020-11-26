@@ -12,6 +12,7 @@ use App\Models\Gender;
 use App\Models\State;
 use App\Models\City;
 use App\Models\User;
+use App\Models\AppointmentSlots;
 use App\Models\Role;
 use Response;
 use Log;
@@ -295,7 +296,9 @@ class DoctorController extends Controller
     {
         //dd($request);
         # code...
-        $doctors=Doctors::get();
-        return view('frontend.doctors', $doctors);
+        $data['doctors']=Doctors::get(); 
+        $data['date']=date('Y-m-d');  
+        return view('frontend.doctors', $data);
+          
     }
 }

@@ -2,6 +2,11 @@
 @section('title', 'MyDocPoint | Doctors')
 @section('content')
 
+<?php 
+$lact  = array(); 
+$lact_new= array();
+$location_blank = array(); 
+?>
 <!-- search -->
 <section class="p-0 bg-blue">
   <div class="banner innr-banner">
@@ -125,13 +130,10 @@
         <div class="col-lg-8">
           <!-- date slider -->
           <div class="owl-carousel date-slider">
-            <div class="date-item"><p>Thu</p><h5>Oct 1</h5></div>
-            <div class="date-item"><p>Fri</p><h5>Oct 2</h5></div>
-            <div class="date-item"><p>Sat</p><h5>Oct 3</h5></div>
-            <div class="date-item"><p>Sun</p><h5>Oct 4</h5></div>
-            <div class="date-item"><p>Mon</p><h5>Oct 5</h5></div>
-            <div class="date-item"><p>Tue</p><h5>Oct 6</h5></div>
-            <div class="date-item"><p>Wed</p><h5>Oct 7</h5></div>
+            @for($i=0; $i<14; $i++)
+            <div class="date-item"><p>{{ date("D",strtotime($date. ' +'.$i.' day')) }}</p><h5>{{ date("M d",strtotime($date. ' +'.$i.' day')) }}</h5></div>
+            @endfor
+             
           </div>
           <div class="slider-btns">
             <span class="prev"><i class="icofont-rounded-left"></i></span>
@@ -144,19 +146,40 @@
       <div class="row no-gutters">
         <div class="col-lg-8">
           <!-- doctor list -->
+
+          @foreach($doctors as $key => $value)
+
+          <?php 
+            if($value->latitude!=null && $value->longitude!=null){
+            $lact2  =array(); 
+            $lact3  =array();  
+            array_push($lact2,$value->name); 
+            array_push($lact2,$value->latitude); 
+            array_push($lact2,$value->longitude); 
+            array_push($lact2,($key+1)); 
+            array_push($lact, $lact2); 
+            $lact3['title']=$value->name; 
+            $lact3['lat']=round($value->latitude,3); 
+            $lact3['lng']=round($value->longitude,3); 
+            array_push($lact_new, $lact3);
+          }else{
+            array_push($location_blank,($key));
+          }
+             ?> 
           <div class="doctor-list">
             <!-- user card -->
             <div class="user-card">
-              <img class="user-img d-desktop-for-phone" src="img/user-card.png" alt="doctor">
+              <img class="user-img d-desktop-for-phone" src="{{ ($value->pic && file_exists('public/storage/images/doctors/'.$value->pic)) ? asset('public/storage/images/doctors/'.$value->pic) : asset('public/storage/images/doctors/images.jpg') }}" alt="{{ $value->name }}">
+
               <div class="row no-gutters">
                 <div class="col-lg-6 pl-md-4">
                   <img class="user-img d-phone" src="img/user-card.png" alt="doctor">
-                  <h5>Dr. Mohan Kumar DDS <i class="icofont-check"></i> <span class="distance">1.5 Km</span></h5>
-                  <h6>Dentist</h6>
+                  <h5>{{ $value->name }}<i class="icofont-check"></i> <span class="distance">1.5 Km</span></h5>
+                  <h6>{{ $value->speciality->spec_name }}</h6>
                   <!-- address -->
                   <div class="address">
-                    <h5>Sector 15,Faridabad</h5>
-                    <p>Deep Dental Care & Treatment Centre Rs.400 Consultation fee at clinic</p>
+                    <h5>{{ $value->address }}</h5>
+                    <p>{{ $value->about }}</p>
                   </div>
                   <!-- address end -->
 
@@ -170,31 +193,24 @@
                 </div>
                 <div class="col-lg-6 pl-md-4 pl-lg-0">
                   <!-- time buttons -->
-                  <ul class="time-btns d-desktop-for-tab">
-                    <li><a href="#">09:00 AM</a></li>
-                    <li><a href="#">09:00 AM</a></li>
-                    <li><a href="#">09:00 AM</a></li>
-                    <li><a href="#" class="empty">--</a></li>
-                    <li><a href="#">11:00 AM</a></li>
-                    <li><a href="#">11:00 AM</a></li>
-                    <li><a href="#">11:00 AM</a></li>
-                    <li><a href="#" class="empty">--</a></li>
-                    <li><a href="#">12:00 AM</a></li>
-                    <li><a href="#">12:00 AM</a></li>
-                    <li><a href="#">12:00 AM</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                    <li><a href="#" class="empty">---</a></li>
-                    <li><a href="#" class="empty">---</a></li>
+                 
+                  <ul class="time-btns d-desktop-for-tab"> 
+                     @for($i=1; $i<=4; $i++) 
+                     @foreach($value->AppointmentSlots as $key2 => $slot) 
+                    <li><a href="#">{{ date('h:i a', strtotime($slot->slot_time)) }}</a></li>
+                    @endforeach
+                     
+                   {{--  <li><a href="#" class="empty">-1-</a></li> --}}
+                    @endfor
+                   
                   </ul>
                   <!-- time buttons end -->
 
                   <ul class="time-btns d-tab">
-                    <li><a href="#">09:00 AM</a></li>
-                    <li><a href="#">11:00 AM</a></li>
-                    <li><a href="#">12:00 AM</a></li>
-                    <li><a href="#" class="empty">---</a></li>
+                    <li><a href="#">09:06 AM</a></li>
+                    <li><a href="#">11:07 AM</a></li>
+                    <li><a href="#">12:08 AM</a></li>
+                    <li><a href="#" class="empty">--9-</a></li>
                   </ul>
                 </div>
                 <div class="col-lg-12 pl-md-4">
@@ -228,7 +244,7 @@
             <!-- user card end -->
           </div>
           <!-- doctor list end -->
-
+          @endforeach
           <!-- doctor list -->
           <div class="doctor-list">
             <!-- user card -->
@@ -317,9 +333,10 @@
         </div>
         <div class="col-lg-4">
           <!-- map -->
-          <div class="loc-map">
+            <div id="map" style="width: 100%; height: 500px;"></div>
+         {{--  <div class="loc-map">
             <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d463522.6072642181!2d78.79619623857486!3d24.820425914447725!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1606175912511!5m2!1sen!2sin" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-          </div>
+          </div> --}}
           <!-- map end -->
         </div>
       </div>
@@ -328,6 +345,95 @@
 </section>
 <!-- inner page content end -->
  
+<script type="text/javascript">
+
+   var locations=<?php echo json_encode($lact_new); ?>; 
+   var blank=<?php echo json_encode($location_blank); ?>;
+   console.log(locations);
+   console.log(blank);
+      function initMap() { 
+        var bounds = new google.maps.LatLngBounds; 
+        var markersArray = []; 
+         var origin2 = "{{ \Illuminate\Support\Facades\Session::get('booking.search')}}";
+        var destinationIcon = 'https://chart.googleapis.com/chart?' +
+            'chst=d_map_pin_letter&chld=B|f5ac32|000000';
+        var originIcon = 'https://chart.googleapis.com/chart?' +
+            'chst=d_map_pin_letter&chld=O|FFFF00|000000';
+            var image = "https://galaxywebsolution.in/wp-content/uploads/2017/07/cropped-gws2-copy.jpg";
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 28.53, lng: 77.39},
+          zoom: 10
+        });
+
+        
+
+        var geocoder = new google.maps.Geocoder; 
+        var service = new google.maps.DistanceMatrixService;
+        service.getDistanceMatrix({
+          origins: [origin2],
+          destinations: locations,
+          travelMode: 'DRIVING',
+          unitSystem: google.maps.UnitSystem.IMPERIAL,
+          avoidHighways: false,
+          avoidTolls: false
+        }, function(response, status) {
+ console.log(response);
+          if (status !== 'OK') {
+            alert('Error was: ' + status);
+          } else {
+            var originList = response.originAddresses;
+            var destinationList = response.destinationAddresses;                
+            deleteMarkers(markersArray);
+            var showGeocodedAddressOnMap = function(asDestination, name) {
+              var icon = asDestination ? destinationIcon : originIcon;
+              if(asDestination){
+              return function(results, status) {
+                if (status === 'OK') {
+                  map.fitBounds(bounds.extend(results[0].geometry.location));
+                  markersArray.push(new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    icon: image,
+                    title:name
+                  }));
+                } else {
+                  alert('Geocode was not successful due to: ' + status);
+                }
+              };
+            }
+            };
+            var count=0;
+            for (var i = 0; i < originList.length; i++) {
+              var results = response.rows[i].elements;
+              geocoder.geocode({'address': originList[i]},
+                  showGeocodedAddressOnMap(false,' '));
+              for(var j = 0; j < results.length; j++) {
+                  for (var p=0, len=blank.length;p<len;p++) {
+                    if (blank[p] == j){
+                        count++;
+                    }  
+                }
+                geocoder.geocode({'address': destinationList[j]},
+                    showGeocodedAddressOnMap(true,locations[j]['title']));  
+                     $("#distance-total"+count).html(results[j].distance.text+'les From '+originList[0]); 
+                     count++;
+              }
+            }
+          }
+        });
+      }
+      function deleteMarkers(markersArray) {
+        for (var i = 0; i < markersArray.length; i++) {
+          markersArray[i].setMap(null);
+        }
+        markersArray = [];
+      } 
+</script>
+
+ <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfaLWLOOJzGnXan4NM8-sk6OSr53b_W4k&callback=initMap">
+    </script>
+
 
 @endsection
  

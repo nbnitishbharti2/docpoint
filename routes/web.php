@@ -110,6 +110,14 @@ Route::group(['middleware' => ['auth']], function () {
     // review for admin
     Route::get('/review', 'ReviewController@index')->name('review');
     Route::get('/change-status/{id}/{status}', 'ReviewController@changeStatus')->name('change-review');
+    // Appointment sloats for admin
+    Route::get('/appointment-slots', 'AppointmentSloatController@index')->name('appointment.slots');
+     Route::get('/appointment-slots-edit/{city_id}', 'AppointmentSloatController@edit')->name('appointment.slots.edit');
+    Route::post('/appointment-slots-edit/{city_id}', 'AppointmentSloatController@update')->name('appointment.slots.update');
+    Route::get('/appointment-slots-delete/{user_id}', 'AppointmentSloatController@delete')->name('appointment.slots.delete');
+     Route::get('/appointment-slots-add', 'AppointmentSloatController@add')->name('appointment.slots.add');
+    Route::post('/appointment-slots-store', 'AppointmentSloatController@store')->name('appointment.slots.store');
+   
 
     // Ajax Routes
     Route::post('get-state', 'StateController@getStateOfCountry')->name('get.country.state');
@@ -123,4 +131,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('change-state-status', 'StateController@changeStatus')->name('change.state.status');
     Route::post('change-city-status', 'CityController@changeStatus')->name('change.city.status');
     Route::post('change-location-status', 'LocalityController@changeStatus')->name('change.location.status');
+    Route::post('change-appointment-slots-status', 'AppointmentSloatController@changeStatus')->name('change.appointment.slots.status');
 });
