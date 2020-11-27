@@ -48,6 +48,9 @@ class CommanHelper
 
 	/**
 	 * Method to attach role to user
+	 * @param Collection $user
+	 * @param Collection $role
+	 * @return Collection $user_role
 	 */
 	public static function attachRole($user, $role)
 	{
@@ -60,7 +63,7 @@ class CommanHelper
 	}
 
 	/**
-	* Method to get User role
+	* Method to get User role by user id
 	* @param int $user_id
 	* @return string 
 	*/
