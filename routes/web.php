@@ -103,20 +103,21 @@ Route::group(['middleware' => ['auth']], function () {
     // User routes
     Route::get('/user_groups', 'UserGroupController@index')->name('user_groups');
     Route::get('/users', 'UserController@listUsers')->name('users');
-    Route::get('/user_groups_add/', 'UserGroupController@add')->name('user_groups_add');
-    Route::post('/user_groups_add/', 'UserGroupController@add')->name('user_groups_add');
+    Route::get('/user_groups_add', 'UserGroupController@add')->name('user_groups_add');
+    Route::post('/user_groups_add', 'UserGroupController@add')->name('user_groups_add');
     Route::get('/log-history/{user_id}', 'UserController@logHistory')->name('log.history');
 
     // review for admin
     Route::get('/review', 'ReviewController@index')->name('review');
     Route::get('/change-status/{id}/{status}', 'ReviewController@changeStatus')->name('change-review');
-    // Appointment sloats for admin
-    Route::get('/appointment-slots', 'AppointmentSloatController@index')->name('appointment.slots');
-     Route::get('/appointment-slots-edit/{city_id}', 'AppointmentSloatController@edit')->name('appointment.slots.edit');
-    Route::post('/appointment-slots-edit/{city_id}', 'AppointmentSloatController@update')->name('appointment.slots.update');
-    Route::get('/appointment-slots-delete/{user_id}', 'AppointmentSloatController@delete')->name('appointment.slots.delete');
-     Route::get('/appointment-slots-add', 'AppointmentSloatController@add')->name('appointment.slots.add');
-    Route::post('/appointment-slots-store', 'AppointmentSloatController@store')->name('appointment.slots.store');
+
+    // Appointment slots for admin
+    Route::get('/appointment-slots', 'AppointmentSlotController@index')->name('appointment.slots');
+    Route::get('/appointment-slots-edit/{city_id}', 'AppointmentSlotController@edit')->name('appointment.slots.edit');
+    Route::post('/appointment-slots-edit/{city_id}', 'AppointmentSlotController@update')->name('appointment.slots.update');
+    Route::get('/appointment-slots-delete/{user_id}', 'AppointmentSlotController@delete')->name('appointment.slots.delete');
+    Route::get('/appointment-slots-add', 'AppointmentSlotController@add')->name('appointment.slots.add');
+    Route::post('/appointment-slots-store', 'AppointmentSlotController@store')->name('appointment.slots.store');
    
 
     // Ajax Routes
@@ -131,5 +132,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('change-state-status', 'StateController@changeStatus')->name('change.state.status');
     Route::post('change-city-status', 'CityController@changeStatus')->name('change.city.status');
     Route::post('change-location-status', 'LocalityController@changeStatus')->name('change.location.status');
-    Route::post('change-appointment-slots-status', 'AppointmentSloatController@changeStatus')->name('change.appointment.slots.status');
+    Route::post('change-appointment-slots-status', 'AppointmentSlotController@changeStatus')->name('change.appointment.slots.status');
 });

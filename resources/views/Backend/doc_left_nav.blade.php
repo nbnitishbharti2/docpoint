@@ -6,7 +6,7 @@
 					<span>Main</span>
 				</li>
 				<li class="active"> 
-					<a href="{{route('doctor.profile')}}"><i class="fe fe-home"></i> <span>Dashboard</span></a>
+					<a href="{{ route('dashboard') }}"><i class="fe fe-home"></i> <span>Dashboard</span></a>
 				</li>
 			</ul>
 		</div>

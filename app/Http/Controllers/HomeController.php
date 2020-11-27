@@ -48,7 +48,7 @@ class HomeController extends Controller
         try {
             $docData = Doctor::get()->where('status', 'Active');
             $data['doc-count'] = count($docData);
-            return view('dashboard',['data' => $data]);
+            return view('dashboard', ['data' => $data]);
         } catch(\Exception $e) {
             Log::error("Error in dashboard on HomeController ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');

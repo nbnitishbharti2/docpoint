@@ -21,22 +21,22 @@
         <div class="main-wrapper">
             <div class="header">
                 <div class="header-left">
-                    <a href="index.html" class="logo">
+					<a href="{{ url('/dashboard') }}" class="logo">
 						<img src="{{ URL::asset('public/admin/assets/img/doc-point-logo.png')}}" alt="Logo">
 					</a>
-					<a href="index.html" class="logo logo-small">
+					<a href="{{ url('/dashboard') }}" class="logo logo-small">
 						<img src="{{ URL::asset('public/admin/assets/img/doc-point-logo.png')}}" alt="Logo" width="30" height="30">
 					</a>
                 </div>
 				<a href="javascript:void(0);" id="toggle_btn">
 					<i class="fe fe-text-align-left"></i>
 				</a>
-				<div class="top-nav-search">
+				{{-- <div class="top-nav-search">
 					<form>
 						<input type="text" class="form-control" placeholder="Search here">
 						<button class="btn" type="submit"><i class="fa fa-search"></i></button>
 					</form>
-				</div>
+				</div> --}}
 				<a class="mobile_btn" id="mobile_btn">
 					<i class="fa fa-bars"></i>
 				</a>
@@ -133,8 +133,7 @@
 									<p class="text-muted mb-0">{{{Auth::user()->email}}}</p>
 								</div>
 							</div>
-							<a class="dropdown-item" href="profile.html">My Profile</a>
-							<a class="dropdown-item" href="settings.html">Settings</a>
+							<a class="dropdown-item" href="{{ route('doctor.profile', [Auth::user()->id]) }}">My Profile</a>
 							<a class="dropdown-item" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
 						</div>
 					</li>
@@ -150,7 +149,11 @@
 			<!-- /Header -->
 			
 			<!-- Sidebar -->
-			@component ('Backend.left_nav') @endcomponent
+			@if(CommanHelper::userRole() == "Admin")
+				@component ('Backend.admin_left_nav') @endcomponent
+			@else
+				@component ('Backend.doc_left_nav') @endcomponent
+			@endif
 			<!-- /Sidebar -->
 			
 			<!-- Page Wrapper -->

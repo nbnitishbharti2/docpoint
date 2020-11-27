@@ -4,22 +4,12 @@
 <div class="page-header">
     <div class="row">
         <div class="col-sm-12">
-        <div class="user-grp-container">
-            <h3 class="page-title">Manage Appointment Slots</h3>
-            <a href="{{route('appointment.slots.add')}}">Add Appointment Slots</a>
-             
-       </div>
-            <ul class="breadcrumb">
-            </ul>
+            <div class="user-grp-container">
+                <h3 class="page-title">Manage Appointment Slots</h3>
+                <a href="{{route('appointment.slots.add')}}">Add Appointment Slots</a>
+            </div>
         </div>
     </div>
-</div>
-<div class="flash-message">
-    @foreach (['danger', 'warning', 'success', 'info'] as $msg)
-    @if(Session::has('alert-' . $msg))
-    <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</p>
-    @endif
-    @endforeach
 </div>
 <div class="row">
     <div class="col-sm-12">

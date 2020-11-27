@@ -23,11 +23,11 @@ class AuthController extends Controller
             if (Auth::check()) {
                 $userData = Auth::user();
                 if($userData->status == 'Active') { // If user is not active
-                    $userRole = CommanHelper::userRole($userData->roles);
+                    $userRole = CommanHelper::userRole();
                     if($userRole == "Admin") {
                         return redirect('/dashboard');
                     } elseif ($userRole == "Doctor") {
-                        return redirect('/profile');
+                        return redirect('/dashboard');
                     } else {
                         return redirect('/');
                     }

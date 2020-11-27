@@ -8,14 +8,18 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AppoinmentSloat;
 use Response;
 use Log;
-class AppointmentSloatController extends Controller
+class AppointmentSlotController extends Controller
 {
     //
     public function index()
     {
-    	//dd(Auth::user());
-    	$data=AppointmentSlots::where('doctor_id',Auth::user()->id)->get();
-    	return view('AppointmentSlots.index',['data' => $data]);
+        try {
+            $data=AppointmentSlots::where('doctor_id',Auth::user()->id)->get();
+            return view('AppointmentSlots.index',['data' => $data]);
+        } catch(\Exception $e) {
+            Log::error("Error in index on AppointmentSlotsController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
     }
      public function delete(int $city_id = 0)
     {
@@ -31,9 +35,11 @@ class AppointmentSloatController extends Controller
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
+
+
     public function changeStatus(Request $request)
     {
-       try {
+        try {
             $appoinment = AppointmentSlots::find($request->user_id);
             if($appoinment != null) {
                 $appoinment->active = ($request->status == "active") ? 1 : 0;
@@ -46,6 +52,8 @@ class AppointmentSloatController extends Controller
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
+
+
     public function edit(int $city_id = 0)
     {
         try {
@@ -59,9 +67,10 @@ class AppointmentSloatController extends Controller
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
-    public function update(AppoinmentSloat $request, $id = 0)
-    { 
 
+
+    public function update(AppoinmentSloat $request, $id = 0)
+    {
         try {
             $data = AppointmentSlots::find($id);
             $data->slot_time=$request->slot_time; 
@@ -71,30 +80,29 @@ class AppointmentSloatController extends Controller
             if($data->save()){
                return redirect('appointment-slots')->with('message', 'Record Updated successfully');
             }
-             return redirect()->back()->with('error', 'Record Not Updated successfully');
+            return redirect()->back()->with('error', 'Record Not Updated successfully');
         } catch(\Exception $e) {
             Log::error("Error in update on AppointmentSlots ". $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
+
+
     public function add()
-    { 
-
-        
-             return view('AppointmentSlots.add'); 
-             
+    {
+        return view('AppointmentSlots.add'); 
     }
-    public function store(AppoinmentSloat $request)
-    { 
 
+    public function store(AppoinmentSloat $request)
+    {
         try {
             $data = new AppointmentSlots();
-            $data->slot_time=$request->slot_time;
-            $data->doctor_id=Auth::user()->id;  
+            $data->slot_time = $request->slot_time;
+            $data->doctor_id = Auth::user()->id;  
             if($data->save()){
                return redirect('appointment-slots')->with('message', 'Record Added successfully');
             }
-             return redirect()->back()->with('error', 'Record Not Added successfully');
+            return redirect()->back()->with('error', 'Record Not Added successfully');
         } catch(\Exception $e) {
             Log::error("Error in Store on AppointmentSlots ". $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
