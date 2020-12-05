@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\AppointmentSlots;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AppoinmentSlot;
+use App\Models\DoctorHoliday;
+use App\Helpers\CommanHelper;
 use Response;
 use Log;
 
@@ -22,6 +24,58 @@ class AppointmentSlotController extends Controller
             return view('AppointmentSlots.index', ['data' => $data]);
         } catch(\Exception $e) {
             Log::error("Error in index on AppointmentSlotsController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to show view to add resource
+     * 
+     * @return View
+     */
+    public function add()
+    {
+        try {
+            $data['doctor_id'] = Auth::user()->doctors->id;
+            return view('AppointmentSlots.add', $data); 
+        } catch(\Exception $e) {
+            Log::error("Error in add on AppointmentSlots ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to store resource
+     * @param App\Http\Requests\AppoinmentSlot $request
+     * @return Redirect
+     */
+    public function store(AppoinmentSlot $request)
+    {
+        try {
+            $leaves = DoctorHoliday::where('doctor_id', Auth::user()->doctors->id)->pluck('date')->toArray();
+            $days = isset($request->days) ? $request->days : array();
+            $start_date = $request->start_date . ' ' . $request->start_time;
+            $end_date = $request->end_date . ' ' . $request->end_time;
+            //Calling the function
+            $Data = CommanHelper::SplitTime($start_date, $end_date, $request->start_time, $request->end_time, $request->interval, $leaves, $days);
+            
+            foreach ($Data as $value) {
+                // Implement unique check
+                $check = AppointmentSlots::where(['doctor_id' => Auth::user()->doctors->id, 'slot_date_time' => date("Y-m-d H:i:s", strtotime($value))])->get();
+                if($check->count() == 0) {
+                    $slot_data = [
+                        'doctor_id' => Auth::user()->doctors->id,
+                        'slot_date' => date("Y-m-d", strtotime($value)),
+                        'slot_date_time' => date("Y-m-d H:i:s", strtotime($value)),
+                        'slot_time' => date("H:i:s", strtotime($value)),
+                        'status' => 'Available'
+                    ];
+                    AppointmentSlots::create($slot_data);
+                }
+            }
+            return redirect()->back()->with('error', 'Record Added successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in Store on AppointmentSlots ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
         }
     }
@@ -106,42 +160,6 @@ class AppointmentSlotController extends Controller
             return redirect()->back()->with('error', 'Record Not Updated successfully');
         } catch(\Exception $e) {
             Log::error("Error in update on AppointmentSlots ". $e->getMessage());
-            return back()->with('error', 'Oops! Something went wrong.');
-        }
-    }
-
-    /**
-     * Method to show view to add resource
-     * 
-     * @return View
-     */
-    public function add()
-    {
-        try {
-            return view('AppointmentSlots.add'); 
-        } catch(\Exception $e) {
-            Log::error("Error in add on AppointmentSlots ". $e->getMessage());
-            return back()->with('error', 'Oops! Something went wrong.');
-        }
-    }
-
-    /**
-     * Method to store resource
-     * @param App\Http\Requests\AppoinmentSlot $request
-     * @return Redirect
-     */
-    public function store(AppoinmentSlot $request)
-    {
-        try {
-            $data = new AppointmentSlots();
-            $data->slot_time = $request->slot_time;
-            $data->doctor_id = Auth::user()->id;  
-            if($data->save()){
-               return redirect('appointment-slots')->with('message', 'Record Added successfully');
-            }
-            return redirect()->back()->with('error', 'Record Not Added successfully');
-        } catch(\Exception $e) {
-            Log::error("Error in Store on AppointmentSlots ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
         }
     }

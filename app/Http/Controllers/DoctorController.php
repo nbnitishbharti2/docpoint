@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Requests\DoctorRequest;
 use App\Models\Doctor as Doctors;
 use App\Helpers\CommanHelper;
+use App\Models\DoctorHoliday;
 use App\Models\Speciality;
 use App\Models\Country;
 use App\Models\Gender;
 use App\Models\State;
 use App\Models\City;
 use App\Models\User;
-use App\Models\AppointmentSlots;
 use App\Models\Role;
 use Response;
 use Log;
@@ -292,13 +292,47 @@ class DoctorController extends Controller
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
-    public function liest(Request $request)
+
+    /**
+     * Method to show Doctors list
+     * @param Illuminate\Http\Request $request
+     * @return redirect
+     */
+    public function list(Request $request)
     {
-        //dd($request);
-        # code...
-        $data['doctors']=Doctors::get(); 
-        $data['date']=date('Y-m-d');  
+        $data['doctors'] = Doctors::get(); 
+        $data['date'] = date('Y-m-d');
         return view('frontend.doctors', $data);
-          
+    }
+
+    /**
+     * Method to show Doctor details
+     * @param int $doctor_id
+     * @return redirect
+     */
+    public function doctorDetails(int $doctor_id = 0)
+    {
+        try {
+            $data['doctors'] = Doctors::find($doctor_id);
+            if($data['doctors'] == null) { // If details not found then return
+                return redirect('doctor-list')->with('error', 'Details not found');
+            }
+            
+            return view('frontend.doctor-details', $data);
+        } catch(\Exception $e) {
+            Log::error("Error in doctorDetails on DoctorController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+
+    public function holiday(int $doctor_id)
+    {
+        try {
+            $data['holidays'] = DoctorHoliday::where('doctor_id', $doctor_id)->get();
+            return view('holiday.index', $data);
+        } catch(\Exception $e) {
+            Log::error("Error in doctorDetails on DoctorController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
     }
 }

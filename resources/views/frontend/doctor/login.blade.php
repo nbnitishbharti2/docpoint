@@ -23,15 +23,15 @@
                                 <form method="POST" id="login" action="{{ route('login') }}">
                                     @csrf
                                     <div class="form-group form-focus login-form">
-                                        <input type="email" class="form-control floating" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                                         <label class="focus-label">Email</label>
+                                        <input type="email" class="form-control floating" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                                         @if($errors->has('email'))
                                             <div class="error">{{ $errors->first('email') }}</div>
                                         @endif
                                     </div>
                                     <div class="form-group form-focus login-form">
-                                        <input type="password" class="form-control floating" name="password" required autocomplete="current-password">
                                         <label class="focus-label">Password</label>
+                                        <input type="password" class="form-control floating" name="password" required autocomplete="current-password">
                                         @if($errors->has('password'))
                                             <div class="error">{{ $errors->first('password') }}</div>
                                         @endif

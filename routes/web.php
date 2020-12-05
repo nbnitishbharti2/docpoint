@@ -31,8 +31,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 /*website */
-Route::any('/doctor-lists', 'DoctorController@liest')->name('doctor.list');
-
+Route::any('/doctor-lists', 'DoctorController@list')->name('doctor.list');
+Route::get('/doctor-details/{doctor_id}', 'DoctorController@doctorDetails')->name('doctor.details');
 
 /**
  * Please add all the action that is accessible after valid login to this group.
@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('doctor-edit/{id}', 'DoctorController@edit')->name('doctor.edit');
     Route::post('/doctor-edit/{id}', 'DoctorController@update')->name('doctor.update');
     Route::get('/doctor-delete/{doctor_id}', 'DoctorController@delete')->name('doctor.delete');
+    Route::get('/doctor-holiday/{doctor_id}', 'DoctorController@holiday')->name('doctor.holiday');
 
     // Speciality route
     Route::get('/speciality-add/', 'SpecialityController@add')->name('Speciality.add');
@@ -111,6 +112,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/review', 'ReviewController@index')->name('review');
     Route::get('/change-status/{id}/{status}', 'ReviewController@changeStatus')->name('change-review');
 
+    
+
     // Appointment slots for admin
     Route::get('/appointment-slots', 'AppointmentSlotController@index')->name('appointment.slots');
     Route::get('/appointment-slots-edit/{city_id}', 'AppointmentSlotController@edit')->name('appointment.slots.edit');
@@ -119,6 +122,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/appointment-slots-add', 'AppointmentSlotController@add')->name('appointment.slots.add');
     Route::post('/appointment-slots-store', 'AppointmentSlotController@store')->name('appointment.slots.store');
    
+    // Appointment management
+    Route::get('/manage-appointment', 'AppointmentController@index')->name('manage.appointment');
 
     // Ajax Routes
     Route::post('get-state', 'StateController@getStateOfCountry')->name('get.country.state');

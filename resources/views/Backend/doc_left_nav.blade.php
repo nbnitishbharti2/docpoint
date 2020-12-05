@@ -2,12 +2,10 @@
 	<div class="sidebar-inner slimscroll">
 		<div id="sidebar-menu" class="sidebar-menu">
 			<ul>
-				<li class="menu-title"> 
-					<span>Main</span>
-				</li>
-				<li class="active"> 
-					<a href="{{ route('dashboard') }}"><i class="fe fe-home"></i> <span>Dashboard</span></a>
-				</li>
+				<li class="active"><a href="{{ route('dashboard') }}"><i class="fe fe-home"></i> <span>Dashboard</span></a></li>
+				<li><a href="{{ route('review') }}"><i class="fe fe-layout"></i> <span>Manage Review</span></a></li>
+				<li><a href="{{ route('appointment.slots') }}"><i class="fe fe-layout"></i> <span>Appoinment Slots</span></a></li>
+				<li><a href="{{ route('manage.appointment') }}"><i class="fe fe-calendar"></i> <span>Appointments</span></a></li>
 			</ul>
 		</div>
 	</div>

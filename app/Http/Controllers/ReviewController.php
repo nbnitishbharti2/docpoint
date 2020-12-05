@@ -13,7 +13,7 @@ class ReviewController extends Controller
     public function index()
     {
     	$data=Review::orderBy('id','desc')->get();
-    	return view('Review.index',['data' => $data]);
+    	return view('review.index',['data' => $data]);
     }
     public function changeStatus($id, $newstatus)
     {

@@ -39,19 +39,20 @@ class CitySeeder extends Seeder
             "Saharsa",
             "Sasaram",
             "Sitamarhi",
-            "Siwan"];
+            "Siwan"
+        ];
     
     
-            foreach ($cities as $value) {
-                DB::table('cities')->insert([
-                    'name' => $value,
-                    'alias' => $value,
-                    'state_id' => 9,
-                    'country_id' => 9,
-                    'active' => 1,
-                    'created_at'=>date('Y-m-d H:i:s'),
-                    'updated_at'=>date('Y-m-d H:i:s'), 
-                ]);  
-            }
+        foreach ($cities as $value) {
+            DB::table('cities')->insert([
+                'name' => $value,
+                'alias' => $value,
+                'state_id' => 9,
+                'country_id' => 9,
+                'active' => 1,
+                'created_at'=>date('Y-m-d H:i:s'),
+                'updated_at'=>date('Y-m-d H:i:s'), 
+            ]);  
+        }
     }
 }

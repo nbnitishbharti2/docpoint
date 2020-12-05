@@ -81,4 +81,33 @@ class CommanHelper
 			Log::error('error on userRole in CommanHelper '. $th->getMessage());
 		}
 	}
+
+	// Your code here!
+	public static function SplitTime($StartTime, $EndTime, $a_time, $b_time, $Duration="15", $leaves = array(), $days = array())
+	{
+		try {
+			$ReturnArray = array ();// Define output
+			$StartTime    = strtotime ($StartTime); //Get Timestamp
+			$EndTime      = strtotime ($EndTime); //Get Timestamp
+
+			$AddMins  = $Duration * 60;
+
+			while ($StartTime <= $EndTime) //Run loop
+			{
+				if(!in_array(date ("Y-m-d", $StartTime), $leaves) && !in_array(date ("l", $StartTime), $days)) {
+					if((date ("H:i", $StartTime) >= $a_time) && (date ("H:i", $StartTime) < $b_time)) {
+						$ReturnArray[] = date ("d-m-Y G:i", $StartTime);
+						$StartTime += $AddMins; //Endtime check
+					} else {
+						$StartTime += $AddMins; //Endtime check
+					}
+				} else {
+					$StartTime += $AddMins; //Endtime check
+				}
+			}
+			return $ReturnArray;
+		} catch (\Throwable $th) {
+			Log::error('error on SplitTime in CommanHelper '. $th->getMessage());
+		}
+	}
 }

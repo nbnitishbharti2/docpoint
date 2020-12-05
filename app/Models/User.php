@@ -53,4 +53,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\UserRole');
     }
+
+    public function doctors()
+    {
+        return $this->hasOne('App\Models\Doctor');
+    }
 }

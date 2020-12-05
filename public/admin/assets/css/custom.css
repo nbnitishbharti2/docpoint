@@ -5,3 +5,25 @@
 .login-form {
     height: 65px !important;
 }
+
+/* Day checkbox css */
+.weekDays-selector input {
+    display: none!important;
+}
+
+.weekDays-selector input[type=checkbox] + label {
+    display: inline-block;
+    border-radius: 6px;
+    background: #dddddd;
+    height: 36px;
+    width: 36px;
+    margin-right: 5px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.weekDays-selector input[type=checkbox]:checked + label {
+    background: #1b5a90;
+    color: #ffffff;
+}

@@ -2,11 +2,11 @@
 @section('title', 'MyDocPoint | Doctors')
 @section('content')
 
-<?php 
+@php 
 $lact  = array(); 
 $lact_new= array();
 $location_blank = array(); 
-?>
+@endphp
 <!-- search -->
 <section class="p-0 bg-blue">
   <div class="banner innr-banner">
@@ -169,7 +169,7 @@ $location_blank = array();
           <div class="doctor-list">
             <!-- user card -->
             <div class="user-card">
-              <img class="user-img d-desktop-for-phone" src="{{ ($value->pic && file_exists('public/storage/images/doctors/'.$value->pic)) ? asset('public/storage/images/doctors/'.$value->pic) : asset('public/storage/images/doctors/images.jpg') }}" alt="{{ $value->name }}">
+              <img class="user-img d-desktop-for-phone" src="{{ ($value->pic && file_exists('public/storage/images/doctor/'.$value->pic)) ? asset('public/storage/images/doctor/'.$value->pic) : asset('public/storage/images/doctor/images.jpg') }}" alt="{{ $value->name }}">
 
               <div class="row no-gutters">
                 <div class="col-lg-6 pl-md-4">
@@ -227,7 +227,7 @@ $location_blank = array();
                       <!-- calendar icon end -->
                       View all availability
                     </a>
-                    <a class="blue-anchor" href="#">
+                    <a class="blue-anchor" href="{{ route('doctor.details', [$value->id]) }}">
                       <!-- user icon -->
                       <svg id="Layer_1" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
                           <g>
@@ -353,9 +353,7 @@ $location_blank = array();
       } 
 </script>
 
- <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfaLWLOOJzGnXan4NM8-sk6OSr53b_W4k&callback=initMap">
-    </script>
+ <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfaLWLOOJzGnXan4NM8-sk6OSr53b_W4k&callback=initMap"> </script>
 
 
 @endsection

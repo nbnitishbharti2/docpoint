@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title')</title>
     <!-- Bootstrap CSS -->
-    <link href="{{ asset('public/storage/frontend/img/doc-point-logo.ico') }}" rel="icon">
+    <link href="{{ asset('public/storage/frontend/img/doc-point-logo.ico') }}" type="image/x-icon" rel="icon">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/icofont.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/media.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/viewer.css') }}">
   </head>
 <body>
 <!-- header -->
@@ -172,6 +173,8 @@
   <script src="{{ asset('public/admin/assets/plugins/validation/jquery.validate.min.js') }}"></script>
   <script src="{{ asset('public/admin/assets/plugins/validation/additional-methods.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/custom.js') }}"></script>
+  <script src="{{ asset('public/storage/frontend/js/viewer.min.js') }}"></script>
+  <script src="{{ asset('public/storage/frontend/js/percent-rating.js') }}"></script>
   <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function() {

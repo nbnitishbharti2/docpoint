@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="{{ URL::asset('public/admin/assets/css/feathericon.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('public/admin/assets/plugins/morris/morris.css') }}">
 		<link rel="stylesheet" href="{{ URL::asset('public/admin/assets/css/style.css') }}">
-		<link rel="stylesheet" href="{{ URL::asset('public/admin/assets/css/custom.css') }}">
+		<link rel="stylesheet" href="{{ URL::asset('public/admin/assets/css/custom.css?v=1') }}">
 		<meta name="csrf-token" content="{{ csrf_token() }}" />
 		<script src="{{ URL::asset('public/admin/assets/js/jquery-3.2.1.min.js') }}"></script>
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/datatables/datatables.min.css')}}">
@@ -129,8 +129,8 @@
 									<img src="{{ URL::asset('public/admin/assets/img/profiles/avatar-01.jpg')}}" alt="User Image" class="avatar-img rounded-circle">
 								</div>
 								<div class="user-text">
-									<h6>{{{Auth::user()->name}}}</h6>
-									<p class="text-muted mb-0">{{{Auth::user()->email}}}</p>
+									<h6>{{ Auth::user()->name }}</h6>
+									<p class="text-muted mb-0">{{ Auth::user()->email }}</p>
 								</div>
 							</div>
 							<a class="dropdown-item" href="{{ route('doctor.profile', [Auth::user()->id]) }}">My Profile</a>

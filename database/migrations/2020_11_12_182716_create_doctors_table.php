@@ -41,7 +41,7 @@ class CreateDoctorsTable extends Migration
             $table->timestamps();
         });
         Schema::table('doctors', function($table){
-             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
         Schema::table('doctors', function($table){
              $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
@@ -55,7 +55,7 @@ class CreateDoctorsTable extends Migration
         Schema::table('doctors', function($table){
             $table->foreign('speciality_id')->references('id')->on('specialities')->onDelete('cascade'); 
         });
-            Schema::table('doctors', function($table){
+        Schema::table('doctors', function($table){
             $table->foreign('gender_id')->references('id')->on('genders')->onDelete('cascade'); 
         });
     }

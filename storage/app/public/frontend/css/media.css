@@ -1,0 +1,187 @@
+@media (min-width: 1400px){
+    .inner-page-content .col-lg-8 {
+        max-width: 890px;
+        width: 100%;
+    }
+    .inner-page-content .col-lg-4 {
+        width: calc(100% - 890px);
+        max-width: calc(100% - 890px);
+        flex: auto;
+    }
+}
+@media (max-width: 1600px){
+}
+@media (max-width: 1400px){
+}
+@media (max-width: 1349px){
+    .date-item h5 {
+        font-size: 16px;
+    }
+    .date-item p {
+        font-size: 14px;
+    }
+    .date-slider {
+        margin-bottom: 20px;
+    }
+}
+@media (max-width: 1200px){
+    
+}
+@media (max-width: 1190px){
+    .logo h2 {font-size: 45px;}
+    .top-txt a, .top-txt p {font-size: 26px;}
+    .top-txt .dropdown-toggle img {width: 15px;}
+    .banner-cont h2 {font-size: 46px;}
+    .visit-txt h3 {font-size: 22px;}
+    .visit-txt p { font-size: 16px; line-height: 25px;}
+    .dc-txt h2 {font-size: 28px;}
+    .star-doctor h2 {font-size: 40px;}
+    .cp-links li {font-size: 14px; margin: 0 10px;}
+    .time-btns a{font-size: 12px;}
+    .doctor-list .user-card>.row {width: calc(100% - 100px);}
+    .doctor-list .user-img { width: 100px; height: 100px;}
+}
+@media (max-width: 1050px){
+    .time-btns a {
+        font-size: 11px;
+    }
+    .date-item p {
+        font-size: 13px;
+    }
+    .date-item h5 {
+        font-size: 14px;
+    }
+    .date-slider .owl-nav button span {
+        font-size: 17px;
+    }
+    .date-slider {
+        margin-bottom: 8px;
+    }
+}
+@media (max-width: 1024px){
+    .logo h2 {font-size: 34px;}
+    .top-txt a, .top-txt p {font-size: 20px;}
+    .banner-cont h2 {font-size: 38px;}
+    .visit-txt h3 span { position: absolute; left: 100%; top: 0; z-index: 1; margin: 0;}
+    
+}
+@media (max-width: 992px){
+    .dc-txt { margin-top: 0; margin-bottom: 30px;}
+    .dc-txt h2 { margin-bottom: 28px;}
+    .dc-txt ul { float: left; margin: 0; width: 50%;}
+    .send-links { float: right; max-width: initial; width: 50%;}
+    .star-doctor h2 { font-size: 26px; margin-bottom: 20px;}
+    .star-doctor p { font-size: 16px;}
+    .ftr-links ul { display: flex; flex-wrap: wrap;}
+    .ftr-links h4 { margin-bottom: 2px;}
+    .ftr-links li { padding: 6px 0; margin-right: 35px;}
+    .ftr-links { margin-bottom: 35px;}
+    .btm-ribbon { flex-direction: column; align-items: center;}
+    .cp-links { margin: 13px 0;}
+    .owl-carousel.owl-loaded.date-slider{display: none;}
+    .d-desktop-for-tab{display: none!important;}
+    .d-tab{display: block;}
+}
+@media (max-width: 768px){
+    section { padding: 30px 0px;}
+    header { padding: 10px 0;}
+    .d-desktop-for-phone{display: none!important;}
+    .d-phone{display: block;}
+    .visit-txt h3 { display: block;}
+    .visit-txt h3 span { position: static;}
+    .logo h2 { text-align: center;}
+    .top-txt a, .top-txt p { font-size: 14px;}
+    .logo { margin-bottom: 10px;}
+    .top-txt .dropdown-toggle img { width: 8px;}
+    .top-txt { justify-content: space-between;}
+    .top-txt span{display: none;}
+    .top-txt .dropdown-menu { transform: none!important; top: 100%!important;}
+    .banner-cont h2 { font-size: 22px; margin: 15px 0;}
+    .banner-cont .needs-validation { flex-direction: column; margin-bottom: 30px;}
+    .search-btn { width: auto; font-size: 19px; height: 40px; position: relative;}
+    .search-btn:before { content: "Search"; position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; place-items: center; font-size: 14px; background-color: var(--blue); pointer-events: none;}
+    .banner-cont .needs-validation .row>div:nth-child(2) .form-control { width: 100%; margin: 0; margin-bottom: 9px;}
+    .banner-cont .form-control { margin-bottom: 9px; height: 40px; font-size: 14px;}
+    .special-heading { font-size: 18px; margin-bottom: 30px;}
+    .blue-btn { height: 40px; font-size: 15px; margin-bottom: 30px;}
+    .dc-txt h2 { font-size: 20px;}
+    .dc-txt ul { float: none; width: 100%; margin-bottom: 20px;}
+    .send-links { float: none; width: 100%; margin-bottom: 15px;}
+    .playstore { display: block; width: max-content; margin: auto;}
+    .user-card { margin-bottom: 50px;}
+    .star-doctor h2 { font-size: 20px; clear: both;}
+    .dc-txt li, .star-doctor li{font-size: 16px;}
+    .star-doctor ul { margin: 15px 0;}
+    .star-doc-btn { font-size: 16px; padding: 8px 12px; margin-bottom: 30px;}
+    .find-doc-heading { margin-bottom: 15px; font-size: 20px;}
+    .doctor-city select { font-size: 14px; padding: 10px 0;}
+    .cp-links { flex-wrap: wrap; justify-content: center;}
+    .banner-cont .needs-validation .row>div:nth-child(2) .invalid-feedback{margin-left: 0; width: 100%;}
+    .banner-cont .invalid-feedback, .banner-cont .valid-feedback { position: static; margin-bottom: 8px;}
+    .page-options span {font-size: 14px;}
+    .page-options a {
+        font-size: 14px;
+        padding: 5px 10px;
+        margin: 0 3px;
+    }
+    .sep {
+        margin: 0 10px;
+    }
+    .page-options ul {
+        margin-right: 75px;
+    }
+    .time-btns {
+        column-count: auto;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .doctor-list .user-card {
+        margin-bottom: 0;
+    }
+    .doctor-list .user-card>.row {
+        width: 100%;
+    }
+    .doctor-list .address {
+        margin: 10px 0;
+    }
+    .doctor-list .user-img {
+        float: left;
+        margin-right: 20px;
+    }
+    .tab-option-wrap a {
+        font-size: 15px;
+        margin: 0 7px;
+    }
+    .tab-option-wrap a span {
+        font-size: 12px;
+        padding: 2px 7px;
+    }
+    .tab-option-wrap li:nth-child(1) a {
+        margin-left: 0;
+    }
+    .tab-option-wrap li:nth-last-child(1) a {
+        margin-right: 0;
+    }
+    .tab-option-wrap a:before {
+        height: 2px;
+    }
+    .page-options span, .sep, .short-by{display: none;}
+    .page-options ul {
+        margin-right: -15px;
+    }
+    .doctor-list {
+        margin-right: -15px;
+        padding-right: 15px;
+    }
+    .loc-map {
+        margin-left: -15px;
+    }
+    .inc-pg {
+        padding-bottom: 0;
+    }
+    .inner-header .top-txt a {
+        font-size: 14px;
+    }
+}
+@media (max-width: 576px){
+}
