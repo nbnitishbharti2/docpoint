@@ -14,7 +14,7 @@
                             <form class="needs-validation" method="post" novalidate action="{{ url('doctor-lists') }}">
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
-                                        <input type="text" class="form-control" placeholder="Condition, Procedur..."
+                                        <input type="text" name="key" class="form-control" placeholder="Condition, Procedur..."
                                             required>
                                         <div class="invalid-feedback">
                                             Enter Condition or Procedure
@@ -24,7 +24,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" class="form-control" placeholder="Zip Code or city" required>
+                                        <input type="text" name="zip" class="form-control" placeholder="Zip Code or city" required>
                                         <div class="invalid-feedback">
                                             Enter Zip code or City
                                         </div>
@@ -33,7 +33,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="date" class="form-control" value="2020-08-30" required>
+                                        <input type="date" min="{{ date('Y-m-d') }}" name="date" class="form-control" value="{{ date('Y-m-d') }}" required>
                                         <div class="invalid-feedback">
                                             Enter Zip code or City
                                         </div>

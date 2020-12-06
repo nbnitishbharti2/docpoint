@@ -3,6 +3,8 @@
 @section('content')
 
 @php 
+//   $sloat=\App\Models\AppointmentSlots::getSloat(1,$date);
+             //    dd($sloat);
 $lact  = array(); 
 $lact_new= array();
 $location_blank = array(); 
@@ -46,7 +48,7 @@ $location_blank = array();
 
                 <!-- search item -->
                 <div class="col-md-4">
-                  <input type="date" class="form-control" value="2020-10-01" required>
+                  <input type="date" name="date" class="form-control" min="{{ date('Y-m-d') }}" value="{{ $date }}" required>
                   <div class="invalid-feedback">
                     Enter date
                   </div>
@@ -195,24 +197,18 @@ $location_blank = array();
                 </div>
                 <div class="col-lg-6 pl-md-4 pl-lg-0">
                   <!-- time buttons -->
-                 
-                  <ul class="time-btns d-desktop-for-tab"> 
-                     @for($i=1; $i<=4; $i++) 
-                     @foreach($value->AppointmentSlots as $key2 => $slot) 
-                    <li><a href="#">{{ date('h:i a', strtotime($slot->slot_time)) }}</a></li>
-                    @endforeach
+
+                
+                  <ul class="time-btns d-desktop-for-tab" id="sloat-p{{ $value->id }}"> 
                      
-                   {{--  <li><a href="#" class="empty">-1-</a></li> --}}
-                    @endfor
-                   
+                    <?php $sloat=\App\Models\AppointmentSlots::getSloat($value->id,$date);
+                 ?>
                   </ul>
                   <!-- time buttons end -->
 
                   <ul class="time-btns d-tab">
-                    <li><a href="#">09:06 AM</a></li>
-                    <li><a href="#">11:07 AM</a></li>
-                    <li><a href="#">12:08 AM</a></li>
-                    <li><a href="#" class="empty">--9-</a></li>
+                   <?php $sloat=\App\Models\AppointmentSlots::getSloatTab($value->id,$date);
+                 ?>
                   </ul>
                 </div>
                 <div class="col-lg-12 pl-md-4">
@@ -266,6 +262,22 @@ $location_blank = array();
 <!-- inner page content end -->
  
 <script type="text/javascript">
+  function more_desktop(id,date) {
+    console.log(id);
+    $.ajax({
+      url: "{{ route('get.doctor.appoinment.sloat') }}",
+      type: 'POST', 
+       data: {"id": id,"date": date}, 
+      success: function(data){ 
+        data=JSON.parse(data) 
+        console.log(data);
+          $("#sloat-p"+id).html(""); 
+        }
+      }); 
+    
+   
+   
+  }
 
    var locations=<?php echo json_encode($lact_new); ?>; 
    var blank=<?php echo json_encode($location_blank); ?>;

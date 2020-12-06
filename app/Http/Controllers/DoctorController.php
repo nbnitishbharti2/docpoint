@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Requests\DoctorRequest;
@@ -299,9 +300,16 @@ class DoctorController extends Controller
      * @return redirect
      */
     public function list(Request $request)
-    {
+    { 
+ $data['doctors'] = Doctors::with('AppointmentSlots')->whereHas('AppointmentSlots', function (Builder $query)  use ($request){
+    $query->whereBetween('slot_date', [$request->date, date('Y-m-d',strtotime($request->date.'+3 days'))])->where('status', 'Available');
+})->get();
+//  ->whereHas('country', function (Builder $query)  use ($request){
+//     $query->where('name', $request->key);
+// })->get();
+ 
         $data['doctors'] = Doctors::get(); 
-        $data['date'] = date('Y-m-d');
+        $data['date'] = $request->date;
         return view('frontend.doctors', $data);
     }
 
@@ -335,4 +343,25 @@ class DoctorController extends Controller
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
+    public function getDoctorAppoinmentSloat(Request $request)
+    {
+         try { 
+            $unique_sloat=AppointmentSlots::where('doctor_id', $request->id)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d',strtotime($request->date.'+3 days'))])->orderBy('slot_time')->get(); 
+        for($i=0; $i<=3; $i++){
+            $ndate=date("Y-m-d",strtotime($request->date. ' +'.$i.' day'));
+            foreach ($unique_sloat as $key => $value) {  
+                $checkSloat=AppointmentSlots::where('doctor_id', $request->id)->where('slot_time',$value->slot_time)->where('slot_date',$ndate)->where('status', 'Available')->first();
+                if($checkSloat==null){ 
+                    echo '<li><a href="#" class="empty">--</a></li>';
+                }else{ 
+                    echo '<li><a href="#">'.date('h:i a', strtotime($checkSloat->slot_time)).'</a></li>';
+                } 
+            }  
+        }
+        } catch(\Exception $e) {
+            Log::error("Error in getDoctorAppoinmentSloat on DoctorController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+
 }

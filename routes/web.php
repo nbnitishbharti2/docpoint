@@ -138,4 +138,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('change-city-status', 'CityController@changeStatus')->name('change.city.status');
     Route::post('change-location-status', 'LocalityController@changeStatus')->name('change.location.status');
     Route::post('change-appointment-slots-status', 'AppointmentSlotController@changeStatus')->name('change.appointment.slots.status');
+     Route::post('get-doctor-appoinment-sloat', 'DoctorController@getDoctorAppoinmentSloat')->name('get.doctor.appoinment.sloat');
 });
