@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="user-grp-container">
-                <h3 class="page-title">Manage Leaves</h3>
-                <a href="{{route('appointment.slots.add')}}">Add Leave</a>
+                <h3 class="page-title">Manage Holiday</h3>
+                <a href="{{route('add.holiday')}}">Add Holiday</a>
             </div>
         </div>
     </div>

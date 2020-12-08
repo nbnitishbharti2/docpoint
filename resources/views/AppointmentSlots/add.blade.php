@@ -50,7 +50,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <label class="col-form-label col-md-2">End Time*</label>
+                        <label class="col-form-label col-md-2">Off Day</label>
                         <div class="col-md-4"> 
                             <div class="weekDays-selector">
                                 <input type="checkbox" id="weekday-mon" name="days[0]" value="Monday" class="weekday" />

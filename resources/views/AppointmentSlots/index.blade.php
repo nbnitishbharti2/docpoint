@@ -19,6 +19,7 @@
                     <table class="datatable table table-hover table-center mb-0">
                         <thead>
                             <tr>
+                                <th>Date</th>
                                 <th>Time</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -28,17 +29,12 @@
                         <tbody>
                             @foreach($data as $value)
                             <tr>
-                                <td>{{ date("h:i a", strtotime($value->slot_time))}}</td>
-                               <td> <div class="status-toggle">
-                                            <input type="checkbox" id="status_{{ $value->id }}" data-id = "{{ $value->id }}" class="appointment-sloat check" {{ ($value->status == '1')? 'checked': '' }}>
-                                            <label for="status_{{ $value->id }}" class="checktoggle">checkbox</label>
-                                        </div></td>
+                                <td>{{ date("Y-m-d", strtotime($value->slot_date_time))}}</td>
+                                <td>{{ date("h:i a", strtotime($value->slot_date_time))}}</td>
+                                <td>{{ $value->status }}</td>
                                 <td>
-                                    <a class="btn-sm btn btn-info" title="Edit" href="{{route('appointment.slots.edit',['id'=>$value->id])}}"><i class="fa fa-pencil"></i></a>
-                                     <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_appoinment_sloats_delete({{ $value->id }})"><i class="fa fa-trash"></i></button>
+                                    <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_appoinment_sloats_delete({{ $value->id }})"><i class="fa fa-trash"></i></button>
                                 </td>
-                               
-                                
                             </tr>
                             @endforeach
                         </tbody>

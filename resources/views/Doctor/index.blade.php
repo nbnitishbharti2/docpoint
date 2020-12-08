@@ -47,7 +47,6 @@
                                     <td>
                                         <a href="{{ route('doctor.edit', ['id' => $doctor->id]) }}" title="Edit" class="btn-sm btn btn-primary"><i class="fa fa-pencil"></i></a>
                                         <a href="{{ route('log.history', ['user_id' => $doctor->user_id]) }}" title="Log History" class="btn-sm btn btn-primary"><i class="fa fa-history"></i></a>
-                                        <a href="{{ route('doctor.holiday', ['doctor_id' => $doctor->id]) }}" title="Holiday" class="btn-sm btn btn-primary"><i class="fa fa-hand-o-left"></i></a>
                                         <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_doctor_delete({{ $doctor->id }})"><i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>

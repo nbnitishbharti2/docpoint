@@ -20,7 +20,7 @@ class AppointmentSlotController extends Controller
     public function index()
     {
         try {
-            $data = AppointmentSlots::where('doctor_id', Auth::user()->id)->get();
+            $data = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->get();
             return view('AppointmentSlots.index', ['data' => $data]);
         } catch(\Exception $e) {
             Log::error("Error in index on AppointmentSlotsController ". $e->getMessage());

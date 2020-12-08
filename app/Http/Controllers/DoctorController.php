@@ -15,7 +15,9 @@ use App\Models\State;
 use App\Models\City;
 use App\Models\User;
 use App\Models\Role;
+use Validator;
 use Response;
+use Auth;
 use Log;
 
 /**
@@ -301,12 +303,9 @@ class DoctorController extends Controller
      */
     public function list(Request $request)
     { 
- $data['doctors'] = Doctors::with('AppointmentSlots')->whereHas('AppointmentSlots', function (Builder $query)  use ($request){
-    $query->whereBetween('slot_date', [$request->date, date('Y-m-d',strtotime($request->date.'+3 days'))])->where('status', 'Available');
-})->get();
-//  ->whereHas('country', function (Builder $query)  use ($request){
-//     $query->where('name', $request->key);
-// })->get();
+        $data['doctors'] = Doctors::with('AppointmentSlots')->whereHas('AppointmentSlots', function (Builder $query)  use ($request){
+            $query->whereBetween('slot_date', [$request->date, date('Y-m-d',strtotime($request->date.'+3 days'))])->where('status', 'Available');
+        })->get();
  
         $data['doctors'] = Doctors::get(); 
         $data['date'] = $request->date;
@@ -343,6 +342,7 @@ class DoctorController extends Controller
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
+
     public function getDoctorAppoinmentSloat(Request $request)
     {
          try { 
@@ -360,8 +360,54 @@ class DoctorController extends Controller
         }
         } catch(\Exception $e) {
             Log::error("Error in getDoctorAppoinmentSloat on DoctorController ". $e->getMessage());
+        }
+    }
+
+    /**
+     * Method to show form for add Holiday
+     */
+    public function addHoliday()
+    {
+        try {
+            return view('holiday.add');
+        } catch(\Exception $e) {
+            Log::error("Error in doctorDetails on DoctorController ". $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
 
+    /**
+     * Method to store Holiday
+     * @param Illuminate\Http\Request $request
+     * @return redirect
+     */
+    public function storeHoliday(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'date' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return redirect('post/create')
+                         ->withErrors($validator)
+                         ->withInput();
+            }
+            // Check
+            $check = DoctorHoliday::where(['doctor_id' => Auth::user()->doctors->id, 'date' => date("Y-m-d", strtotime($request->date))])->count();
+            if($check > 0) {
+                return back()->with('error', 'Holiday already saved');
+            }
+            $data = [
+                'doctor_id' => Auth::user()->doctors->id,
+                'date' => date("Y-m-d", strtotime($request->date)),
+                'leave_day' => date("l", strtotime($request->date)),
+            ];
+            DoctorHoliday::create($data);
+            return redirect('/doctor-holiday/'. Auth::user()->doctors->id)->with('message', 'Holiday saved successfully');
+        } catch(\Exception $e) {
+            Log::error("Error in doctorDetails on DoctorController ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
 }
