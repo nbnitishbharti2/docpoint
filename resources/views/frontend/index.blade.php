@@ -14,7 +14,7 @@
                             <form class="needs-validation" method="post" novalidate action="{{ url('doctor-lists') }}">
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
-                                        <input type="text" name="key" class="form-control" placeholder="Condition, Procedur..."
+                                        <input type="text" name="search" class="form-control" placeholder="Condition, Procedur..."
                                             required>
                                         <div class="invalid-feedback">
                                             Enter Condition or Procedure

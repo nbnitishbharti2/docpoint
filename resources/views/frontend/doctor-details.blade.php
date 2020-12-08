@@ -1140,22 +1140,8 @@
 
                             <!-- time buttons -->
                             <ul class="time-btns d-desktop-for-tab">
-                                <li><a href="#">09:00 AM</a></li>
-                                <li><a href="#">09:00 AM</a></li>
-                                <li><a href="#">09:00 AM</a></li>
-                                <li><a href="#" class="empty">--</a></li>
-                                <li><a href="#">11:00 AM</a></li>
-                                <li><a href="#">11:00 AM</a></li>
-                                <li><a href="#">11:00 AM</a></li>
-                                <li><a href="#" class="empty">--</a></li>
-                                <li><a href="#">12:00 AM</a></li>
-                                <li><a href="#">12:00 AM</a></li>
-                                <li><a href="#">12:00 AM</a></li>
-                                <li><a href="#" class="empty">---</a></li>
-                                <li><a href="#" class="empty">---</a></li>
-                                <li><a href="#" class="empty">---</a></li>
-                                <li><a href="#" class="empty">---</a></li>
-                                <li><a href="#" class="empty">---</a></li>
+                                <?php $sloat=\App\Models\AppointmentSlots::getSloat($doctors->id,$date);
+                 ?>
                             </ul>
                             <!-- time buttons end -->
                         </div>

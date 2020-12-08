@@ -305,10 +305,12 @@ class DoctorController extends Controller
     $query->whereBetween('slot_date', [$request->date, date('Y-m-d',strtotime($request->date.'+3 days'))])->where('status', 'Available');
 })->get();
 //  ->whereHas('country', function (Builder $query)  use ($request){
-//     $query->where('name', $request->key);
+//     $query->where('name', $request->search);
 // })->get();
  
         $data['doctors'] = Doctors::get(); 
+        $data['search'] = $request->search;
+        $data['zip'] = $request->zip;
         $data['date'] = $request->date;
         return view('frontend.doctors', $data);
     }
@@ -322,6 +324,7 @@ class DoctorController extends Controller
     {
         try {
             $data['doctors'] = Doctors::find($doctor_id);
+            $data['date'] = '2020-12-06';
             if($data['doctors'] == null) { // If details not found then return
                 return redirect('doctor-list')->with('error', 'Details not found');
             }

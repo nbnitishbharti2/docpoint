@@ -18,12 +18,12 @@ $location_blank = array();
           <!-- search content -->
           <div class="banner-cont">
             <!-- search form -->
-            <form class="needs-validation" novalidate>
+           <form class="needs-validation" method="post" novalidate action="{{ url('doctor-lists') }}">
               <div class="row no-gutters">
                 <!-- search item -->
                 <div class="col-md-4">
                   <i class="icofont-search-1"></i>
-                  <input type="text" class="form-control" placeholder="Condition, Procedur..." value="Dentist" required>
+                  <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Condition, Procedur..." value="Dentist" required>
                   <div class="invalid-feedback">
                     Enter Condition or Procedure
                   </div>
@@ -36,7 +36,7 @@ $location_blank = array();
                 <!-- search item -->
                 <div class="col-md-4">
                   <i class="icofont-location-pin"></i>
-                  <input type="text" class="form-control" placeholder="Zip Code or city" value="New York, NY" required>
+                  <input type="text" name="zip" value="{{ $zip }}" class="form-control" placeholder="Zip Code or city" value="New York, NY" required>
                   <div class="invalid-feedback">
                     Enter Zip code or City
                   </div>
@@ -48,7 +48,7 @@ $location_blank = array();
 
                 <!-- search item -->
                 <div class="col-md-4">
-                  <input type="date" name="date" class="form-control" min="{{ date('Y-m-d') }}" value="{{ $date }}" required>
+                  <input type="date" name="date" class="form-control"   value="{{ $date }}" required>
                   <div class="invalid-feedback">
                     Enter date
                   </div>
@@ -87,7 +87,7 @@ $location_blank = array();
         <div class="col-lg-12">
           <!-- page options -->
           <div class="page-options">
-            <span>923 doctors</span>
+            <span>{{ count($doctors) }} doctors</span>
             <div class="sep"></div>
             <ul>
               <li><a href="#">Dental Consultation</a></li>
