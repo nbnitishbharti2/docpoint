@@ -56,6 +56,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/doctor-edit/{id}', 'DoctorController@update')->name('doctor.update');
     Route::get('/doctor-delete/{doctor_id}', 'DoctorController@delete')->name('doctor.delete');
     Route::get('/doctor-holiday/{doctor_id}', 'DoctorController@holiday')->name('doctor.holiday');
+    Route::get('/add-holiday', 'DoctorController@addHoliday')->name('add.holiday');
+    Route::post('/store-holiday', 'DoctorController@storeHoliday')->name('store.holiday');
 
     // Speciality route
     Route::get('/speciality-add/', 'SpecialityController@add')->name('Speciality.add');

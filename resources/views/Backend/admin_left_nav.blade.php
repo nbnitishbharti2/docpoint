@@ -28,9 +28,6 @@
                 <li>
                     <a href="{{ route('review') }}"><i class="fe fe-layout"></i> <span>Manage Review</span></a>
                 </li>
-                <li>
-                    <a href="{{ route('appointment.slots') }}"><i class="fe fe-layout"></i> <span>Appoinment Slots</span></a>
-                </li>
             </ul>
         </div>
     </div>
