@@ -4,6 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
     <!-- Bootstrap CSS -->
     <link href="{{ asset('public/storage/frontend/img/doc-point-logo.ico') }}" type="image/x-icon" rel="icon">
@@ -165,7 +166,7 @@
   
   
   <!-- Optional JavaScript -->
-  <script src="{{ asset('public/storage/frontend/js/jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ asset('public/storage/frontend/js/jquery.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/popper.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/bootstrap.min.js') }}"></script>
    <script src="{{ asset('public/storage/frontend/js/owl.carousel.min.js') }}"></script>
@@ -215,7 +216,11 @@
       });
     }, false);
   })();
-
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
   /************  date slider ************/
   $('.date-slider').owlCarousel({
     loop:false,

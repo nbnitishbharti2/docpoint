@@ -92,3 +92,16 @@ function onlyNumberKey(evt) {
         return false; 
     return true; 
 }
+
+function more_desktop(id, date) {
+    $.ajax({
+      url: slot_url,
+      type: 'POST', 
+      data: {"id": id,"date": date}, 
+      success: function(data){ 
+        data=JSON.parse(data) 
+        console.log(data);
+          $("#sloat-p"+id).html(""); 
+        }
+    }); 
+}

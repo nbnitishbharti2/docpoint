@@ -200,15 +200,18 @@ $location_blank = array();
 
                 
                   <ul class="time-btns d-desktop-for-tab" id="sloat-p{{ $value->id }}"> 
-                     
-                    <?php $sloat=\App\Models\AppointmentSlots::getSloat($value->id,$date);
-                 ?>
+                  {{-- @php 
+                    $sloat=\App\Models\AppointmentSlots::getSloat($value->id,$date);
+                    $sloat=\App\Models\AppointmentSlots::getSloatTab($value->id,$date);
+                  @endphp --}}
+                  @foreach ($appointments[$value->id] as $key => $appointment)
+                    {{ $key }}
+                    <li><a href="#">{{ date('h:i A', strtotime($appointment->slot_time)) }}</a></li>        
+                  @endforeach
                   </ul>
                   <!-- time buttons end -->
 
                   <ul class="time-btns d-tab">
-                   <?php $sloat=\App\Models\AppointmentSlots::getSloatTab($value->id,$date);
-                 ?>
                   </ul>
                 </div>
                 <div class="col-lg-12 pl-md-4">
@@ -260,114 +263,91 @@ $location_blank = array();
   </div>
 </section>
 <!-- inner page content end -->
- 
 <script type="text/javascript">
-  function more_desktop(id,date) {
-    console.log(id);
-    $.ajax({
-      url: "{{ route('get.doctor.appoinment.sloat') }}",
-      type: 'POST', 
-       data: {"id": id,"date": date}, 
-      success: function(data){ 
-        data=JSON.parse(data) 
-        console.log(data);
-          $("#sloat-p"+id).html(""); 
-        }
-      }); 
-    
+  var slot_url = "{{ route('get.doctor.appoinment.slot') }}";
+  var locations = <?php echo json_encode($lact_new); ?>; 
+  var blank = <?php echo json_encode($location_blank); ?>;
    
-   
-  }
+  function initMap() { 
+    var bounds = new google.maps.LatLngBounds; 
+    var markersArray = []; 
+      //var origin2 = "{{ \Illuminate\Support\Facades\Session::get('booking.search')}}";
+      var origin2='Noida';
+      var destinationIcon = 'https://chart.googleapis.com/chart?' +
+        'chst=d_map_pin_letter&chld=B|f5ac32|000000';
+      var originIcon = 'https://chart.googleapis.com/chart?' +
+        'chst=d_map_pin_letter&chld=O|FFFF00|000000';
+      var image = "http://galaxydemo.in/m3.jpg";
+      // var image = {{ asset('public/storage/images/logo/logo-map.jpg') }};
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 28.53, lng: 77.39},
+        zoom: 10
+      });
 
-   var locations=<?php echo json_encode($lact_new); ?>; 
-   var blank=<?php echo json_encode($location_blank); ?>;
-   console.log(locations);
-   console.log(blank);
-      function initMap() { 
-        var bounds = new google.maps.LatLngBounds; 
-        var markersArray = []; 
-         //var origin2 = "{{ \Illuminate\Support\Facades\Session::get('booking.search')}}";
-         var origin2='Noida';
-        var destinationIcon = 'https://chart.googleapis.com/chart?' +
-            'chst=d_map_pin_letter&chld=B|f5ac32|000000';
-        var originIcon = 'https://chart.googleapis.com/chart?' +
-            'chst=d_map_pin_letter&chld=O|FFFF00|000000';
-            var image = "http://galaxydemo.in/m3.jpg";
-            // var image = {{ asset('public/storage/images/logo/logo-map.jpg') }};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 28.53, lng: 77.39},
-          zoom: 10
-        });
-
-        
-
-        var geocoder = new google.maps.Geocoder; 
-        var service = new google.maps.DistanceMatrixService;
-        service.getDistanceMatrix({
-          origins: [origin2],
-          destinations: locations,
-          travelMode: 'DRIVING',
-         // unitSystem: google.maps.UnitSystem.IMPERIAL,
-          unitSystem: google.maps.UnitSystem.METRIC,
-          avoidHighways: false,
-          avoidTolls: false
-        }, function(response, status) {
- console.log(response);
-          if (status !== 'OK') {
-            alert('Error was: ' + status);
-          } else {
-            var originList = response.originAddresses;
-            var destinationList = response.destinationAddresses;                
-            deleteMarkers(markersArray);
-            var showGeocodedAddressOnMap = function(asDestination, name) {
-              var icon = asDestination ? destinationIcon : originIcon;
-              if(asDestination){
-              return function(results, status) {
-                if (status === 'OK') {
-                  map.fitBounds(bounds.extend(results[0].geometry.location));
-                  markersArray.push(new google.maps.Marker({
-                    map: map,
-                    position: results[0].geometry.location,
-                    icon: image,
-                    title:name
-                  }));
-                } else {
-                  alert('Geocode was not successful due to: ' + status);
-                }
-              };
-            }
-            };
-            var count=0;
-            for (var i = 0; i < originList.length; i++) {
-              var results = response.rows[i].elements;
-              geocoder.geocode({'address': originList[i]},
-                  showGeocodedAddressOnMap(false,' '));
-              for(var j = 0; j < results.length; j++) {
-                  for (var p=0, len=blank.length;p<len;p++) {
-                    if (blank[p] == j){
-                        count++;
-                    }  
-                }
-                geocoder.geocode({'address': destinationList[j]},
-                    showGeocodedAddressOnMap(true,locations[j]['title']));  
-                     $("#distance-total"+count).html(results[j].distance.text+' From '+originList[0]); 
-                     count++;
+    var geocoder = new google.maps.Geocoder; 
+    var service = new google.maps.DistanceMatrixService;
+    service.getDistanceMatrix({
+      origins: [origin2],
+      destinations: locations,
+      travelMode: 'DRIVING',
+      // unitSystem: google.maps.UnitSystem.IMPERIAL,
+      unitSystem: google.maps.UnitSystem.METRIC,
+      avoidHighways: false,
+      avoidTolls: false
+    }, function(response, status) {
+      if (status !== 'OK') {
+        alert('Error was: ' + status);
+      } else {
+        var originList = response.originAddresses;
+        var destinationList = response.destinationAddresses;                
+        deleteMarkers(markersArray);
+        var showGeocodedAddressOnMap = function(asDestination, name) {
+          var icon = asDestination ? destinationIcon : originIcon;
+          if(asDestination){
+            return function(results, status) {
+              if (status === 'OK') {
+                map.fitBounds(bounds.extend(results[0].geometry.location));
+                markersArray.push(new google.maps.Marker({
+                  map: map,
+                  position: results[0].geometry.location,
+                  icon: image,
+                  title:name
+                }));
+              } else {
+                alert('Geocode was not successful due to: ' + status);
               }
-            }
+            };
           }
-        });
-      }
-      function deleteMarkers(markersArray) {
-        for (var i = 0; i < markersArray.length; i++) {
-          markersArray[i].setMap(null);
+        };
+        var count=0;
+        for (var i = 0; i < originList.length; i++) {
+          var results = response.rows[i].elements;
+          geocoder.geocode({'address': originList[i]},
+              showGeocodedAddressOnMap(false,' '));
+          for(var j = 0; j < results.length; j++) {
+              for (var p=0, len=blank.length;p<len;p++) {
+                if (blank[p] == j){
+                    count++;
+                }  
+            }
+            geocoder.geocode({'address': destinationList[j]},
+                showGeocodedAddressOnMap(true,locations[j]['title']));  
+                  $("#distance-total"+count).html(results[j].distance.text+' From '+originList[0]); 
+                  count++;
+          }
         }
-        markersArray = [];
-      } 
+      }
+    });
+  }
+  function deleteMarkers(markersArray) {
+    for (var i = 0; i < markersArray.length; i++) {
+      markersArray[i].setMap(null);
+    }
+    markersArray = [];
+  } 
 </script>
 
- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfaLWLOOJzGnXan4NM8-sk6OSr53b_W4k&callback=initMap"> </script>
-
-
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfaLWLOOJzGnXan4NM8-sk6OSr53b_W4k&callback=initMap"> </script>
 @endsection
  
  

@@ -15,10 +15,10 @@ class AppointmentSlots extends Model
 		$slot_count=AppointmentSlots::where('doctor_id', $id)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d',strtotime($date.'+3 days'))])->orderBy('slot_time')->count();
 		$limit=($slot_count>4)?3:4;
 		$unique_sloat=AppointmentSlots::where('doctor_id', $id)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d',strtotime($date.'+3 days'))])->orderBy('slot_time')->take($limit)->get(); 
-		for($i=0; $i<=3; $i++){
+		for($i=0; $i<=3; $i++) {
 			$ndate=date("Y-m-d",strtotime($date. ' +'.$i.' day'));
 			foreach ($unique_sloat as $key => $value) {  
-				$checkSloat=AppointmentSlots::where('doctor_id', $id)->where('slot_time',$value->slot_time)->where('slot_date',$ndate)->where('status', 'Available')->first();
+				$checkSloat=AppointmentSlots::where('doctor_id', $id)->where('slot_time',$value->slot_time)->where('slot_date',$date)->where('status', 'Available')->first();
 				if($checkSloat==null){ 
 					echo '<li><a href="#" class="empty">--</a></li>';
 				}else{ 
@@ -26,7 +26,7 @@ class AppointmentSlots extends Model
 				} 
 			} 
 			if($slot_count>4){
-				$check_more_sloat=AppointmentSlots::where('doctor_id', $id)->where('slot_date',$ndate)->where('slot_time', '>',$value->slot_time)->where('status', 'Available')->count(); 
+				$check_more_sloat=AppointmentSlots::where('doctor_id', $id)->where('slot_date',$date)->where('slot_time', '>',$value->slot_time)->where('status', 'Available')->count(); 
 				if($check_more_sloat>0){
 					echo '<li><a href="javascript:void(0)" onclick="more_desktop('.$id.','.$date.')">More</a></li>';
 				}else{
@@ -44,7 +44,6 @@ class AppointmentSlots extends Model
 	}
 	public static function getSloatTab($id='', $date)
 	{
-
 		$slot_count=AppointmentSlots::where('doctor_id', $id)->where('status', 'Available')->where('slot_date', $date)->orderBy('slot_time')->count();
 		$limit=($slot_count>4)?3:4;
 		$unique_sloat=AppointmentSlots::where('doctor_id', $id)->where('status', 'Available')->where('slot_date',$date)->orderBy('slot_time')->take($limit)->get(); 
@@ -57,7 +56,7 @@ class AppointmentSlots extends Model
 			} 
 		} 
 		if($slot_count>4){
-			$check_more_sloat=AppointmentSlots::where('doctor_id', $id)->where('slot_date',$ndate)->where('slot_time', '>',$value->slot_time)->where('status', 'Available')->count(); 
+			$check_more_sloat=AppointmentSlots::where('doctor_id', $id)->where('slot_date',$date)->where('slot_time', '>',$value->slot_time)->where('status', 'Available')->count(); 
 			if($check_more_sloat>0){
 				echo '<li><a href="#">More</a></li>';
 			}else{
