@@ -16,9 +16,7 @@ use App\Models\State;
 use App\Models\City;
 use App\Models\User;
 use App\Models\Role;
-use Validator;
 use Response;
-use Auth;
 use Log;
 
 /**
@@ -313,8 +311,10 @@ class DoctorController extends Controller
         foreach ($data['doctors'] as $value) {
             $data['appointments'][$value->id] =  AppointmentSlots::where('doctor_id', $value->id)->whereBetween('slot_date', [$request->date, date('Y-m-d',strtotime($request->date.'+4 days'))])->where('status', 'Available')->get();
         }
+        $data['doctors'] = Doctors::get(); 
+        $data['search'] = $request->search;
+        $data['zip'] = $request->zip;
         $data['date'] = $request->date;
-        //dd($data);
         return view('frontend.doctors', $data);
     }
 
@@ -327,6 +327,7 @@ class DoctorController extends Controller
     {
         try {
             $data['doctors'] = Doctors::find($doctor_id);
+            $data['date'] = '2020-12-06';
             if($data['doctors'] == null) { // If details not found then return
                 return redirect('doctor-list')->with('error', 'Details not found');
             }
@@ -351,8 +352,7 @@ class DoctorController extends Controller
 
     public function getDoctorAppoinmentSlot(Request $request)
     {
-        try {
-            
+        try {   
             $unique_sloat=AppointmentSlots::where('doctor_id', $request->id)->where('status', 'Available')->whereBetween('slot_date', [$request->date, date('Y-m-d',strtotime($request->date.'+3 days'))])->orderBy('slot_time')->get(); 
             for($i=0; $i<=3; $i++){
                 $ndate=date("Y-m-d",strtotime($request->date. ' +'.$i.' day'));
@@ -384,38 +384,4 @@ class DoctorController extends Controller
         }
     }
 
-    /**
-     * Method to store Holiday
-     * @param Illuminate\Http\Request $request
-     * @return redirect
-     */
-    public function storeHoliday(Request $request)
-    {
-        try {
-            $validator = Validator::make($request->all(), [
-                'date' => 'required'
-            ]);
-
-            if ($validator->fails()) {
-                return redirect('post/create')
-                         ->withErrors($validator)
-                         ->withInput();
-            }
-            // Check
-            $check = DoctorHoliday::where(['doctor_id' => Auth::user()->doctors->id, 'date' => date("Y-m-d", strtotime($request->date))])->count();
-            if($check > 0) {
-                return back()->with('error', 'Holiday already saved');
-            }
-            $data = [
-                'doctor_id' => Auth::user()->doctors->id,
-                'date' => date("Y-m-d", strtotime($request->date)),
-                'leave_day' => date("l", strtotime($request->date)),
-            ];
-            DoctorHoliday::create($data);
-            return redirect('/doctor-holiday/'. Auth::user()->doctors->id)->with('message', 'Holiday saved successfully');
-        } catch(\Exception $e) {
-            Log::error("Error in doctorDetails on DoctorController ". $e->getMessage());
-            return back()->with('error', 'Oops! Something went wrong.');
-        }
-    }
 }
