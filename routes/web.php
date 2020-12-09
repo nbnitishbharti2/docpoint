@@ -140,5 +140,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('change-city-status', 'CityController@changeStatus')->name('change.city.status');
     Route::post('change-location-status', 'LocalityController@changeStatus')->name('change.location.status');
     Route::post('change-appointment-slots-status', 'AppointmentSlotController@changeStatus')->name('change.appointment.slots.status');
-    Route::post('get-doctor-appoinment-slot', 'DoctorController@getDoctorAppoinmentSlot')->name('get.doctor.appoinment.slot');
+   
 });
+
+ // Ajax routeson site 
+ Route::post('get-doctor-appoinment-slot', 'DoctorController@getDoctorAppoinmentSlot')->name('get.doctor.appoinment.slot');
+ Route::post('get-doctor-appoinment-slot-by-date', 'DoctorController@getDoctorAppoinmentSlotByDate')->name('get.doctor.appoinment.slot.by.date');

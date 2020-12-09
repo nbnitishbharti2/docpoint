@@ -8,6 +8,7 @@
 $lact  = array(); 
 $lact_new= array();
 $location_blank = array(); 
+$doctor_id_list=array();
 @endphp
 <!-- search -->
 <section class="p-0 bg-blue">
@@ -131,15 +132,15 @@ $location_blank = array();
       <div class="row no-gutters">
         <div class="col-lg-8">
           <!-- date slider -->
-          <div class="owl-carousel date-slider">
+          <div class="owl-carousel date-slider" id="date-list">
             @for($i=0; $i<14; $i++)
             <div class="date-item"><p>{{ date("D",strtotime($date. ' +'.$i.' day')) }}</p><h5>{{ date("M d",strtotime($date. ' +'.$i.' day')) }}</h5></div>
             @endfor
              
           </div>
           <div class="slider-btns">
-            <span class="prev"><i class="icofont-rounded-left"></i></span>
-            <span class="next"><i class="icofont-rounded-right"></i></span>
+            <span class="prev"><i class="icofont-rounded-left" onclick="more_desktop_date(0)"></i></span>
+            <span class="next"><i class="icofont-rounded-right" onclick="more_desktop_date(1)"></i></span>
           </div>
           <!-- date slider end -->
         </div>
@@ -160,6 +161,8 @@ $location_blank = array();
             array_push($lact2,$value->longitude); 
             array_push($lact2,($key+1)); 
             array_push($lact, $lact2); 
+            array_push($doctor_id_list, $value->id);
+            
             $lact3['title']=$value->name; 
             $lact3['lat']=round($value->latitude,3); 
             $lact3['lng']=round($value->longitude,3); 
@@ -200,14 +203,39 @@ $location_blank = array();
 
                 
                   <ul class="time-btns d-desktop-for-tab" id="sloat-p{{ $value->id }}"> 
-                  {{-- @php 
+                    @php 
                     $sloat=\App\Models\AppointmentSlots::getSloat($value->id,$date);
-                    $sloat=\App\Models\AppointmentSlots::getSloatTab($value->id,$date);
-                  @endphp --}}
-                  @foreach ($appointments[$value->id] as $key => $appointment)
-                    {{ $key }}
+                   // $sloat=\App\Models\AppointmentSlots::getSloatTab($value->id,$date);
+                  @endphp 
+                 {{--  @foreach ($appointments[$value->id] as $key => $appointment)
+                    
                     <li><a href="#">{{ date('h:i A', strtotime($appointment->slot_time)) }}</a></li>        
-                  @endforeach
+                  @endforeach --}}
+                {{--    @foreach ($unique_sloat[$value->id] as $key => $unique)
+                 @if(array_search($unique['slot_time'], array_column($appointments[$value->id], 'slot_time'))>0 && array_search($date, array_column($appointments[$value->id], 'slot_date')))
+                       <li><a href="#">{{ date("h:m a",strtotime($unique['slot_time'])) }}</a></li>
+                   @else
+                      <li><a href="#">{{ array_search($unique['slot_time'], array_column($appointments[$value->id], 'slot_time')) }}--{{ array_search($date, array_column($appointments[$value->id], 'slot_date')) }}</a></li>
+                   @endif
+                   @if(array_search($unique['slot_time'], array_column($appointments[$value->id], 'slot_time'))>0 && array_search($date, array_column($appointments[$value->id], 'slot_date')))
+                       <li><a href="#">{{ date("h:m a",strtotime($unique['slot_time'])) }}</a></li>
+                   @else
+                      <li><a href="#">--</a></li>
+                   @endif
+                   @if(array_search($unique['slot_time'], array_column($appointments[$value->id], 'slot_time'))>0 && array_search($date, array_column($appointments[$value->id], 'slot_date')))
+                       <li><a href="#">{{ date("h:m a",strtotime($unique['slot_time'])) }}</a></li>
+                   @else
+                      <li><a href="#">--</a></li>
+                   @endif
+                   @if(array_search($unique['slot_time'], array_column($appointments[$value->id], 'slot_time'))>0 && array_search($date, array_column($appointments[$value->id], 'slot_date')))
+                       <li><a href="#">{{ date("h:m a",strtotime($unique['slot_time'])) }}</a></li>
+                   @else
+                      <li><a href="#">--</a></li>
+                   @endif
+                 
+                           
+                  @endforeach --}}
+                 
                   </ul>
                   <!-- time buttons end -->
 
@@ -265,8 +293,14 @@ $location_blank = array();
 <!-- inner page content end -->
 <script type="text/javascript">
   var slot_url = "{{ route('get.doctor.appoinment.slot') }}";
+  var date_slot_url = "{{ route('get.doctor.appoinment.slot.by.date') }}";
   var locations = <?php echo json_encode($lact_new); ?>; 
   var blank = <?php echo json_encode($location_blank); ?>;
+  var doctorlistid=<?php echo json_encode($doctor_id_list); ?>;
+  var new_date=<?php echo date("Ymd",strtotime($date)); ?>;
+  var min_date=<?php echo date("Ymd",strtotime(date("d-m-Y"))); ?>;
+  var date_list_start=<?php echo date("Ymd",strtotime($date)); ?>;
+  var date_list_end=<?php echo date("Ymd",strtotime($date.'+13 days')); ?>;
    
   function initMap() { 
     var bounds = new google.maps.LatLngBounds; 

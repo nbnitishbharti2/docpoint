@@ -309,8 +309,12 @@ class DoctorController extends Controller
         // dd($data['doctor']);
         $data['doctors'] = Doctors::get(); 
         foreach ($data['doctors'] as $value) {
-            $data['appointments'][$value->id] =  AppointmentSlots::where('doctor_id', $value->id)->whereBetween('slot_date', [$request->date, date('Y-m-d',strtotime($request->date.'+4 days'))])->where('status', 'Available')->get();
+            $data['appointments'][$value->id] =  AppointmentSlots::where('doctor_id', $value->id)->whereBetween('slot_date', [date('Y-m-d',strtotime($request->date.'-1 days')), date('Y-m-d',strtotime($request->date.'+3 days'))])->where('status', 'Available')->get()->toArray();
+            $data['unique_sloat'][$value->id] =  AppointmentSlots::where('doctor_id', $value->id)->where('status', 'Available')->whereBetween('slot_date', [$request->date, date('Y-m-d',strtotime($request->date.'+3 days'))])->orderBy('slot_time')->get()->toArray();
         }
+        
+        
+       // dd($request->date);
         $data['doctors'] = Doctors::get(); 
         $data['search'] = $request->search;
         $data['zip'] = $request->zip;
@@ -353,9 +357,10 @@ class DoctorController extends Controller
     public function getDoctorAppoinmentSlot(Request $request)
     {
         try {   
-            $unique_sloat=AppointmentSlots::where('doctor_id', $request->id)->where('status', 'Available')->whereBetween('slot_date', [$request->date, date('Y-m-d',strtotime($request->date.'+3 days'))])->orderBy('slot_time')->get(); 
+            $date=date("Y-m-d",strtotime($request->date));
+            $unique_sloat=AppointmentSlots::where('doctor_id', $request->id)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d',strtotime($date.'+3 days'))])->orderBy('slot_time')->get(); 
             for($i=0; $i<=3; $i++){
-                $ndate=date("Y-m-d",strtotime($request->date. ' +'.$i.' day'));
+                $ndate=date("Y-m-d",strtotime($date. ' +'.$i.' day'));
                 foreach ($unique_sloat as $key => $value) {  
                     $checkSlot = AppointmentSlots::where('doctor_id', $request->id)->where('slot_time', $value->slot_time)->where('slot_date',$ndate)->where('status', 'Available')->first();
                     if($checkSlot==null){ 
@@ -367,6 +372,74 @@ class DoctorController extends Controller
             }
         } catch(\Exception $e) {
             Log::error("Error in getDoctorAppoinmentSlot on DoctorController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+   
+    public function getDoctorAppoinmentSlotByDate(Request $request)
+    {
+       try {   
+            if($request->type==1){
+                $data['date_list_end']=date("Ymd",strtotime($request->date_list_end.'+1 days'));
+
+                $data['date_append']='<div class="date-item"><p>'.date("D",strtotime($request->date_list_end.'+1 days')).'</p><h5>'.date("M d",strtotime($request->date_list_end.'+1 days')).'</h5></div>';
+
+                 $date=date("Y-m-d",strtotime($request->date.'+1 days'));
+            }else{
+                if($request->min_date<$request->date_list_start){
+                 $data['date_list_start']=date("Ymd",strtotime($request->date_list_start.'-1 days'));
+                  $data['date_append']='<div class="date-item"><p>'.date("D",strtotime($request->date_list_start.'-1 days')).'</p><h5>'.date("M d",strtotime($request->date_list_start.'-1 days')).'</h5></div>';
+                }
+                $date=date("Y-m-d",strtotime($request->date.'-1 days'));
+            }
+           // $date=date("Y-m-d",strtotime($request->date));
+           // $did=json_decode($request->ids);
+            $sloat=array();
+            foreach($request->ids as $key => $val){
+               // echo $val;
+            $sloat[$val]='';
+                 
+               $slot_count=AppointmentSlots::where('doctor_id', $val)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d',strtotime($date.'+3 days'))])->orderBy('slot_time')->count();
+        $limit=($slot_count>4)?3:4;
+        $unique_sloat=AppointmentSlots::where('doctor_id', $val)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d',strtotime($date.'+3 days'))])->orderBy('slot_time')->take($limit)->get(); 
+        for($i=0; $i<=3; $i++){
+            $ndate=date("Y-m-d",strtotime($date. ' +'.$i.' day'));
+            foreach ($unique_sloat as $key => $value) {  
+                $checkSloat=AppointmentSlots::where('doctor_id', $val)->where('slot_time',$value->slot_time)->where('slot_date',$ndate)->where('status', 'Available')->first();
+                if($checkSloat==null){ 
+                   $sloat[$val]= $sloat[$val].'<li><a href="#" class="empty">--</a></li>';
+                }else{ 
+                    $sloat[$val]= $sloat[$val].'<li><a href="#">'.date('h:i a', strtotime($checkSloat->slot_time)).'</a></li>';
+                } 
+            } 
+            if($slot_count<4){
+                for ($j=$slot_count; $j<4; $j++) { 
+                     $sloat[$val]= $sloat[$val].'<li><a href="#" class="empty">--</a></li>'; 
+                }
+            }
+            if($slot_count>4){
+                $check_more_sloat=AppointmentSlots::where('doctor_id', $val)->where('slot_date',$ndate)->where('slot_time', '>',$value->slot_time)->where('status', 'Available')->count(); 
+                if($check_more_sloat>0){
+                    $sloat[$val]= $sloat[$val].'<li><a href="javascript:void(0)" onclick="more_desktop('.$val.','.date("Ymd",strtotime($date)).')">More</a></li>';
+                }else{
+                    $sloat[$val]= $sloat[$val].'<li><a href="#" class="empty">--</a></li>';
+                } 
+            }
+        } 
+        if($slot_count<4){
+            for($i=0; $i<=3; $i++){
+                for ($j=$slot_count; $j<4; $j++) { 
+                   // $sloat[$val]= $sloat[$val].'<li><a href="#" class="empty">--</a></li>'; 
+                } 
+            }
+        } 
+                
+             } 
+             $data['sloat']=$sloat;
+             $data['date']=date("Ymd",strtotime($date));
+             echo json_encode($data); 
+        } catch(\Exception $e) {
+            Log::error("Error in getDoctorAppoinmentSlotByDate on DoctorController ". $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }

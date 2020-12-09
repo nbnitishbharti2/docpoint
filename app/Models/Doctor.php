@@ -45,4 +45,5 @@ class Doctor extends Model
     {
         return $this->hasMany('App\Models\AppointmentSlots');
     }
+    
 }

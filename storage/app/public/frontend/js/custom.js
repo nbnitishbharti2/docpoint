@@ -99,9 +99,40 @@ function more_desktop(id, date) {
       type: 'POST', 
       data: {"id": id,"date": date}, 
       success: function(data){ 
-        data=JSON.parse(data) 
+       // data=JSON.parse(data) 
         console.log(data);
-          $("#sloat-p"+id).html(""); 
+          $("#sloat-p"+id).html(data); 
         }
     }); 
+}
+
+
+function more_desktop_date(type) {
+    console.log('fun');
+    if(new_date>=min_date){
+    $.ajax({
+      url: date_slot_url,
+      type: 'POST', 
+      data: {"type": type,"ids": doctorlistid,"date": new_date,"date_list_start": date_list_start,"date_list_end": date_list_end,"min_date":min_date}, 
+      success: function(data){ 
+        data=JSON.parse(data)
+        new_date=data.date; 
+        if(type==1){
+            date_list_end=data.date_list_end;
+            // $(".owl-stage").append(data.date_append);
+            //end 
+        }else{
+            if(min_date<date_list_start){
+                 date_list_start=data.date_list_start;
+                 // $(".owl-stage").prepend(data.date_append);
+            }
+            //start
+        }
+        for(i=0; i<doctorlistid.length; i++){
+            j=doctorlistid[i];
+            $("#sloat-p"+j).html(data.sloat[j]);  
+        } 
+        }
+    });
+}
 }

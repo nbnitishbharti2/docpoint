@@ -2,6 +2,10 @@
 @section('title', 'MyDocPoint | Doctors Details')
 @section('content')
 <!-- doctor main detail -->
+<?php $doctor_id_list=array();
+  
+ array_push($doctor_id_list, $doctors->id);
+  ?>
 <section>
     <div class="doctor-main-detail">
         <div class="container sml-container">
@@ -1102,44 +1106,20 @@
                         <div class="avliable-time">
                             <p>Mount Sinai Doctors - West 8th Avenue 780 8th Avenue, Ste 303, New York, NY 10036</p>
                             <!-- date slider -->
-                            <div class="owl-carousel date-slider">
-                                <div class="date-item">
-                                    <p>Thu</p>
-                                    <h5>Oct 1</h5>
-                                </div>
-                                <div class="date-item">
-                                    <p>Fri</p>
-                                    <h5>Oct 2</h5>
-                                </div>
-                                <div class="date-item">
-                                    <p>Sat</p>
-                                    <h5>Oct 3</h5>
-                                </div>
-                                <div class="date-item">
-                                    <p>Sun</p>
-                                    <h5>Oct 4</h5>
-                                </div>
-                                <div class="date-item">
-                                    <p>Mon</p>
-                                    <h5>Oct 5</h5>
-                                </div>
-                                <div class="date-item">
-                                    <p>Tue</p>
-                                    <h5>Oct 6</h5>
-                                </div>
-                                <div class="date-item">
-                                    <p>Wed</p>
-                                    <h5>Oct 7</h5>
-                                </div>
+                            <div class="owl-carousel date-slider" id="date-list">
+                                 @for($i=0; $i<14; $i++)
+            <div class="date-item"><p>{{ date("D",strtotime($date. ' +'.$i.' day')) }}</p><h5>{{ date("M d",strtotime($date. ' +'.$i.' day')) }}</h5></div>
+            @endfor
+                               
                             </div>
                             <div class="slider-btns">
-                                <span class="prev"><i class="icofont-rounded-left"></i></span>
-                                <span class="next"><i class="icofont-rounded-right"></i></span>
+                                <span class="prev"><i class="icofont-rounded-left" onclick="more_desktop_date(0)"></i></span>
+                                <span class="next"><i class="icofont-rounded-right" onclick="more_desktop_date(1)"></i></span>
                             </div>
                             <!-- date slider end -->
 
                             <!-- time buttons -->
-                            <ul class="time-btns d-desktop-for-tab">
+                            <ul class="time-btns d-desktop-for-tab" id="sloat-p{{ $doctors->id }}">
                                 <?php $sloat=\App\Models\AppointmentSlots::getSloat($doctors->id,$date);
                  ?>
                             </ul>
@@ -1153,5 +1133,14 @@
         </div>
     </div>
 </section>
+<script type="text/javascript">
+     var slot_url = "{{ route('get.doctor.appoinment.slot') }}";
+     var doctorlistid=<?php echo json_encode($doctor_id_list); ?>;
+  var new_date=<?php echo date("Ymd",strtotime($date)); ?>;
+   var date_slot_url = "{{ route('get.doctor.appoinment.slot.by.date') }}";
+   var min_date=<?php echo date("Ymd",strtotime(date("d-m-Y"))); ?>;
+   var date_list_start=<?php echo date("Ymd",strtotime($date)); ?>;
+  var date_list_end=<?php echo date("Ymd",strtotime($date.'+13 days')); ?>;
+</script>
 <!-- doctor main detail end -->
 @endsection
