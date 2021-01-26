@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UpdatePasswordRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\DoctorRegistrationRequest;
 use App\Helpers\CommanHelper;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\DoctorRegistration;
 use Response;
 use Auth;
 use Log;
@@ -60,7 +62,27 @@ class UserController extends Controller
             return back()->with('error', 'Oops! Something went wrong.');
         }
     }
+/**
+     * Method to create User
+     * @return View
+     */
+    public function createDoctor(DoctorRegistrationRequest $request)
+    {
 
+        try {
+            $userData = array(
+                'name' => $request->name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'address' => $request->address,
+            ); 
+            $user = DoctorRegistration::create($userData); 
+            return redirect('/')->with('message', 'Your are registerd successfully.');
+        } catch(\Exception $e) {
+            Log::error("Error in createDoctor on UserController ". $e->getMessage()); 
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
     /**
      * Method to show User Login form
      * @return View

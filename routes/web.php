@@ -23,7 +23,7 @@ Route::get('/user-login', 'UserController@userLogin')->name('user.login');
 
 /* Start doctor auth */
 Route::get('/doctor-registration', 'UserController@doctorRegistration')->name('doctor.registration');
-// Route::post('/doctor-registration', 'UserController@createDoctor')->name('create.doctor');
+ Route::post('/doctor-registration', 'UserController@createDoctor')->name('create.doctor');
 Route::get('/doctor-login', 'UserController@doctorLogin')->name('doctor.login');
 /*  End doctor auth */
 

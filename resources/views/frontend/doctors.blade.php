@@ -107,13 +107,74 @@ $doctor_id_list = array();
             <span>{{ count($doctors) }} doctors</span>
             <div class="sep"></div>
             <ul>
-              <li><a href="#">Specialties</a></li>
+               
               <li><a href="#">Availability</a></li>
-              <li><a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gender</a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item active" href="#">Male</a>
-                  <a class="dropdown-item" href="#">Female</a>
-                  <a class="dropdown-item" href="#">Transgender</a>
+              
+                 <li>
+                <div class="dropdown multiselect">
+                  <button class="select-btn" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Availability
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu multidrop-off" aria-labelledby="dropdownMenu1">
+                  <li><a>
+                    <input type="checkbox" id="action1">
+                    <label for="action1">Action</label>
+                  </a></li>
+                  <li><a>
+                    <input type="checkbox" id="action2">
+                    <label for="action2">Action2</label>
+                  </a></li>
+                  <li><a>
+                    <input type="checkbox" id="action3">
+                    <label for="action3">Action</label>
+                  </a></li>
+                    <li role="separator" class="divider"></li>
+                  <li><a>
+                    <input type="checkbox" id="action4">
+                    <label for="action4">Action</label>
+                  </a></li>
+                  <li class="mb-0">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                      <button type="button" class="btn btn-secondary">clear</button>
+                      <button type="button" class="btn btn-primary">Apply</button>
+                    </div>
+                  </li>
+                  </ul>
+                </div>
+              </li>
+
+               <li>
+                <div class="dropdown multiselect">
+                  <button class="select-btn" type="button" id="dropdownMenu11" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Availability1
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu multidrop-off" aria-labelledby="dropdownMenu11">
+                  <li><a>
+                    <input type="checkbox" id="action1">
+                    <label for="action1">Action</label>
+                  </a></li>
+                  <li><a>
+                    <input type="checkbox" id="action2">
+                    <label for="action2">Action</label>
+                  </a></li>
+                  <li><a>
+                    <input type="checkbox" id="action3">
+                    <label for="action3">Action</label>
+                  </a></li>
+                    <li role="separator" class="divider"></li>
+                  <li><a>
+                    <input type="checkbox" id="action4">
+                    <label for="action4">Action</label>
+                  </a></li>
+                  <li class="mb-0">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                      <button type="button" class="btn btn-secondary">clear</button>
+                      <button type="button" class="btn btn-primary">Apply</button>
+                    </div>
+                  </li>
+                  </ul>
                 </div>
               </li>
               <li><a href="#">Hospital affiliations</a></li>
@@ -417,6 +478,7 @@ $doctor_id_list = array();
 
   
 </script>
+
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfaLWLOOJzGnXan4NM8-sk6OSr53b_W4k&callback=initMap"> </script>
 @endsection

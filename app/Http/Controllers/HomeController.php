@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Speciality;
 use App\Models\Country;
 use App\Models\Doctor;
-use Log;
+use Log; 
+
 
 class HomeController extends Controller
 {
@@ -27,7 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        try {
+        try { 
             $country = Country::get();
             $speciality = Speciality::get()->where('status', 'Active');
             return view('frontend.index', ['country' => $country, 'speciality'=>$speciality]);

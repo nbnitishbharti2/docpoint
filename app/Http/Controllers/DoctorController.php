@@ -497,13 +497,18 @@ class DoctorController extends Controller
                 }
                 $video_class='icofont-video';
                 $slot_count2 = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', $sloattype)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d', strtotime($date . '+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->get();
-                $slot_count = count($slot_count2);
+                 if(($slot_count2[0]->appointment_type=='Physical' && $slot_count2[0]->doctor->physical=="Yes") || ($slot_count2[0]->appointment_type=='Video' && $slot_count2[0]->doctor->video=="Yes")){
+                        $slot_count = count($slot_count2);
+                    }else{
+                        $slot_count = 0;
+                    } 
                 $limit = ($slot_count > 4) ? 3 : 4;
 
                 $unique_sloat = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', $sloattype)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d', strtotime($date . '+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->take($limit)->get();
                 // echo count($unique_sloat);
                 for ($i = 0; $i <= 3; $i++) {
                     $ndate = date("Y-m-d", strtotime($date . ' +' . $i . ' day'));
+                    if($slot_count>0)
                     foreach ($unique_sloat as $key => $value) {
 
                         $checkSloat = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', $sloattype)->where('slot_time', $value->slot_time)->where('slot_date', $ndate)->where('status', 'Available')->first();
@@ -616,13 +621,19 @@ class DoctorController extends Controller
                 }
 
                 $slot_count2 = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', $sloattype)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d', strtotime($date . '+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->get();
-                $slot_count = count($slot_count2);
+               if(($slot_count2[0]->appointment_type=='Physical' && $slot_count2[0]->doctor->physical=="Yes") || ($slot_count2[0]->appointment_type=='Video' && $slot_count2[0]->doctor->video=="Yes")){
+                        $slot_count = count($slot_count2);
+                    }else{
+                        $slot_count = 0;
+                    }
+                    $data['slot_count'] = $slot_count;
                 $limit = ($slot_count > 4) ? 3 : 4;
 
                 $unique_sloat = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', $sloattype)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d', strtotime($date . '+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->take($limit)->get();
                 
                 for ($i = 0; $i <= 3; $i++) {
                     $ndate = date("Y-m-d", strtotime($date . ' +' . $i . ' day'));
+                    if($slot_count>0)
                     foreach ($unique_sloat as $key => $value) {
 
                         $checkSloat = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', $sloattype)->where('slot_time', $value->slot_time)->where('slot_date', $ndate)->where('status', 'Available')->first();

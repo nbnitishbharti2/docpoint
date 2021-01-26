@@ -1006,3 +1006,176 @@ select.search-dropdown {
     width: max-content!important;
     transform: none!important;
 }
+
+
+/* 23 jan 2021 */
+.page-options ul{overflow: initial; flex-wrap: wrap;}
+
+.page-options ul>li {
+    flex-grow: 1;
+    margin-bottom: 8px;
+}
+.page-options a {
+    width: calc(100% - 8px);
+    text-align: center;
+}
+.page-options .dropdown-menu a{
+    width: 100%;
+}
+#datepicker {
+    width: 67px;
+    font-size: 15px;
+    color: #212529;
+    font-family: 'Roboto';
+    padding: 9px 15px;
+    margin: 0 5px;
+    border: 1px solid var(--light-txt);
+    border-radius: 3px;
+    cursor: pointer;
+    outline: none;
+}
+.ui-widget-header {
+    border: 1px solid #ffffff;
+    background: #ffffff;
+}
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {
+    top: 13px;
+}
+.ui-datepicker .ui-datepicker-header {
+    padding: 15px 0;
+}
+.ui-widget-header .ui-icon {
+    background-image: url(../img/left-arrow.svg);
+    background-position: initial;
+}
+.ui-widget-header .ui-icon-circle-triangle-e{
+    background-image: url(../img/right-arrow.svg);
+}
+.ui-widget-header .ui-state-hover, .ui-widget-header .ui-widget-content .ui-state-hover, .ui-widget-header .ui-widget-header .ui-state-hover, .ui-widget-header .ui-state-focus, .ui-widget-header .ui-widget-content .ui-state-focus, .ui-widget-header .ui-widget-header .ui-state-focus, .ui-widget-header .ui-button:hover, .ui-widget-header .ui-button:focus {
+    border: 1px solid #ffffff;
+    background: #ffffff;
+    cursor: pointer;
+}
+.ui-datepicker-calendar .ui-state-default,.ui-datepicker-calendar  .ui-widget-content .ui-state-default{
+    border: 1px solid #fff;
+    background: #ffff;
+    text-align: center;
+    border-radius: 50%;
+}
+.ui-datepicker-calendar .ui-state-hover{
+    border: 1px solid #cbd5e9;
+    background: #e4e9f3;
+}
+.ui-datepicker-calendar .ui-state-active{
+    border: 1px solid #2b519c;
+    background: #2b519c;
+    color: #fff;
+}
+.fixed-header.fx-head {
+    width: 100%;
+}
+ul.multiselect-container.dropdown-menu {
+    width: max-content;
+    display: none;
+    margin-right: auto;
+}
+ul.multiselect-container.dropdown-menu.show{display: block;}
+.page-options .multiselect-container a {
+    padding: 0;
+    text-align: left;
+}
+.page-options .multiselect-container li {
+    margin: 0;
+}
+.page-options .multiselect-container li:nth-last-child(1){
+    position: static;
+    margin: 0;
+}
+.page-options .multiselect-container li .checkbox {
+    margin: 0;
+    display: block;
+    padding: 5px;
+    cursor: pointer;
+}
+.multiselect-group label {
+    font-weight: 600;
+    font-size: 14px;
+    padding: 4px 5px;
+    width: 100%;
+    margin: 0;
+    background-color: #f3f3f3;
+    font-family: 'Roboto', sans-serif;
+}
+.btn-group {
+    margin: 0 5px;
+    border: 1px solid var(--light-txt);
+    border-radius: 3px;
+}
+.modal-body .user-card{    
+    display: flex;
+    text-align: left;
+    align-items: flex-start;
+}
+.modal-body .user-img {
+    object-fit: contain;
+}
+.modal-body .date-slider {
+    max-width: 100%;
+    margin-right: auto;
+}
+.modal-body .rating {
+    justify-content: flex-start;
+}
+
+/* 26 jan 2021 */
+.btn-group {
+    width: calc(100% - 8px);
+}
+.dropdown-menu.multidrop-off {
+    display: none;
+    margin-right: auto;
+}
+.dropdown-menu.multidrop-off.show {
+    display: block;
+}
+.dropdown.multiselect {
+    height: 100%;
+}
+.select-btn {
+    width: calc(100% - 8px);
+    margin: 0 5px;
+    height: 100%;
+    border: 1px solid var(--light-txt);
+    border-radius: 3px;
+    font-size: 16px;
+    font-family: 'Roboto';
+    padding: 8px 15px;
+    background-color: transparent;
+}
+.page-options .multidrop-off li {
+    position: static!important;
+}
+.page-options .multidrop-off a {
+    padding: 0;
+    text-align: left;
+    position: relative;
+}
+.page-options .multidrop-off a label {
+    display: block;
+    margin: 0;
+    padding-left: 33px;
+    cursor: pointer;
+}
+.page-options .multidrop-off a input[type=checkbox] {
+    position: absolute;
+    top: 4px;
+    left: 14px;
+}
+.multidrop-off .btn-group {
+    border: none;
+}
+.multidrop-off .btn {
+    padding: 2px 5px;
+    font-size: 13px;
+}
+/* 26 jan 2021 end */
