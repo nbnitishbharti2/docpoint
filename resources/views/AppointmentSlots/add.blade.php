@@ -8,12 +8,12 @@
                 <h4 class="card-title">Add Appoinment Slot</h4>
             </div>
             <div class="card-body">
-                <form method ="POST" enctype='multipart/form-data' id="speciality-form" action="{{route('appointment.slots.store')}}">
+                <form method ="POST" enctype='multipart/form-data' id="appointment-slot-form" action="{{route('appointment.slots.store')}}">
                     @csrf
                     <div class="form-group row">
                         <label class="col-form-label col-md-2">Start Date*</label>
                         <div class="col-md-4"> 
-                            <input name ="start_date" required type="date" min="{{ date('Y-m-d') }}" class="form-control" id="start_date" value="{{ old('start_date') }}">
+                            <input name ="start_date" required type="date" min="{{ date('Y-m-d') }}" class="form-control" id="start_date" value="">
                             @error('start_date')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -45,12 +45,12 @@
                     <div class="form-group row">
                         <label class="col-form-label col-md-2">Interval (In Minutes)*</label>
                         <div class="col-md-4"> 
-                            <input name ="interval" required type="number" class="form-control" id="interval" value="{{ old('interval') }}">
+                            <input name ="interval" type="number" class="form-control" id="interval" value="{{ old('interval') }}">
                             @error('interval')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <label class="col-form-label col-md-2">Off Day</label>
+                        <label class="col-form-label col-md-2">On Day</label>
                         <div class="col-md-4"> 
                             <div class="weekDays-selector">
                                 <input type="checkbox" id="weekday-mon" name="days[0]" value="Monday" class="weekday" />
@@ -68,6 +68,18 @@
                                 <input type="checkbox" id="weekday-sun" name="days[6]" value="Sunday" class="weekday" />
                                 <label for="weekday-sun">S</label>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-md-2">Appointment Type*</label>
+                        <div class="col-md-4 pt-8">
+                            <input type="radio" name="appointment_type" id="appointment_type_physical" value="Physical" {{ (old('appointment_type') == "Physical" || old('appointment_type') == null) ? "checked" : '' }}> 
+                            <label for="appointment_type_physical">Physical</label>
+                            <input type="radio" name="appointment_type" id="appointment_type_video" value="Video">
+                            <label for="appointment_type_video">Video</label>
+                            @error('appointment_type')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="text-right">

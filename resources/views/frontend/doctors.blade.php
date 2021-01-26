@@ -1,14 +1,24 @@
 @extends('layouts.frontend')
 @section('title', 'MyDocPoint | Doctors')
 @section('content')
-
-@php 
-//   $sloat=\App\Models\AppointmentSlots::getSloat(1,$date);
-             //    dd($sloat);
-$lact  = array(); 
-$lact_new= array();
+<style>
+  .morecontent span {
+    display: none;
+  }
+  .morelink {
+      display: block;
+      color: brown;
+  }
+  .more {
+    text-align: justify;
+    text-justify: inter-word;
+  }
+</style>
+@php
+$lact = array(); 
+$lact_new = array();
 $location_blank = array(); 
-$doctor_id_list=array();
+$doctor_id_list = array();
 @endphp
 <!-- search -->
 <section class="p-0 bg-blue">
@@ -24,7 +34,13 @@ $doctor_id_list=array();
                 <!-- search item -->
                 <div class="col-md-4">
                   <i class="icofont-search-1"></i>
-                  <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Condition, Procedur..." value="Dentist" required>
+                  <select class="form-control" name="spacility" required>
+                    <option></option>
+                    @foreach ($speciality as $value) 
+                    <option value="{{$value->id}}" <?php echo ($spacility==$value->id)?'selected':'' ?>>{{$value->spec_name}}</option>  
+                    @endforeach
+                </select>
+                  {{-- <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Condition, Procedur..." value="Dentist" required> --}}
                   <div class="invalid-feedback">
                     Enter Condition or Procedure
                   </div>
@@ -37,7 +53,7 @@ $doctor_id_list=array();
                 <!-- search item -->
                 <div class="col-md-4">
                   <i class="icofont-location-pin"></i>
-                  <input type="text" name="zip" value="{{ $zip }}" class="form-control" placeholder="Zip Code or city" value="New York, NY" required>
+                  <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Zip Code or city" value="New York, NY" required>
                   <div class="invalid-feedback">
                     Enter Zip code or City
                   </div>
@@ -49,7 +65,7 @@ $doctor_id_list=array();
 
                 <!-- search item -->
                 <div class="col-md-4">
-                  <input type="date" name="date" class="form-control"   value="{{ $date }}" required>
+                  <input type="text" name="date" class="form-control"  id="date" value="{{ date("d-m-Y", strtotime($date)) }}" required>
                   <div class="invalid-feedback">
                     Enter date
                   </div>
@@ -79,9 +95,9 @@ $doctor_id_list=array();
         <div class="col-lg-12">
           <!-- tab option wrap -->
           <ul class="tab-option-wrap">
-              <li class="active"><a href="#">All appointments</a></li>
-              <li><a href="#">In-person</a></li>
-              <li><a href="#">Video visit <span class="bg-blue">New</span></a></li>
+              <li class="active" onclick="more_desktop_change_type('')"><a href="#">All appointments</a></li>
+              <li ><a href="javascript:void(0)" onclick="more_desktop_change_type('Physical')">In-person</a></li>
+              <li><a href="javascript:void(0)"  onclick="more_desktop_change_type('Video')">Video visit <span class="bg-blue">New</span></a></li>
           </ul>
           <!-- tab option wrap end -->
         </div>
@@ -91,11 +107,15 @@ $doctor_id_list=array();
             <span>{{ count($doctors) }} doctors</span>
             <div class="sep"></div>
             <ul>
-              <li><a href="#">Dental Consultation</a></li>
               <li><a href="#">Specialties</a></li>
               <li><a href="#">Availability</a></li>
-              <li><a href="#">Special hours</a></li>
-              <li><a href="#">Gender</a></li>
+              <li><a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gender</a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item active" href="#">Male</a>
+                  <a class="dropdown-item" href="#">Female</a>
+                  <a class="dropdown-item" href="#">Transgender</a>
+                </div>
+              </li>
               <li><a href="#">Hospital affiliations</a></li>
               <!-- short by -->
               <li class="short-by"><a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -108,9 +128,9 @@ $doctor_id_list=array();
                     <!-- short icon end -->
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item active" href="#">default order</a>
-                    <a class="dropdown-item" href="#">distance</a>
-                    <a class="dropdown-item" href="#">wait time rating</a>
+                    <a class="dropdown-item active" href="#">Default Order</a>
+                    <a class="dropdown-item" href="#">Distance</a>
+                    <a class="dropdown-item" href="#">Wait Time Rating</a>
                   </div>
               </li>
               <!-- short by end -->
@@ -133,13 +153,13 @@ $doctor_id_list=array();
         <div class="col-lg-8">
           <!-- date slider -->
           <div class="owl-carousel date-slider" id="date-list">
-            @for($i=0; $i<14; $i++)
+            @for($i=0; $i<5; $i++)
             <div class="date-item"><p>{{ date("D",strtotime($date. ' +'.$i.' day')) }}</p><h5>{{ date("M d",strtotime($date. ' +'.$i.' day')) }}</h5></div>
             @endfor
              
           </div>
           <div class="slider-btns">
-            <span class="prev"><i class="icofont-rounded-left" onclick="more_desktop_date(0)"></i></span>
+            <span class="prev"><i class="icofont-rounded-left"  onclick="more_desktop_date(0)"></i></span>
             <span class="next"><i class="icofont-rounded-right" onclick="more_desktop_date(1)"></i></span>
           </div>
           <!-- date slider end -->
@@ -168,6 +188,7 @@ $doctor_id_list=array();
             $lact3['lng']=round($value->longitude,3); 
             array_push($lact_new, $lact3);
           }else{
+            array_push($doctor_id_list, $value->id);
             array_push($location_blank,($key));
           }
              ?> 
@@ -178,21 +199,30 @@ $doctor_id_list=array();
 
               <div class="row no-gutters">
                 <div class="col-lg-6 pl-md-4">
-                  <img class="user-img d-phone" src="img/user-card.png" alt="doctor">
-                  <h5>{{ $value->name }}<i class="icofont-check"></i>
+                  <img class="user-img d-phone" src="{{ asset('public/storage/frontend/img/user-card.png') }}" alt="doctor">
+                  <h5>{{ $value->name }}@if($value->sponsored=='Yes')<i class="icofont-check"></i> @endif
                   <br> <i class="icofont-map-pins"></i><span id="distance-total{{$key }}"></span> 
                     {{-- <span class="distance">1.5 Km</span> --}}</h5>
                   <h6>{{ $value->speciality->spec_name }}</h6>
                   <!-- address -->
                   <div class="address">
                     <h5>{{ $value->address }}</h5>
-                    <p>{{ $value->about }}</p>
+                    <span class = "more">{{ $value->about }}</span>
                   </div>
                   <!-- address end -->
-
+                  <div>
+                    <ul class="pills-wrap">
+                      @if($value->physical == "Yes")
+                          <li class="pills"><a href="javascript:void(0)"><i class="icofont-user"></i></a></li>
+                      @endif
+                      @if($value->video == "Yes")
+                          <li class="pills"><a href="javascript:void(0)"><i class="icofont-video"></i></a></li>
+                      @endif
+                    </ul>
+                  </div>
                   <!-- rating -->
                   <div class="rating">
-                    <span>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+                    <span>&#9733;</span>
                     <p class="total-rating">4</p>
                     <p class="rating-count">(969)</p>
                   </div>
@@ -204,7 +234,7 @@ $doctor_id_list=array();
                 
                   <ul class="time-btns d-desktop-for-tab" id="sloat-p{{ $value->id }}"> 
                     @php 
-                    $sloat=\App\Models\AppointmentSlots::getSloat($value->id,$date);
+                    $sloat=\App\Models\AppointmentSlots::getSloat($value->id, $date);
                    // $sloat=\App\Models\AppointmentSlots::getSloatTab($value->id,$date);
                   @endphp 
                  {{--  @foreach ($appointments[$value->id] as $key => $appointment)
@@ -290,18 +320,23 @@ $doctor_id_list=array();
     </div>
   </div>
 </section>
+<input type="hidden" name="sloat" id="sloat-doctor-details" value="0">
 <!-- inner page content end -->
 <script type="text/javascript">
   var slot_url = "{{ route('get.doctor.appoinment.slot') }}";
   var date_slot_url = "{{ route('get.doctor.appoinment.slot.by.date') }}";
+  var change_type_slot_url = "{{ route('get.doctor.appoinment.slot.change.type') }}";
+  
   var locations = <?php echo json_encode($lact_new); ?>; 
   var blank = <?php echo json_encode($location_blank); ?>;
-  var doctorlistid=<?php echo json_encode($doctor_id_list); ?>;
-  var new_date=<?php echo date("Ymd",strtotime($date)); ?>;
-  var min_date=<?php echo date("Ymd",strtotime(date("d-m-Y"))); ?>;
-  var date_list_start=<?php echo date("Ymd",strtotime($date)); ?>;
-  var date_list_end=<?php echo date("Ymd",strtotime($date.'+13 days')); ?>;
-   
+  var doctorlistid = <?php echo json_encode($doctor_id_list); ?>;
+  var new_date = <?php echo date("Ymd",strtotime($date)); ?>;
+  var min_date = <?php echo date("Ymd",strtotime(date("d-m-Y"))); ?>;
+  var date_list_start = <?php echo date("Ymd",strtotime($date)); ?>;
+  var date_list_end = <?php echo date("Ymd",strtotime($date.'+3 days')); ?>;
+  var page_type=1;
+  var appoinment_type='Physical';
+  
   function initMap() { 
     var bounds = new google.maps.LatLngBounds; 
     var markersArray = []; 
@@ -330,7 +365,7 @@ $doctor_id_list=array();
       avoidTolls: false
     }, function(response, status) {
       if (status !== 'OK') {
-        alert('Error was: ' + status);
+       // alert('Error was: ' + status);
       } else {
         var originList = response.originAddresses;
         var destinationList = response.destinationAddresses;                
@@ -348,7 +383,7 @@ $doctor_id_list=array();
                   title:name
                 }));
               } else {
-                alert('Geocode was not successful due to: ' + status);
+               // alert('Geocode was not successful due to: ' + status);
               }
             };
           }
@@ -378,7 +413,9 @@ $doctor_id_list=array();
       markersArray[i].setMap(null);
     }
     markersArray = [];
-  } 
+  }
+
+  
 </script>
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfaLWLOOJzGnXan4NM8-sk6OSr53b_W4k&callback=initMap"> </script>

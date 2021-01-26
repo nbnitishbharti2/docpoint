@@ -1,6 +1,7 @@
 @extends('layouts.frontend')
 @section('title', 'MyDocPoint | Home')
 @section('content')
+@include('layouts.message')
     <!-- banner -->
     <section class="p-0 bg-light-grey">
         <div class="banner">
@@ -14,8 +15,14 @@
                             <form class="needs-validation" method="post" novalidate action="{{ url('doctor-lists') }}">
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
-                                        <input type="text" name="search" class="form-control" placeholder="Condition, Procedur..."
-                                            required>
+                                        <select class="form-control" name="spacility" required>
+                                            <option></option>
+                                            @foreach ($speciality as $value) 
+                                            <option value="{{$value->id}}">{{$value->spec_name}}</option>  
+                                            @endforeach
+                                        </select>
+                                        {{-- <input type="text" name="search" class="form-control" placeholder="Condition, Procedur..."
+                                            required> --}}
                                         <div class="invalid-feedback">
                                             Enter Condition or Procedure
                                         </div>
@@ -24,7 +31,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" name="zip" class="form-control" placeholder="Zip Code or city" required>
+                                        <input type="text" name="search" class="form-control" placeholder="Zip Code or city">
                                         <div class="invalid-feedback">
                                             Enter Zip code or City
                                         </div>
@@ -33,9 +40,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="date" min="{{ date('Y-m-d') }}" name="date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                        <input type="text" name="date" id="date" class="form-control" value="{{ date("d-m-Y") }}" required>
                                         <div class="invalid-feedback">
-                                            Enter Zip code or City
+                                            Enter Date
                                         </div>
                                         <div class="valid-feedback">
                                             Looks good!

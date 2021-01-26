@@ -32,12 +32,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /*website */
 Route::any('/doctor-lists', 'DoctorController@list')->name('doctor.list');
-Route::get('/doctor-details/{doctor_id}', 'DoctorController@doctorDetails')->name('doctor.details');
+Route::get('/doctor-details/{doctor_id}/{sloat_id?}/{date?}', 'DoctorController@doctorDetails')->name('doctor.details');
+Route::get('/doctor-booking/{sloat_id}', 'DoctorController@booking')->name('doctor.booking');
+
 
 /**
  * Please add all the action that is accessible after valid login to this group.
  */
 Route::group(['middleware' => ['auth']], function () {
+
 
     // Check user & redirect
     Route::get('/auth', 'AuthController@authenticateUserAndRedirect')->name('auth');
@@ -46,6 +49,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('update-password/{user_id}', 'UserController@updatePassword')->name('update.password');
     Route::get('/user-delete/{user_id}', 'UserController@delete')->name('user.delete');
 
+    // review 
+    Route::post('/add-review', 'ReviewController@addReview')->name('add.review');
     // Doctor Routes
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
     Route::get('/doctor-list', 'DoctorController@index')->name('doctor.index');
@@ -58,6 +63,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/doctor-holiday/{doctor_id}', 'DoctorController@holiday')->name('doctor.holiday');
     Route::get('/add-holiday', 'DoctorController@addHoliday')->name('add.holiday');
     Route::post('/store-holiday', 'DoctorController@storeHoliday')->name('store.holiday');
+    Route::get('/delete-holiday/{holiday_id}', 'DoctorController@deleteHoliday')->name('delete.holiday');
 
     // Speciality route
     Route::get('/speciality-add/', 'SpecialityController@add')->name('Speciality.add');
@@ -111,7 +117,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/log-history/{user_id}', 'UserController@logHistory')->name('log.history');
 
     // review for admin
-    Route::get('/review', 'ReviewController@index')->name('review');
+    Route::get('/review/{doctor_id?}', 'ReviewController@index')->name('review');
     Route::get('/change-status/{id}/{status}', 'ReviewController@changeStatus')->name('change-review');
 
     
@@ -127,6 +133,14 @@ Route::group(['middleware' => ['auth']], function () {
     // Appointment management
     Route::get('/manage-appointment', 'AppointmentController@index')->name('manage.appointment');
 
+    // Appointment booking
+
+    Route::post('/doctor-booking', 'DoctorController@savebooking')->name('doctor.booking.save');
+
+    // Premium Charges Routes
+    Route::get('/premium-charge/{doctor_id}', 'PremiumChargeController@index')->name('premium.charge');
+    Route::post('/update-premium-charge/{doctor_id}', 'PremiumChargeController@update')->name('update.premium.charge');
+    Route::get('/premium-charge-delete/{doctor_id}', 'PremiumChargeController@delete')->name('premium.charge.delete');
     // Ajax Routes
     Route::post('get-state', 'StateController@getStateOfCountry')->name('get.country.state');
     Route::post('get-city', 'CityController@getCityOfState')->name('get.state.city');
@@ -140,9 +154,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('change-city-status', 'CityController@changeStatus')->name('change.city.status');
     Route::post('change-location-status', 'LocalityController@changeStatus')->name('change.location.status');
     Route::post('change-appointment-slots-status', 'AppointmentSlotController@changeStatus')->name('change.appointment.slots.status');
+    Route::post('change-appointment-status', 'AppointmentController@changeStatus')->name('change.appointment.status');
    
 });
 
  // Ajax routeson site 
  Route::post('get-doctor-appoinment-slot', 'DoctorController@getDoctorAppoinmentSlot')->name('get.doctor.appoinment.slot');
  Route::post('get-doctor-appoinment-slot-by-date', 'DoctorController@getDoctorAppoinmentSlotByDate')->name('get.doctor.appoinment.slot.by.date');
+ Route::post('get-doctor-appoinment-slot-change-type', 'DoctorController@getDoctorAppoinmentSlotChangeType')->name('get.doctor.appoinment.slot.change.type');

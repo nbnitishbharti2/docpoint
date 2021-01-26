@@ -25,9 +25,6 @@
                 <li>
                     <a href="{{ route('users') }}"><i class="fe fe-layout"></i> <span>Manage Users</span></a>
                 </li>
-                <li>
-                    <a href="{{ route('review') }}"><i class="fe fe-layout"></i> <span>Manage Review</span></a>
-                </li>
             </ul>
         </div>
     </div>

@@ -1,11 +1,12 @@
 @extends('layouts.frontend')
 @section('title', 'MyDocPoint | Doctors Details')
 @section('content')
+@include('layouts.message')
 <!-- doctor main detail -->
-<?php $doctor_id_list=array();
-  
- array_push($doctor_id_list, $doctors->id);
-  ?>
+@php
+    $doctor_id_list=array();
+    array_push($doctor_id_list, $doctors->id);
+@endphp
 <section>
     <div class="doctor-main-detail">
         <div class="container sml-container">
@@ -31,16 +32,17 @@
                         </div>
                         <!-- doctor info -->
                         <div class="doctor-info">
-                            <h2>{{ $doctors->name }}</h2>
+                            <h2>{{ 'Dr. ' .$doctors->name }}</h2>
                             <h4>Internist, Primary Care Doctor</h4>
                             <h3>{{ Str::ucfirst($doctors->address) }}</h3>
+                          
                             <ul class="pills-wrap">
-                                <li class="pills"><i class="icofont-user"></i>
-                                    <p>In-person visits</p>
-                                </li>
-                                <li class="pills"><i class="icofont-video"></i>
-                                    <p>Video visits</p>
-                                </li>
+                                @if($doctors->physical == "Yes")
+                                    <li class="pills"><a href="javascript:void(0)" onclick="more_desktop_change_type('Physical')"><i class="icofont-user" ></i><p>In-person visits</p></a></li>
+                                @endif
+                                @if($doctors->video == "Yes")
+                                    <li class="pills"><a href="javascript:void(0)" onclick="more_desktop_change_type('Video')"><i class="icofont-video" ></i><p>Video visits</p></a></li>
+                                @endif
                             </ul>
                         </div>
                         <!-- doctor info end -->
@@ -90,9 +92,9 @@
                             <div class="doctor-service-item">
                                 <i class="icofont-hospital"></i>
                                 <div class="service-txt">
-                                    <h4>Saint Luke's-Roosevelt Hospita... <span data-toggle="tooltip"
-                                            data-placement="top" title="Saint luke's-Rossevelt hospital center"><i
-                                                class="icofont-info-circle"></i></span></h4>
+                                    <h4>Saint Luke's-Roosevelt Hospita... 
+                                        <span data-toggle="tooltip" data-placement="top" title="Saint luke's-Rossevelt hospital center"><i class="icofont-info-circle"></i></span>
+                                    </h4>
                                     <p>The provider is affiliated with this hospital</p>
                                 </div>
                             </div>
@@ -106,50 +108,49 @@
                         <!-- doctor rating -->
                         <div class="doc-rating">
                             <h5>Overall rating</h5>
-                            <h2>4.85</h2>
+                            @if(count($doctor_reviews)>0)
+                                <h2>{{ number_format((float)((($waiting_total+$rate_total) / count($doctor_reviews)) /2), 2, '.', '') }}</h2>
+                            @else
+                                <h2>0</h2>
+                            @endif
                             <!-- rating -->
-                            <div class="star-div disabled" data-rating="4.85">
-                                <i class="star star-under icofont-star" star-data="1"><i
-                                        class="star star-over icofont-star"></i></i>
-                                <i class="star star-under icofont-star" star-data="2"><i
-                                        class="star star-over icofont-star"></i></i>
-                                <i class="star star-under icofont-star" star-data="3"><i
-                                        class="star star-over icofont-star"></i></i>
-                                <i class="star star-under icofont-star" star-data="4"><i
-                                        class="star star-over icofont-star"></i></i>
-                                <i class="star star-under icofont-star" star-data="5"><i
-                                        class="star star-over icofont-star"></i></i>
+                            @if(count($doctor_reviews)>0)
+                                <div class="star-div disabled" data-rating="{{ number_format((float)((($waiting_total+$rate_total) / count($doctor_reviews)) /2), 2, '.', '') }}">
+                            @else
+                                <div class="star-div disabled" data-rating="0">
+                            @endif
+                            
+                                <i class="star star-under icofont-star" star-data="1"><i class="star star-over icofont-star"></i></i>
+                                <i class="star star-under icofont-star" star-data="2"><i class="star star-over icofont-star"></i></i>
+                                <i class="star star-under icofont-star" star-data="3"><i class="star star-over icofont-star"></i></i>
+                                <i class="star star-under icofont-star" star-data="4"><i class="star star-over icofont-star"></i></i>
+                                <i class="star star-under icofont-star" star-data="5"><i class="star star-over icofont-star"></i></i>
                             </div>
                             <!-- rating end -->
-                            <a class="reviews-counts" href="#all_reviews">1529 Reviews</a>
+                            <a class="reviews-counts" href="#all_reviews">{{ count($doctor_reviews) }} Reviews</a>
                         </div>
                         <!-- doctor rating end -->
 
                         <!-- recent reviews -->
                         <div class="recent-reviews">
                             <h5>Recent reviews</h5>
-
-                            <!-- review item -->
-                            <div class="rrv-review-item">
-                                <div class="para-div">
-                                    <p class="two-line-clamp">A little confusion with the technology but no problem
-                                        whatsoever once we got connected. The doctor is super personable.</p>
+                            @foreach ($doctor_reviews as $key => $review)
+                                @if ($key == 2)
+                                    @php
+                                        break;
+                                    @endphp
+                                @endif
+                                <!-- review item -->
+                                <div class="rrv-review-item">
+                                    <div class="para-div">
+                                        <p class="two-line-clamp">{{ $review->review_desc }}</p>
+                                    </div>
+                                    <p class="reviewer-info"><span>{{ Str::ucfirst($review->user->name) }}</span><span>{{ \Carbon\Carbon::parse($review->created_at)->diffForHumans() }}</span>
+                                        {{-- <span><i class="icofont-video"></i>Video visit</span></p> --}}
                                 </div>
-                                <p class="reviewer-info"><span>Jerome W.</span> <span>Less than 1 month ago</span>
-                                    <span><i class="icofont-video"></i>Video visit</span></p>
-                            </div>
-                            <!-- review item end -->
-
-                            <!-- review item -->
-                            <div class="rrv-review-item">
-                                <div class="para-div">
-                                    <p class="two-line-clamp">Long wait, crowded office. Went for a yearly physical and
-                                        saw him for a short time and he never refilled my prescription (which was the
-                                        main reason for my yearly visit). His assistant was also unprofessional.</p>
-                                </div>
-                                <p class="reviewer-info"><span>Initials hidden</span></p>
-                            </div>
-                            <!-- review item end -->
+                                <!-- review item end -->
+                                
+                            @endforeach
                             <a class="more-review-btn" href="#all_reviews">Read more reviews</a>
                         </div>
                         <!-- recent reviews end -->
@@ -164,7 +165,7 @@
                                 <h2 class="mb-0">
                                     <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
                                         data-target="#collapseOne" aria-controls="collapseOne">
-                                        About Dr. Michael Bagner
+                                        {{ 'About Dr. ' .$doctors->name }}
                                     </button>
                                 </h2>
                             </div>
@@ -201,43 +202,6 @@
                                         and psychological needs of his patients; and has been the recipient of numerous
                                         patient satisfaction awards.<br>
                                     </p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- card end -->
-
-                        <!-- card -->
-                        <div class="card">
-                            <div class="card-header" id="headingTwo">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                        data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        In-network insurances
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                data-parent="#doctorDetailAccord">
-                                <div class="card-body">
-                                    <p>All providers on Zocdoc are required to accurately list in-network plans. If any
-                                        coverage issues occur, our Service team will help advocate for you with the
-                                        provider. <a href="#">Learn more</a></p>
-                                    <div class="insur-head">
-                                        <p>Check if this doctor is in-network for your insurance</p>
-                                        <button>Check your insurance coverage</button>
-                                    </div>
-                                    <ul class="insure-cont">
-                                        {{-- <li><img src="img/insure1.svg" alt="barnd logo">Aetna</li>
-                                        <li><img src="img/insure2.svg" alt="barnd logo">UnitedHealthcare</li>
-                                        <li><img src="img/insure3.svg" alt="barnd logo">BlueCross BlueShield</li>
-                                        <li><img src="img/insure4.svg" alt="barnd logo">UnitedHealthcare Oxford</li>
-                                        <li><img src="img/insure5.png" alt="barnd logo">Emblem Health</li>
-                                        <li>200+ more in-network plans <a href="#">View All</a></li> --}}
-                                    </ul>
-                                    <div class="bottom-note">
-                                        <p><span>99% of patients</span> have successfully booked with these insurances
-                                        </p>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -375,107 +339,6 @@
 
                         <!-- card -->
                         <div class="card">
-                            <div class="card-header" id="headingfive">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                        data-target="#collapsefive" aria-expanded="false" aria-controls="collapsefive">
-                                        Zocdoc awards <span data-toggle="tooltip" data-placement="bottom"
-                                            data-container="#doctorDetailAccord" data-html="true" title="
-                      <p>Zocdoc recognise practices for notable and outstanding performance. Awards include:</p>
-  
-                      <p>See you again - Patients often return to this practice.</p>
-                      
-                      <p>Rapid registration - This practice offers online check-in, which allows patients to submit forms online before arriving for their appointment.</p>
-                      
-                      <p>Speedy response - This practice confirms appointment quickly.</p>
-                      
-                      <p>Schedule hero - This practice keeps their schedules and insurance up to date.</p>
-                      ">
-                                            <i class="icofont-info-circle"></i></span>
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id="collapsefive" class="collapse" aria-labelledby="headingfive"
-                                data-parent="#doctorDetailAccord">
-                                <div class="card-body">
-                                    <!-- doctor awards -->
-                                    <ul class="doct-awards">
-                                        <li>
-                                            <button data-toggle="tooltip" data-placement="top"
-                                                title="Complete your forms online with this practice">
-                                                <!-- award icon -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 61.9">
-                                                    <g fill="#FFB4C8">
-                                                        <path
-                                                            d="M54 20.9V13h-9V0H9v13H0v7.9c0 .7 0 4.5 2.5 7.2 1.1 1.1 3 2.5 6.2 2.5H9V35c0 5.5 4.8 10 10.1 10H24v12h-9v4.9h23V57h-9V45h5.8C40.2 45 45 40.5 45 35v-4.4h.2c3.2 0 5.2-1.3 6.2-2.5 2.6-2.7 2.6-6.4 2.6-7.2zM9 25.2h-.2c-1.6 0-2.1-.6-2.3-.8-.9-1-1.1-2.7-1-3.3V18H9v7.2zM40 35c0 2.5-2.8 5-5.2 5H19.1c-2.4 0-5.1-2.5-5.1-5V5h26v30zm7.6-10.6c-.2.2-.8.8-2.3.8H45V18h3.6v3.1c0 .6-.1 2.4-1 3.3z">
-                                                        </path>
-                                                        <path d="M36 12.1L18 12v5h18zM18 19h12v5H18z"></path>
-                                                    </g>
-                                                    <clipPath>
-                                                        <path
-                                                            d="M85.6 118.4l-4.4 4.4-4.4-4.4-1.1 1.1 4.4 4.4-4.4 4.4 1.1 1.1 4.4-4.4 4.4 4.4 1.1-1.1-4.4-4.4 4.4-4.4z">
-                                                        </path>
-                                                    </clipPath>
-                                                </svg>
-                                                <!-- award icon end -->
-                                                <span>Rapid registration</span>
-                                            </button>
-                                        </li>
-
-                                        <li>
-                                            <button data-toggle="tooltip" data-placement="top"
-                                                title="Complete your forms online with this practice">
-                                                <!-- award icon -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 61.9">
-                                                    <g fill="#FFB4C8">
-                                                        <path
-                                                            d="M54 20.9V13h-9V0H9v13H0v7.9c0 .7 0 4.5 2.5 7.2 1.1 1.1 3 2.5 6.2 2.5H9V35c0 5.5 4.8 10 10.1 10H24v12h-9v4.9h23V57h-9V45h5.8C40.2 45 45 40.5 45 35v-4.4h.2c3.2 0 5.2-1.3 6.2-2.5 2.6-2.7 2.6-6.4 2.6-7.2zM9 25.2h-.2c-1.6 0-2.1-.6-2.3-.8-.9-1-1.1-2.7-1-3.3V18H9v7.2zM40 35c0 2.5-2.8 5-5.2 5H19.1c-2.4 0-5.1-2.5-5.1-5V5h26v30zm7.6-10.6c-.2.2-.8.8-2.3.8H45V18h3.6v3.1c0 .6-.1 2.4-1 3.3z">
-                                                        </path>
-                                                        <path
-                                                            d="M18 18.8v.2l8.6 6.7h.7l8.7-6.8v-4.6l-4.7-3.8-4.4 3.5-4.2-3.8-4.7 3.5z">
-                                                        </path>
-                                                    </g>
-                                                    <clipPath>
-                                                        <path
-                                                            d="M10.6 118.4l-4.4 4.4-4.4-4.4-1.1 1.1 4.4 4.4-4.4 4.4 1.1 1.1 4.4-4.4 4.4 4.4 1.1-1.1-4.4-4.4 4.4-4.4z">
-                                                        </path>
-                                                    </clipPath>
-                                                </svg>
-                                                <!-- award icon end -->
-                                                <span>See you again</span>
-                                            </button>
-                                        </li>
-
-                                        <li>
-                                            <button data-toggle="tooltip" data-placement="top"
-                                                title="Complete your forms online with this practice">
-                                                <!-- award icon -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 61.9">
-                                                    <g fill="#FFB4C8">
-                                                        <path
-                                                            d="M54 20.9V13h-9V0H9v13H0v7.9c0 .7 0 4.5 2.5 7.2 1.1 1.1 3 2.5 6.2 2.5H9V35c0 5.5 4.8 10 10.1 10H24v12h-9v4.9h23V57h-9V45h5.8C40.2 45 45 40.5 45 35v-4.4h.2c3.2 0 5.2-1.3 6.2-2.5 2.6-2.7 2.6-6.4 2.6-7.2zM9 25.2h-.2c-1.6 0-2.1-.6-2.3-.8-.9-1-1.1-2.7-1-3.3V18H9v7.2zM40 35c0 2.5-2.8 5-5.2 5H19.1c-2.4 0-5.1-2.5-5.1-5V5h26v30zm7.6-10.6c-.2.2-.8.8-2.3.8H45V18h3.6v3.1c0 .6-.1 2.4-1 3.3z">
-                                                        </path>
-                                                        <path d="M24 26.7h4.8l3.2-11h-3.3l1.3-6h-5l-3 11h3z"></path>
-                                                    </g>
-                                                    <clipPath>
-                                                        <path
-                                                            d="M-63.4 118.4l-4.4 4.4-4.4-4.4-1.1 1.1 4.4 4.4-4.4 4.4 1.1 1.1 4.4-4.4 4.4 4.4 1.1-1.1-4.4-4.4 4.4-4.4z">
-                                                        </path>
-                                                    </clipPath>
-                                                </svg>
-                                                <!-- award icon end -->
-                                                <span>Speedy response</span>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                    <!-- doctor awards end -->
-                                </div>
-                            </div>
-                        </div>
-                        <!-- card end -->
-
-                        <!-- card -->
-                        <div class="card">
                             <div class="card-header" id="headingSix">
                                 <h2 class="mb-0">
                                     <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
@@ -492,59 +355,72 @@
                                         <li>
                                             <h4>Overall rating</h4>
                                             <!-- rating -->
-                                            <div class="star-div disabled" data-rating="4.85">
-                                                <i class="star star-under icofont-star" star-data="1"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="2"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="3"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="4"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="5"><i
-                                                        class="star star-over icofont-star"></i></i>
+                                                @if(count($doctor_reviews)>0)
+                                                    <div class="star-div disabled" data-rating="{{ number_format((float)((($waiting_total+$rate_total) / count($doctor_reviews)) /2), 2, '.', '') }}">
+                                                @else
+                                                    <div class="star-div disabled" data-rating="0">
+                                                @endif
+                                                <i class="star star-under icofont-star" star-data="1"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="2"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="3"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="4"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="5"><i class="star star-over icofont-star"></i></i>
                                             </div>
                                             <!-- rating end -->
-                                            <h3>4.85</h3>
+                                            
+                                            @if(count($doctor_reviews)>0)
+                                                <h3>{{ number_format((float)((($waiting_total+$rate_total) / count($doctor_reviews)) /2), 2, '.', '') }}</h3>
+                                            @else
+                                                <h3>0</h3>
+                                            @endif
                                         </li>
 
                                         <li>
                                             <h4>Wait time</h4>
                                             <!-- rating -->
-                                            <div class="star-div disabled" data-rating="4.37">
-                                                <i class="star star-under icofont-star" star-data="1"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="2"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="3"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="4"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="5"><i
-                                                        class="star star-over icofont-star"></i></i>
+                                            @if(count($doctor_reviews)>0)
+                                                <div class="star-div disabled" data-rating="{{ number_format((float)(($waiting_total) / count($doctor_reviews)), 2, '.', '') }}">
+                                            @else
+                                                <div class="star-div disabled" data-rating="1">
+                                            @endif
+                                            
+                                                <i class="star star-under icofont-star" star-data="1"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="2"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="3"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="4"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="5"><i class="star star-over icofont-star"></i></i>
                                             </div>
                                             <!-- rating end -->
-                                            <h3>4.37</h3>
+                                            @if(count($doctor_reviews)>0)
+                                                <h3>{{ number_format((float)(($waiting_total) / count($doctor_reviews)), 2, '.', '') }}</h3>
+                                            @else
+                                                <h3>1</h3>
+                                            @endif
                                         </li>
 
-                                        <li>
+                                        {{-- <li>
                                             <h4>Bedside manner</h4>
                                             <!-- rating -->
-                                            <div class="star-div disabled" data-rating="4.87">
-                                                <i class="star star-under icofont-star" star-data="1"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="2"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="3"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="4"><i
-                                                        class="star star-over icofont-star"></i></i>
-                                                <i class="star star-under icofont-star" star-data="5"><i
-                                                        class="star star-over icofont-star"></i></i>
+                                            @if(count($doctor_reviews)>0)
+                                                <div class="star-div disabled" data-rating="{{ number_format((float)(($rate_total) / count($doctor_reviews)), 2, '.', '') }}">
+                                            @else
+                                                <div class="star-div disabled" data-rating="1">
+                                            @endif
+                                            
+                                                <i class="star star-under icofont-star" star-data="1"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="2"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="3"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="4"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="5"><i class="star star-over icofont-star"></i></i>
                                             </div>
                                             <!-- rating end -->
-                                            <h3>4.87</h3>
-                                        </li>
+                                            
+                                            @if(count($doctor_reviews)>0)
+                                                <h3>{{ number_format((float)(($rate_total) / count($doctor_reviews)), 2, '.', '') }}</h3>
+                                            @else
+                                                <h3>1</h3>
+                                            @endif
+                                        </li> --}}
                                     </ul>
 
                                     <!-- note -->
@@ -566,7 +442,7 @@
                     <!-- all reviews -->
                     <div class="all_reviews" id="all_reviews">
                         <div class="reviews-head">
-                            <h3>1572 reviews</h3>
+                            <h3>{{ count($doctor_reviews) }} reviews</h3>
                             <select>
                                 <option>Most relevant</option>
                                 <option>Highest rated</option>
@@ -583,240 +459,90 @@
 
                         <div class="main-review-container">
                             <!-- review item -->
-                            <div class="rrv-review-item">
-                                <!-- rating -->
-                                <div class="star-div disabled" data-rating="1.3">
-                                    <i class="star star-under icofont-star" star-data="1"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="2"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="3"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="4"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="5"><i
-                                            class="star star-over icofont-star"></i></i>
+                            @foreach ($doctor_reviews as $key => $review)
+                                    @if ($key == 5)
+                                        @php
+                                            break;
+                                        @endphp
+                                    @endif
+                                <div class="rrv-review-item">
+                                    <!-- rating -->
+                                    @if(count($doctor_reviews)>0)
+                                        <div class="star-div disabled" data-rating="{{ number_format((float)(($review->wating_rate + $review->rate)/2), 2, '.', '') }}">
+                                    @else
+                                        <div class="star-div disabled" data-rating="1">
+                                    @endif
+                                    
+                                        <i class="star star-under icofont-star" star-data="1"><i class="star star-over icofont-star"></i></i>
+                                        <i class="star star-under icofont-star" star-data="2"><i class="star star-over icofont-star"></i></i>
+                                        <i class="star star-under icofont-star" star-data="3"><i class="star star-over icofont-star"></i></i>
+                                        <i class="star star-under icofont-star" star-data="4"><i class="star star-over icofont-star"></i></i>
+                                        <i class="star star-under icofont-star" star-data="5"><i class="star star-over icofont-star"></i></i>
+                                    </div>
+                                    <!-- rating end -->
+                                    <div class="para-div">
+                                        <p class="two-line-clamp">{{ $review->review_desc }}</p>
+                                    </div>
+                                    <p class="reviewer-info">
+                                        <span>{{ \Carbon\Carbon::parse($review->created_at)->diffForHumans() }}</span>
+                                        <span>{{ $review->user->name }}</span>
+                                        <span>Verified patient</span>
+                                        {{-- <span><i class="icofont-video"></i>Video visit</span> --}}
+                                    </p>
                                 </div>
-                                <!-- rating end -->
-                                <div class="para-div">
-                                    <p class="two-line-clamp">A little confusion with the technology but no problem
-                                        whatsoever once we got connected. The doctor is super personable.</p>
-                                </div>
-                                <p class="reviewer-info">
-                                    <span>Less than 1 month ago</span>
-                                    <span>Jerome W.</span>
-                                    <span>Verified patient</span>
-                                    <span><i class="icofont-video"></i>Video visit</span>
-                                </p>
-                            </div>
-                            <!-- review item end -->
-
-                            <!-- review item -->
-                            <div class="rrv-review-item">
-                                <!-- rating -->
-                                <div class="star-div disabled" data-rating="3.6">
-                                    <i class="star star-under icofont-star" star-data="1"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="2"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="3"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="4"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="5"><i
-                                            class="star star-over icofont-star"></i></i>
-                                </div>
-                                <!-- rating end -->
-                                <div class="para-div">
-                                    <p class="two-line-clamp">Dr Bagner's physician's assistant was incredible. Went out
-                                        of his way to be extra welcoming. Really appreciated it.</p>
-                                </div>
-                                <p class="reviewer-info">
-                                    <span>Less than 3 months ago</span>
-                                    <span>Initials hidden</span>
-                                </p>
-                            </div>
-                            <!-- review item end -->
-
-                            <!-- review item -->
-                            <div class="rrv-review-item">
-                                <!-- rating -->
-                                <div class="star-div disabled" data-rating="2">
-                                    <i class="star star-under icofont-star" star-data="1"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="2"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="3"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="4"><i
-                                            class="star star-over icofont-star"></i></i>
-                                    <i class="star star-under icofont-star" star-data="5"><i
-                                            class="star star-over icofont-star"></i></i>
-                                </div>
-                                <!-- rating end -->
-                                <div class="para-div">
-                                    <p class="two-line-clamp">Dr Bagner, always takes the time to listen to come up with
-                                        best approach to your situation, I never feel rushed!!</p>
-                                </div>
-                                <p class="reviewer-info">
-                                    <span>October 21, 2020</span>
-                                    <span>Initials hidden</span>
-                                </p>
-                            </div>
+                            @endforeach
                             <!-- review item end -->
                             <div class="review-btm-options">
                                 <a class="more-review-btn" href="#">Read more reviews</a>
                             </div>
                         </div>
                     </div>
+                    @if (Auth::user() && $review_status == 'Yes')
+                        <form action="{{route('add.review')}}" method="post">
+                            @csrf
+                            <input type="hidden" name="doctor_id" value="{{$doctors->id}}">
+                            <div class="all_reviews" id="all_reviews">
+                                <div class="main-review-container"> 
+                                    <div class="row no-gutters">
+                                        <div class="col-lg-6 pos-static pr-4">
+                                            <label>Wait time</label><br>
+                                            <div class="star-div" id="wait_rating" data-rating="0" value="0" onchange="change_wait_rating();">
+                                            <input type="hidden" name="wait_rating_count"  id="wait_rating_count">
+                                                <i class="star star-under icofont-star" star-data="1"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="2"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="3"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="4"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="5"><i class="star star-over icofont-star"></i></i>
+                                            </div>
+                                        </div>
+                                        {{-- <div class="col-lg-6 pos-static pr-4">
+                                            <label>Bedside manner</label><br>
+                                            <div class="star-div " id="bedside_rating" data-rating="0" value="0">
+                                                <input type="hidden" name="bedside_rating_count"  id="bedside_rating_count">
+                                                <i class="star star-under icofont-star" star-data="1"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="2"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="3"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="4"><i class="star star-over icofont-star"></i></i>
+                                                <i class="star star-under icofont-star" star-data="5"><i class="star star-over icofont-star"></i></i>
+                                            </div>
+                                        </div> --}}
+                                        <div class="col-lg-12 pos-static pr-4">
+                                            <textarea name="review" class="form-control" rows="4" placeholder="Enter your review"></textarea> 
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- review item end -->
+                                    <div class="review-btm-options">
+                                        <button class="more-review-btn" type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    @endif
                     <!-- all reviews end -->
 
-                    <!-- frequently asked -->
-                    <div class="doctor-faq">
-                        <h4>Frequently asked questions</h4>
-
-                        <div class="accordion" id="doctor_faq">
-
-                            <div class="card">
-                                <div class="card-header" id="faqHeadingOne">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#faqCollapseOne" aria-controls="faqCollapseOne">
-                                            How soon can I make an appointment with Dr. Michael Bagner?
-                                        </button>
-                                    </h2>
-                                </div>
-
-                                <div id="faqCollapseOne" class="collapse" aria-labelledby="faqHeadingOne"
-                                    data-parent="#doctor_faq">
-                                    <div class="card-body">
-                                        Generally, Dr. Michael Bagner has appointments available on Zocdoc within 1
-                                        week. You can see Dr. Bagner's earliest availability on Zocdoc and <a
-                                            href="#">make an appointment online.</a>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="card">
-                                <div class="card-header" id="faqHeadingtwo">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#faqCollapsetwo" aria-controls="faqCollapsetwo">
-                                            Is Dr. Michael Bagner accepting new patients?
-                                        </button>
-                                    </h2>
-                                </div>
-
-                                <div id="faqCollapsetwo" class="collapse" aria-labelledby="faqHeadingtwo"
-                                    data-parent="#doctor_faq">
-                                    <div class="card-body">
-                                        Dr. Michael Bagner generally accepts new patients on Zocdoc. <a href="#">You can
-                                            see Dr. Bagner's earliest availability</a> on Zocdoc and schedule an
-                                        appointment online.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" id="faqHeadingThree">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#faqCollapseThree" aria-controls="faqCollapseThree">
-                                            Does Dr. Michael Bagner accept my insurance?
-                                        </button>
-                                    </h2>
-                                </div>
-
-                                <div id="faqCollapseThree" class="collapse" aria-labelledby="faqHeadingThree"
-                                    data-parent="#doctor_faq">
-                                    <div class="card-body">
-                                        <a href="#">Choose your insurance plan</a> to verify if Dr. Bagner is
-                                        in-network.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" id="faqHeadingFour">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#faqCollapseFour" aria-controls="faqCollapseFour">
-                                            Which hospital is Dr. Michael Bagner affiliated with?
-                                        </button>
-                                    </h2>
-                                </div>
-
-                                <div id="faqCollapseFour" class="collapse" aria-labelledby="faqHeadingFour"
-                                    data-parent="#doctor_faq">
-                                    <div class="card-body">
-                                        Dr. Michael Bagner is affiliated with Saint Luke's-Roosevelt Hospital Center.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" id="faqHeadingFive">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#faqCollapseFive" aria-controls="faqCollapseFive">
-                                            What practice does Dr. Michael Bagner work with?
-                                        </button>
-                                    </h2>
-                                </div>
-
-                                <div id="faqCollapseFive" class="collapse" aria-labelledby="faqHeadingFive"
-                                    data-parent="#doctor_faq">
-                                    <div class="card-body">
-                                        <a href="#">Dr. Michael Bagner</a> works with <a href="#">Mount Sinai
-                                            Doctors.</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" id="faqHeadingSix">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#faqCollapseSix" aria-controls="faqCollapseSix">
-                                            Where is Dr. Michael Bagner's office located?
-                                        </button>
-                                    </h2>
-                                </div>
-
-                                <div id="faqCollapseSix" class="collapse" aria-labelledby="faqHeadingSix"
-                                    data-parent="#doctor_faq">
-                                    <div class="card-body">
-                                        Dr. Michael Bagner has 2 office locations in New York, <a href="#">view full
-                                            addresses</a> on Dr. Bagner's profile.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" id="faqHeadingSeven">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#faqCollapseSeven" aria-controls="faqCollapseSeven">
-                                            Can I make an appointment with Dr. Michael Bagner online?
-                                        </button>
-                                    </h2>
-                                </div>
-
-                                <div id="faqCollapseSeven" class="collapse" aria-labelledby="faqHeadingSeven"
-                                    data-parent="#doctor_faq">
-                                    <div class="card-body">
-                                        Yes, you can <a href="#">make an appointment online</a> with Dr. Bagner using
-                                        Zocdoc. It’s simple, secure, and free.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- frequently asked end -->
-
                     <!-- find doctors -->
-                    <div class="find-doctors">
+                    {{-- <div class="find-doctors">
                         <h4>Find doctors</h4>
 
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -834,10 +560,6 @@
                                     aria-controls="procedures-and-treatments" aria-selected="false">Procedures and
                                     Treatments</a>
                             </li>
-                            {{-- <li class="nav-item">
-                                <a class="nav-link" id="insurances-tab" data-toggle="tab" href="#insurances" role="tab"
-                                    aria-controls="insurances" aria-selected="false">Insurances</a>
-                            </li> --}}
                             <li class="nav-item">
                                 <a class="nav-link" id="telemedicine-tab" data-toggle="tab" href="#telemedicine"
                                     role="tab" aria-controls="telemedicine" aria-selected="false">Telemedicine</a>
@@ -950,19 +672,22 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <!-- find doctors end -->
 
                     <!-- bottom breadcrumb -->
                     <ul class="bottom-bread-crumb">
                         <li><a href="{{ url('/') }}">Mydocpoint</a></li>
                         <li><a href="{{ route('doctor.list') }}">Doctors</a></li>
-                        <li>Dr. Mohan Kumar DDS.</li>
+                        <li>{{ 'Dr. ' .$doctors->name }}</li>
                     </ul>
                     <!-- bottom breadcrumb end -->
                 </div>
                 <div class="col-lg-4">
                     <!-- side card -->
+                    <form method="post" action="{{ route('doctor.booking.save')}}">
+                        @csrf
+                   
                     <div class="side-card">
                         <h3>Book an appointment for free</h3>
                         {{-- <h5>What's your insurance plan?</h5>
@@ -975,110 +700,29 @@
                         </div> --}}
 
                         <h5>What's the reason for your visit?</h5>
-                        <select>
+                        <select name="resion">
                             <optgroup label="Popular Visit Reasons">
-                                <option value="83">General Consultation</option>
-                                <option selected="" value="75">Illness</option>
-                                <option value="2551">New Patient Visit</option>
-                                <option value="367">Pre-Travel Consultation</option>
-                                <option value="123">Sports Injury</option>
+                                @foreach ( $popular_reason as $key => $val)
+                                <option value="{{$val->reason_id}}">{{$val->reason->name}}</option>
+                                @endforeach
                             </optgroup>
                             <optgroup label="All Visit Reasons">
-                                <option value="1063">Abdominal Pain</option>
-                                <option value="1032">Acid Reflux / Heartburn</option>
-                                <option value="422">Ankle Problems</option>
-                                <option value="2970">Annual Check Up</option>
-                                <option value="494">Anxiety</option>
-                                <option value="1812">Back Pain</option>
-                                <option value="122">Back Problems</option>
-                                <option value="1894">Bladder and Bowel Management</option>
-                                <option value="2477">Blood Work</option>
-                                <option value="2001">Bowel and Bladder Management</option>
-                                <option value="2153">Breast Cancer High Risk Screening</option>
-                                <option value="2162">Breast Cancer Screening</option>
-                                <option value="390">Bronchitis</option>
-                                <option value="1175">Bruise / Contusion</option>
-                                <option value="194">Cardiovascular Screening Visit</option>
-                                <option value="3290">Chronic Cough</option>
-                                <option value="2520">Chronic Illness</option>
-                                <option value="3193">Cold</option>
-                                <option value="3211">Cold Sores / Herpes Labialis</option>
-                                <option value="1462">Concussion</option>
-                                <option value="1600">Constipation</option>
-                                <option value="3194">Cough</option>
-                                <option value="1624">Dehydration</option>
-                                <option value="370">Diabetes Consultation</option>
-                                <option value="1332">Diabetes Follow Up</option>
-                                <option value="1117">Diarrhea</option>
-                                <option value="468">Dizziness</option>
-                                <option value="121">Elbow Problems</option>
-                                <option value="1052">Fainting / Syncope</option>
-                                <option value="1019">Fever</option>
-                                <option value="1705">Flu</option>
-                                <option value="134">Flu Shot</option>
-                                <option value="106">Foot Problems</option>
-                                <option value="1432">Gall Bladder Problem</option>
-                                <option value="1309">General Follow Up</option>
-                                <option value="499">Headache</option>
-                                <option value="1072">Hemorrhoids</option>
-                                <option value="125">Hip Problems</option>
-                                <option value="2620">Hospital Discharge/Follow Up</option>
-                                <option value="1781">Infection Follow Up</option>
-                                <option value="1796">Itching</option>
-                                <option value="1129">Jaundice</option>
-                                <option value="1023">Joint Pain</option>
-                                <option value="1801">Joint Problem </option>
-                                <option value="124">Knee Problems</option>
-                                <option value="4070">LGBT Care</option>
-                                <option value="1177">Ligament Sprain</option>
-                                <option value="3631">Lower Extremity Pain</option>
-                                <option value="3632">Lower Extremity Swelling</option>
-                                <option value="3213">Measles / Rubeola</option>
-                                <option value="2621">Medicare Annual Wellness Visit</option>
-                                <option value="1176">Muscle Strain</option>
-                                <option value="192">Nail Abnormality</option>
-                                <option value="1886">Nausea and Vomiting</option>
-                                <option value="1888">Neck Pain</option>
-                                <option value="1889">Neck Problems</option>
-                                <option value="2728">Nose Bleed / Epistaxis</option>
-                                <option value="1207">Nutrition Consultation</option>
-                                <option value="2501">Postpartum Depression</option>
-                                <option value="509">Pre-Surgery Checkup / Pre-Surgical Clearance</option>
-                                <option value="78">Pre-Travel Checkup</option>
-                                <option value="1331">Pre-Travel Follow Up</option>
-                                <option value="504">Rash</option>
-                                <option value="1020">Severe Infection</option>
-                                <option value="150">Sexually Transmitted Disease (STD)</option>
-                                <option value="3219">Shortness of Breath / Difficulty in Breathing</option>
-                                <option value="2413">Shoulder Pain</option>
-                                <option value="161">Shoulder Problem</option>
-                                <option value="2366">Skin Problem </option>
-                                <option value="2907">Stiffness</option>
-                                <option value="1029">Stomach Pain</option>
-                                <option value="3381">Stomach Ulcer</option>
-                                <option value="2522">Suture Removal</option>
-                                <option value="2906">Swelling</option>
-                                <option value="3931">Swelling in Legs</option>
-                                <option value="228">Tingling / Numbness / Weakness</option>
-                                <option value="3844">Tiredness / Fatigue </option>
-                                <option value="1536">Type 1 Diabetes</option>
-                                <option value="3038">Type 2 Diabetes</option>
-                                <option value="1550">Urology Problem </option>
-                                <option value="421">Wrist Problems</option>
-                                <option value="2642">Yearly Wellness Visit (For Medicare Patients)</option>
+                                @foreach ( $reason as $key => $val)
+                                <option value="{{$val->id}}">{{$val->name}}</option>
+                                @endforeach 
                             </optgroup>
                         </select>
 
                         <h5>Has the patient seen this doctor before?</h5>
                         <div class="seen-check">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="patient_type" id="yes" value="option1" checked>
+                                <input class="form-check-input" type="radio" name="patient_type" id="yes" value="New" checked>
                                 <label class="form-check-label" for="yes">
                                     Yes
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="patient_type" id="no" value="option2">
+                                <input class="form-check-input" type="radio" name="patient_type" id="no" value="Existing">
                                 <label class="form-check-label" for="no">
                                     No
                                 </label>
@@ -1088,28 +732,47 @@
 
                         <h5>Choose the type of appointment</h5>
                         <div class="seen-check">
+                            @if($doctors->physical == "Yes")
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="appointment_type" id="inperson" value="option1" checked>
+                                <input class="form-check-input" onclick="more_desktop_change_type('Physical')" type="radio" name="appointment_type" id="inperson" value="In-Person" <?php echo ($appointment_type=='Physical')?'checked':'' ?>>
                                 <label class="form-check-label" for="inperson">
                                     In-person
                                 </label>
                             </div>
+                            @endif
+                            @if($doctors->video == "Yes")
+                                <div class="form-check">
+                                    <input class="form-check-input" onclick="more_desktop_change_type('Video')" type="radio" name="appointment_type" id="videovisit" value="Video" <?php echo ($appointment_type=='Video')?'checked':'' ?>>
+                                    <label class="form-check-label" for="videovisit">
+                                        Video visit
+                                    </label>
+                                </div>
+                            @endif
+                        </div>
+                        <h5>Choose Booking Type</h5>
+                        <div class="seen-check"> 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="appointment_type" id="videovisit" value="option2">
-                                <label class="form-check-label" for="videovisit">
-                                    Video visit
+                                <input class="form-check-input" type="radio" name="booking_type" id="normal_bookinh" value="In-Person" checked>
+                                <label class="form-check-label" for="normal_bookinh">
+                                    Normal 
                                 </label>
-                            </div>
+                            </div> 
+                                <div class="form-check">
+                                    <input class="form-check-input" onclick="check_premium()" type="radio" name="booking_type" id="premium_booking" value="Video">
+                                    <label class="form-check-label" for="premium_booking">
+                                        Premium
+                                    </label>
+                                </div> 
                         </div>
 
                         <h5>Select an available time</h5>
                         <div class="avliable-time">
-                            <p>Mount Sinai Doctors - West 8th Avenue 780 8th Avenue, Ste 303, New York, NY 10036</p>
+                            <p>{{$doctors->address.', '.$doctors->city->name.', '.$doctors->state->name.', '.$doctors->country->name.', '.$doctors->zip}}</p>
                             <!-- date slider -->
                             <div class="owl-carousel date-slider" id="date-list">
-                                 @for($i=0; $i<14; $i++)
-            <div class="date-item"><p>{{ date("D",strtotime($date. ' +'.$i.' day')) }}</p><h5>{{ date("M d",strtotime($date. ' +'.$i.' day')) }}</h5></div>
-            @endfor
+                                 @for($i=0; $i<5; $i++)
+                                    <div class="date-item"><p>{{ date("D",strtotime($date. ' +'.$i.' day')) }}</p><h5>{{ date("M d",strtotime($date. ' +'.$i.' day')) }}</h5></div>
+                                @endfor
                                
                             </div>
                             <div class="slider-btns">
@@ -1117,30 +780,43 @@
                                 <span class="next"><i class="icofont-rounded-right" onclick="more_desktop_date(1)"></i></span>
                             </div>
                             <!-- date slider end -->
-
+                            
                             <!-- time buttons -->
                             <ul class="time-btns d-desktop-for-tab" id="sloat-p{{ $doctors->id }}">
-                                <?php $sloat=\App\Models\AppointmentSlots::getSloat($doctors->id,$date);
-                 ?>
+                                @php $sloat=\App\Models\AppointmentSlots::getSloat($doctors->id,$date,0,$sloat_id,$appointment_type); @endphp
                             </ul>
                             <!-- time buttons end -->
+                            <input type="hidden" name="sloat" id="sloat-doctor-details" value="{{$sloat_id}}">
                         </div>
-                        <button class="continue-button">Continue booking</button>
+                        <button class="continue-button" type="submit">Continue booking</button>
+                        <button class="continue-button" data-toggle="tooltip" title="Premium Booking &#013;Premium charge is included in this booking." type="submit">Premium booking</button>
                     </div>
+                     </form>
                     <!-- side card end -->
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+
+
 <script type="text/javascript">
      var slot_url = "{{ route('get.doctor.appoinment.slot') }}";
+     var change_type_slot_url = "{{ route('get.doctor.appoinment.slot.change.type') }}";
      var doctorlistid=<?php echo json_encode($doctor_id_list); ?>;
   var new_date=<?php echo date("Ymd",strtotime($date)); ?>;
    var date_slot_url = "{{ route('get.doctor.appoinment.slot.by.date') }}";
    var min_date=<?php echo date("Ymd",strtotime(date("d-m-Y"))); ?>;
    var date_list_start=<?php echo date("Ymd",strtotime($date)); ?>;
-  var date_list_end=<?php echo date("Ymd",strtotime($date.'+13 days')); ?>;
+  var date_list_end=<?php echo date("Ymd",strtotime($date.'+3 days')); ?>;
+  var page_type=0;
+  var appoinment_type='<?php echo $appointment_type ?>';
+
+  function change_wait_rating()
+{
+    alert('hi');
+}
 </script>
 <!-- doctor main detail end -->
 @endsection

@@ -13,4 +13,8 @@ class Country extends Model
     {
         return $this->hasMany('App\Models\City');
     }
+    // public function doctors()
+    // {
+    //     return $this->morphMany(Doctor::class, 'id');
+    // }
 }

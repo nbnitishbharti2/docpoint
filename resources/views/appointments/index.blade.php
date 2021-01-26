@@ -19,27 +19,36 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>Time</th>
+                                <th>Name</th>
+                                <th>Reason</th>
+                                <th>Patient Type</th>
+                                <th>Appointment Type</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($appointments as $value)
-                            <tr>
-                                <td>{{ date("d-m-Y", strtotime($value->appointment_date))}}</td>
-                               <td> 
-                                    <div class="status-toggle">
-                                        <input type="checkbox" id="status_{{ $value->id }}" data-id = "{{ $value->id }}" class="appointment-sloat check" {{ ($value->status == '1')? 'checked': '' }}>
-                                        <label for="status_{{ $value->id }}" class="checktoggle">checkbox</label>
-                                    </div>
-                                </td>
-                                <td>
-                                    <a class="btn-sm btn btn-info" title="Edit" href="{{route('appointment.slots.edit',['id'=>$value->id])}}"><i class="fa fa-pencil"></i></a>
-                                     <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_appoinment_sloats_delete({{ $value->id }})"><i class="fa fa-trash"></i></button>
-                                </td>
-                               
-                                
-                            </tr>
+                                <tr>
+                                    <td>{{ date("d-m-Y", strtotime($value->appointment_date)) }}</td>
+                                    <td>{{ date("h:i A", strtotime($value->appointment_slot->slot_time)) }}</td>
+                                    <td>{{ Str::ucfirst($value->user->name) }}</td>
+                                    <td>{{ Str::ucfirst($value->reason->name) }}</td>
+                                    <td>{{ Str::ucfirst($value->patient_type) }}</td>
+                                    <td>{{ Str::ucfirst($value->appointment_type) }}</td>
+                                    <td> 
+                                        {{ Str::ucfirst($value->status) }}
+                                    </td>
+                                    <td>
+                                        @if($value->status != 'Canceled')
+                                            <div class="status-toggle">
+                                                <input type="checkbox" title="Change Status" id="status_{{ $value->id }}" data-id = "{{ $value->id }}" class="appointment check" {{ ($value->status == 'Active')? 'checked': '' }}>
+                                                <label for="status_{{ $value->id }}" class="checktoggle">checkbox</label>
+                                            </div>
+                                        @endif
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -48,29 +57,7 @@
         </div>
     </div>			
 </div>
-<!-- /.delete confirmation modal -->
-<div class="modal fade" id="modal-appointment-sloat-delete">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Delete Appointment Sloat</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to Delete?</p>
-        </div>
-        <div class="modal-footer">
-            <a href="{{ url('/appointment-slots-delete/11') }}" id="delete-appointment-sloat" class="btn btn-danger">Delete</a>
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
 <script>
-    var change_appoinmrnt_slot_status = "{{ route('change.appointment.slots.status') }}";
+    var change_appoinment_status = "{{ route('change.appointment.status') }}";
 </script>
 @endsection

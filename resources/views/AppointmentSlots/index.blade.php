@@ -22,8 +22,8 @@
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Status</th>
+                                <th>Appoinment Type</th>
                                 <th>Action</th>
-                                
                             </tr>
                         </thead>
                         <tbody>
@@ -32,6 +32,7 @@
                                 <td>{{ date("Y-m-d", strtotime($value->slot_date_time))}}</td>
                                 <td>{{ date("h:i a", strtotime($value->slot_date_time))}}</td>
                                 <td>{{ $value->status }}</td>
+                                <td>{{ $value->appointment_type }}</td>
                                 <td>
                                     <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_appoinment_sloats_delete({{ $value->id }})"><i class="fa fa-trash"></i></button>
                                 </td>

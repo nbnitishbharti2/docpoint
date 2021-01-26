@@ -28,6 +28,7 @@
 body{font-family: 'Verdana', sans-serif; background: #ffffff;}
 a:hover{text-decoration:none;}
 a{display: inline-block; color: inherit;}
+.pills a {display: flex !important;}
 h2{font-size:36px;}
 h3{font-size:30px;}
 h4{font-size:24px;}
@@ -243,7 +244,7 @@ header {padding: 21px 0;}
     .doctor-list .user-card { display: flex; text-align: left;}
     .doctor-list .rating { justify-content: flex-start;}
     .time-btns { list-style: none; column-count: 4; gap: 6px;}
-    .time-btns a { padding: 10px 6px; white-space: nowrap; font-size: 13px; background-color: var(--blue); color: var(--white); display: block; text-align: center; margin-bottom: 6px; transition: all ease 0.5s;}
+    .time-btns a { padding: 10px 6px; white-space: nowrap; font-size: 11px; background-color: var(--blue); color: var(--white); display: block; text-align: center; margin-bottom: 6px; transition: all ease 0.5s;}
     .time-btns a:hover{background-color: var(--navy-blue);}
     .doctor-list .user-img { width: 130px; height: 130px; align-self: flex-start; margin-bottom: 0;}
     .inr-line-btn { display: flex; align-items: center;}
@@ -996,3 +997,12 @@ select.search-dropdown {
     color: #fff;
 }
 /* doctor details end */
+
+.time-btns li.active a {
+    background-color: #273d6a;
+}
+.owl-carousel .owl-stage{
+    display: flex;
+    width: max-content!important;
+    transform: none!important;
+}

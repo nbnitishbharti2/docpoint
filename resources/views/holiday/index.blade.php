@@ -46,7 +46,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Delete Appointment Sloat</h4>
+          <h4 class="modal-title">Delete Holiday</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -55,7 +55,7 @@
           <p>Are you sure you want to Delete?</p>
         </div>
         <div class="modal-footer">
-            <a href="{{ url('/appointment-slots-delete/11') }}" id="delete-appointment-sloat" class="btn btn-danger">Delete</a>
+            <a href="{{ url('/delete-holiday/11') }}" id="delete-appointment-sloat" class="btn btn-danger">Delete</a>
             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -63,7 +63,4 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-<script>
-    var change_appoinmrnt_slot_status = "{{ route('change.appointment.slots.status') }}";
-</script>
 @endsection

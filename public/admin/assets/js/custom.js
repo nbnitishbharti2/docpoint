@@ -203,4 +203,26 @@ $(document).ready(function(){
 			form.submit();
 		}
 	});
+
+	//Password Update form validation
+	$( "#premium_charges" ).validate({
+		rules: {
+			amount: {
+				required: true,
+				digits: true
+			},
+			no_of_patient: {
+				required: true,
+				digits: true
+			},
+			premium_patient: {
+				required: true,
+				digits: true
+			},
+		}, 
+		submitHandler: function(form) {
+			// do other things for a valid form
+			form.submit();
+		}
+	});
 });

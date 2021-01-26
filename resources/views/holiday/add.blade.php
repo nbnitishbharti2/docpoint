@@ -13,7 +13,7 @@
                     <div class="form-group row">
                         <label class="col-form-label col-md-2">Date*</label>
                         <div class="col-md-10">
-                            <input name ="date" required type="date" class="form-control" id="date" value="{{ old('date') }}">
+                            <input name ="date" required type="text" class="form-control" id="date" value="{{ old('date') }}">
                             @error('date')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -30,4 +30,12 @@
 @endsection
 @section('script')
 <script  src="{{ asset('public/admin/assets/js/custom.js')}}"></script>
+<script>
+$(function(){
+    $('#date').datepicker({
+        format: 'dd-mm-yyyy',
+        orientation: "bottom"
+    });
+});
+</script>
 @endsection

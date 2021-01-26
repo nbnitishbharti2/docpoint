@@ -16,17 +16,18 @@ class CreateReviewsTable extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('doctor_id')->nullable();
-            $table->unsignedBigInteger('patient_id')->nullable();
-            $table->string('review_title', 30)->nullable();
-            $table->string('review_desc',300)->nullable(); 
-            $table->tinyInteger('status')->default(1);
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->integer('wating_rate')->default('1');
+            $table->integer('rate')->default('1');
+            $table->text('review_desc')->nullable(); 
+            $table->enum('status', ['New', 'Approved', 'Rejected'])->default('New');
             $table->timestamps();
         });
-         Schema::table('reviews', function($table){
+        Schema::table('reviews', function($table){
              $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
         });
         Schema::table('reviews', function($table){
-             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
+             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

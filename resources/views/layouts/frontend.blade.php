@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/media.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/viewer.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker.min.css') }}"/>
   </head>
 <body>
 <!-- header -->
@@ -173,10 +174,12 @@
   <script src="{{ asset('public/storage/frontend/js/slick.js') }}"></script>
   <script src="{{ asset('public/admin/assets/plugins/validation/jquery.validate.min.js') }}"></script>
   <script src="{{ asset('public/admin/assets/plugins/validation/additional-methods.min.js') }}"></script>
-  <script src="{{ asset('public/storage/frontend/js/custom.js?v=2') }}"></script>
+  <script src="{{ asset('public/storage/frontend/js/custom.js?v=5') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/viewer.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/percent-rating.js') }}"></script>
-  <script>
+  <script src="{{ asset('public/storage/frontend/js/bootstrap-tooltip.js') }}"></script>
+  <script src="{{ asset('public/storage/frontend/js/bootstrap-datepicker.min.js') }}"></script>
+  {{-- <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function() {
       'use strict';
@@ -195,9 +198,14 @@
         });
       }, false);
     })();
-  </script>
+  </script> --}}
   
 <script>
+  $('#date').datepicker({
+    format: 'dd-mm-yyyy',
+    orientation: "bottom",
+    startDate:new Date()
+  }); 
   // Example starter JavaScript for disabling form submissions if there are invalid fields
   (function() {
     'use strict';
@@ -294,6 +302,7 @@
       slider.scrollLeft = scrollLeft - walk;
     });
     /*********** horizontal scroll end *****************/
+    
 </script>
   </body>
 </html>

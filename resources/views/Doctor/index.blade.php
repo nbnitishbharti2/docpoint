@@ -48,6 +48,10 @@
                                         <a href="{{ route('doctor.edit', ['id' => $doctor->id]) }}" title="Edit" class="btn-sm btn btn-primary"><i class="fa fa-pencil"></i></a>
                                         <a href="{{ route('log.history', ['user_id' => $doctor->user_id]) }}" title="Log History" class="btn-sm btn btn-primary"><i class="fa fa-history"></i></a>
                                         <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_doctor_delete({{ $doctor->id }})"><i class="fa fa-trash"></i></button>
+                                        <a href="{{ route('review', ['doctor_id' => $doctor->id]) }}" title="Reviews" class="btn-sm btn btn-primary"><i class="fa fa-star"></i></a>
+                                        @if($doctor->sponsored == "Yes")
+                                            <a href="{{ route('premium.charge', ['doctor_id' => $doctor->id]) }}" title="Premium Settings" class="btn-sm btn btn-success"><i class="fa fa-cog"></i></a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

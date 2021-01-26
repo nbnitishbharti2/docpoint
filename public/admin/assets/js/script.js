@@ -251,7 +251,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'success',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				} else {
 					$.toast({
@@ -259,7 +260,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'error',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				}
 			},
@@ -269,7 +271,8 @@
 					text: error,
 					showHideTransition: 'slide',
 					icon: 'error',
-					position : 'top-right'
+					position : 'top-right',
+					hideAfter : 3000,
 				});
 			}
 		});
@@ -296,7 +299,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'success',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				} else {
 					$.toast({
@@ -304,7 +308,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'error',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				}
 			},
@@ -314,7 +319,56 @@
 					text: error,
 					showHideTransition: 'slide',
 					icon: 'error',
-					position : 'top-right'
+					position : 'top-right',
+					hideAfter : 3000,
+				});
+			}
+		});
+	});
+
+	// Change Doctor Sponsored Status
+	$('.appointment').on("change", function(){
+		var appoinment_status = '';
+		var appointment_id = $(this).attr("data-id");
+		if ($(this).prop('checked')==true){ 
+			appoinment_status = "Active";
+		} else {
+			appoinment_status = "Rejected";
+		}
+		$.ajax({
+			url: change_appoinment_status,
+			method: 'POST',
+			cache: false,
+			data: {appointment_id:appointment_id,status:appoinment_status},
+			success: function(data) {
+				if(data.status == true){
+					$.toast({
+						heading: 'Success',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'success',
+						position : 'top-right',
+						hideAfter : 3000,
+					});
+				} else {
+					$.toast({
+						heading: 'Error',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'error',
+						position : 'top-right',
+						hideAfter : 3000,
+					});
+				}
+			},
+			error: function(error) {
+				$.toast({
+					heading: 'Error',
+					text: error,
+					showHideTransition: 'slide',
+					icon: 'error',
+					position : 'top-right',
+					hideAfter : 3000,
 				});
 			}
 		});
@@ -340,7 +394,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'success',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				} else {
 					$.toast({
@@ -348,7 +403,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'error',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				}
 			},
@@ -358,7 +414,8 @@
 					text: error,
 					showHideTransition: 'slide',
 					icon: 'error',
-					position : 'top-right'
+					position : 'top-right',
+					hideAfter : 3000,
 				});
 			}
 		});
@@ -385,7 +442,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'success',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				} else {
 					$.toast({
@@ -393,7 +451,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'error',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				}
 			},
@@ -403,7 +462,8 @@
 					text: error,
 					showHideTransition: 'slide',
 					icon: 'error',
-					position : 'top-right'
+					position : 'top-right',
+					hideAfter : 3000,
 				});
 			}
 		});
@@ -430,7 +490,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'success',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				} else {
 					$.toast({
@@ -438,7 +499,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'error',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				}
 			},
@@ -448,7 +510,8 @@
 					text: error,
 					showHideTransition: 'slide',
 					icon: 'error',
-					position : 'top-right'
+					position : 'top-right',
+					hideAfter : 3000,
 				});
 			}
 		});
@@ -476,7 +539,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'success',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				} else {
 					$.toast({
@@ -484,7 +548,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'error',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				}
 			},
@@ -494,7 +559,8 @@
 					text: error,
 					showHideTransition: 'slide',
 					icon: 'error',
-					position : 'top-right'
+					position : 'top-right',
+					hideAfter : 3000,
 				});
 			}
 		});
@@ -522,7 +588,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'success',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				} else {
 					$.toast({
@@ -530,7 +597,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'error',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				}
 			},
@@ -540,7 +608,8 @@
 					text: error,
 					showHideTransition: 'slide',
 					icon: 'error',
-					position : 'top-right'
+					position : 'top-right',
+					hideAfter : 3000,
 				});
 			}
 		});
@@ -568,7 +637,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'success',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				} else {
 					$.toast({
@@ -576,7 +646,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'error',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				}
 			},
@@ -586,7 +657,8 @@
 					text: error,
 					showHideTransition: 'slide',
 					icon: 'error',
-					position : 'top-right'
+					position : 'top-right',
+					hideAfter : 3000,
 				});
 			}
 		});
@@ -613,7 +685,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'success',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				} else {
 					$.toast({
@@ -621,7 +694,8 @@
 						text: data.msg,
 						showHideTransition: 'slide',
 						icon: 'error',
-						position : 'top-right'
+						position : 'top-right',
+						hideAfter : 3000,
 					});
 				}
 			},
@@ -631,7 +705,8 @@
 					text: error,
 					showHideTransition: 'slide',
 					icon: 'error',
-					position : 'top-right'
+					position : 'top-right',
+					hideAfter : 3000,
 				});
 			}
 		});
@@ -641,7 +716,12 @@
 //Delete doctor show popup function
 function confirm_doctor_delete(doctor_id) {
 	var delete_url = $('#delete-doctor').attr('href');
-	delete_url = delete_url.replace(/\d+/g, '') + doctor_id;
+	var del_arr=delete_url.split('/');
+	del_arr.pop();
+	del_arr.push(location_id);
+	delete_url=del_arr.toString('');
+	delete_url=delete_url.replaceAll(',','/');
+	//delete_url = delete_url.replace(/\d+/g, '') + doctor_id;
 	$('#delete-doctor').attr('href', delete_url);
 	$('#modal-doctor-delete').modal('show');
 }
@@ -649,7 +729,12 @@ function confirm_doctor_delete(doctor_id) {
 //Delete user show popup function
 function confirm_user_delete(user_id) {
 	var delete_url = $('#delete-user').attr('href');
-	delete_url = delete_url.replace(/\d+/g, '') + user_id;
+	var del_arr=delete_url.split('/');
+	del_arr.pop();
+	del_arr.push(location_id);
+	delete_url=del_arr.toString('');
+	delete_url=delete_url.replaceAll(',','/');
+	//delete_url = delete_url.replace(/\d+/g, '') + user_id;
 	$('#delete-user').attr('href', delete_url);
 	$('#modal-user-delete').modal('show');
 }
@@ -657,7 +742,12 @@ function confirm_user_delete(user_id) {
 //Delete speciality show popup function
 function confirm_speciality_delete(speciality_id) {
 	var delete_url = $('#delete-speciality').attr('href');
-	delete_url = delete_url.replace(/\d+/g, '') + speciality_id;
+	var del_arr=delete_url.split('/');
+	del_arr.pop();
+	del_arr.push(location_id);
+	delete_url=del_arr.toString('');
+	delete_url=delete_url.replaceAll(',','/');
+	//delete_url = delete_url.replace(/\d+/g, '') + speciality_id;
 	$('#delete-speciality').attr('href', delete_url);
 	$('#modal-speciality-delete').modal('show');
 }
@@ -665,35 +755,60 @@ function confirm_speciality_delete(speciality_id) {
 //Delete country show popup function
 function confirm_country_delete(country_id) {
 	var delete_url = $('#delete-country').attr('href');
-	delete_url = delete_url.replace(/\d+/g, '') + country_id;
+	var del_arr=delete_url.split('/');
+	del_arr.pop();
+	del_arr.push(location_id);
+	delete_url=del_arr.toString('');
+	delete_url=delete_url.replaceAll(',','/');
+	//delete_url = delete_url.replace(/\d+/g, '') + country_id;
 	$('#delete-country').attr('href', delete_url);
 	$('#modal-country-delete').modal('show');
 }
 //Delete state show popup function
 function confirm_state_delete(state_id) {
 	var delete_url = $('#delete-state').attr('href');
-	delete_url = delete_url.replace(/\d+/g, '') + state_id;
+	var del_arr=delete_url.split('/');
+	del_arr.pop();
+	del_arr.push(location_id);
+	delete_url=del_arr.toString('');
+	delete_url=delete_url.replaceAll(',','/');
+	//delete_url = delete_url.replace(/\d+/g, '') + state_id;
 	$('#delete-state').attr('href', delete_url);
 	$('#modal-state-delete').modal('show');
 }
 //Delete city show popup function
 function confirm_city_delete(city_id) {
 	var delete_url = $('#delete-city').attr('href');
-	delete_url = delete_url.replace(/\d+/g, '') + city_id;
+	var del_arr=delete_url.split('/');
+	del_arr.pop();
+	del_arr.push(location_id);
+	delete_url=del_arr.toString('');
+	delete_url=delete_url.replaceAll(',','/');
+	//delete_url = delete_url.replace(/\d+/g, '') + city_id;
 	$('#delete-city').attr('href', delete_url);
 	$('#modal-city-delete').modal('show');
 }
 //Delete location show popup function
 function confirm_location_delete(location_id) {
 	var delete_url = $('#delete-location').attr('href');
-	delete_url = delete_url.replace(/\d+/g, '') + location_id;
+	var del_arr=delete_url.split('/');
+	del_arr.pop();
+	del_arr.push(location_id);
+	delete_url=del_arr.toString('');
+	delete_url=delete_url.replaceAll(',','/');
+	//delete_url = delete_url.replace(/\d+/g, '') + location_id;
 	$('#delete-location').attr('href', delete_url);
 	$('#modal-location-delete').modal('show');
 }
 //Delete appoinment sloats show popup function
 function confirm_appoinment_sloats_delete(location_id) {
 	var delete_url = $('#delete-appointment-sloat').attr('href');
-	delete_url = delete_url.replace(/\d+/g, '') + location_id;
+	var del_arr=delete_url.split('/');
+	del_arr.pop();
+	del_arr.push(location_id);
+	delete_url=del_arr.toString('');
+	delete_url=delete_url.replaceAll(',','/');
+	//delete_url = delete_url.replace(/\d+/g, '') + location_id;
 	$('#delete-appointment-sloat').attr('href', delete_url);
 	$('#modal-appointment-sloat-delete').modal('show');
 }

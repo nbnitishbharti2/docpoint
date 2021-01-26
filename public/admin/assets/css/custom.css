@@ -24,6 +24,9 @@
 }
 
 .weekDays-selector input[type=checkbox]:checked + label {
-    background: #1b5a90;
+    background: #1edb0d;
     color: #ffffff;
+}
+.pt-8 {
+    padding-top: 8px;
 }

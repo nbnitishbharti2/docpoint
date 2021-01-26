@@ -94,7 +94,7 @@ class CommanHelper
 
 			while ($StartTime <= $EndTime) //Run loop
 			{
-				if(!in_array(date ("Y-m-d", $StartTime), $leaves) && !in_array(date ("l", $StartTime), $days)) {
+				if(!in_array(date ("Y-m-d", $StartTime), $leaves) && in_array(date ("l", $StartTime), $days)) {
 					if((date ("H:i", $StartTime) >= $a_time) && (date ("H:i", $StartTime) < $b_time)) {
 						$ReturnArray[] = date ("d-m-Y G:i", $StartTime);
 						$StartTime += $AddMins; //Endtime check

@@ -91,16 +91,55 @@ $('.star-div').each(function(){
     }
     $(this).click(function(){
       var afterRating = currentRating/100*5
-      var newRating = afterRating.toFixed(2)
-      $(this).attr("data-rating", newRating);
+      var newRating =  Math.ceil(afterRating.toFixed(2))
+     // alert(newRating)
+     // var newRating =  Math.ceil(afterRating.toFixed(2))
+      $(this).attr("data-rating", newRating); 
+       var name=($(this).attr("id"))
+       $("#"+name+"_count").val(newRating)
+      $(this).attr("value", newRating);
       if(parseFloat($(this).attr("data-rating"))>= 4.51){
         $(this).attr("data-rating", 5);
-        $(this).children(".star-under:nth-child(5)").children(".star-over").css("width", "100%");
+        $(this).children(".star-under:nth-child(6)").children(".star-over").css("width", "100%");
       }
+      if(parseFloat($(this).attr("data-rating"))== 1){
+        $(this).attr("data-rating", 1);
+        $(this).children(".star-under:nth-child(1)").children(".star-over").css("width", "100%");
+      }
+      if(parseFloat($(this).attr("data-rating"))== 2){
+        $(this).attr("data-rating", 2);
+        $(this).children(".star-under:nth-child(2)").children(".star-over").css("width", "100%");
+      }
+      if(parseFloat($(this).attr("data-rating"))== 3){
+        $(this).attr("data-rating", 3);
+        $(this).children(".star-under:nth-child(3)").children(".star-over").css("width", "100%");
+      }
+      if(parseFloat($(this).attr("data-rating"))== 4){
+        $(this).attr("data-rating", 4);
+        $(this).children(".star-under:nth-child(4)").children(".star-over").css("width", "100%");
+      }
+      $(this).children(".star-under:nth-child(4)").children(".star-over").css("width", "100%");
     });
     $(this).mouseout(function(){
       if(parseFloat($(this).attr("data-rating"))>= 4.51){
+        $(this).children(".star-under:nth-child(6)").children(".star-over").css("width", "100%");
+      }
+      if(parseFloat($(this).attr("data-rating"))== 1){
+        $(this).attr("data-rating", 1);
+        $(this).children(".star-under:nth-child(2)").children(".star-over").css("width", "100%");
+      }
+      if(parseFloat($(this).attr("data-rating"))== 2){
+        $(this).attr("data-rating", 2);
+        $(this).children(".star-under:nth-child(3)").children(".star-over").css("width", "100%");
+      }
+      if(parseFloat($(this).attr("data-rating"))== 3){
+        $(this).attr("data-rating", 3);
+        $(this).children(".star-under:nth-child(4)").children(".star-over").css("width", "100%");
+      }
+      if(parseFloat($(this).attr("data-rating"))== 4){
+        $(this).attr("data-rating", 4);
         $(this).children(".star-under:nth-child(5)").children(".star-over").css("width", "100%");
       }
+      
     });
   });

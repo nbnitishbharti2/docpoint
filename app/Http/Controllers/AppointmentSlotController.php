@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\AppointmentSlots;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AppoinmentSlot;
+use App\Models\AppointmentSlotsData;
 use App\Models\DoctorHoliday;
 use App\Helpers\CommanHelper;
 use Response;
@@ -20,7 +21,7 @@ class AppointmentSlotController extends Controller
     public function index()
     {
         try {
-            $data = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->get();
+            $data = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->orderBy('id', 'desc')->get();
             return view('AppointmentSlots.index', ['data' => $data]);
         } catch(\Exception $e) {
             Log::error("Error in index on AppointmentSlotsController ". $e->getMessage());
@@ -52,6 +53,7 @@ class AppointmentSlotController extends Controller
     public function store(AppoinmentSlot $request)
     {
         try {
+            $entry_counter = 0;
             $leaves = DoctorHoliday::where('doctor_id', Auth::user()->doctors->id)->pluck('date')->toArray();
             $days = isset($request->days) ? $request->days : array();
             $start_date = $request->start_date . ' ' . $request->start_time;
@@ -63,17 +65,44 @@ class AppointmentSlotController extends Controller
                 // Implement unique check
                 $check = AppointmentSlots::where(['doctor_id' => Auth::user()->doctors->id, 'slot_date_time' => date("Y-m-d H:i:s", strtotime($value))])->get();
                 if($check->count() == 0) {
-                    $slot_data = [
-                        'doctor_id' => Auth::user()->doctors->id,
-                        'slot_date' => date("Y-m-d", strtotime($value)),
-                        'slot_date_time' => date("Y-m-d H:i:s", strtotime($value)),
-                        'slot_time' => date("H:i:s", strtotime($value)),
-                        'status' => 'Available'
-                    ];
-                    AppointmentSlots::create($slot_data);
+                    // Check before proceed
+                    $check_count = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)
+                                                        ->where('slot_date', '<=', date("Y-m-d", strtotime($value)))
+                                                        ->where('slot_time', '<', date("H:i:s", strtotime($value)))
+                                                        ->where('slot_end_time', '>', date("H:i:s", strtotime($value)))
+                                                        ->count();
+                    if($check_count == 0) { // If time is not between previous entered slot
+                        $slot_data = [
+                            'doctor_id' => Auth::user()->doctors->id,
+                            'slot_date' => date("Y-m-d", strtotime($value)),
+                            'slot_date_time' => date("Y-m-d H:i:s", strtotime($value)),
+                            'slot_time' => date("H:i:s", strtotime($value)),
+                            'slot_end_time' => date("H:i:s", strtotime("+" .$request->interval ." minutes", strtotime($value))),
+                            'status' => 'Available',
+                            'appointment_type' => $request->appointment_type,
+                        ];
+                        AppointmentSlots::create($slot_data);
+                        ++$entry_counter;
+                    }
+                    // End check
                 }
             }
-            return redirect()->back()->with('error', 'Record Added successfully');
+            if($entry_counter > 0) {
+                $appointment_slot_data = [
+                    'doctor_id' => Auth::user()->doctors->id,
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date,
+                    'start_time' => $request->start_time,
+                    'end_time' => $request->end_time,
+                    'interval' => $request->interval,
+                    'days' => json_encode($request->days),
+                    'appointment_type' => $request->appointment_type,
+                ];
+                AppointmentSlotsData::create($appointment_slot_data);
+                return redirect()->back()->with('message', 'Record Added successfully');
+            } else {
+                return redirect()->back()->with('error', 'Record not added. Appointment slot confliction.');
+            }
         } catch(\Exception $e) {
             Log::error("Error in Store on AppointmentSlots ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
@@ -93,7 +122,7 @@ class AppointmentSlotController extends Controller
                 return redirect()->back()->with('error', 'Details not found');
             }
             $appoinment->delete();
-            return redirect()->back()->with('error', 'Record deleted successfully');
+            return redirect()->back()->with('success', 'Record deleted successfully');
         } catch(\Exception $e) {
             Log::error("Error in delete on AppointmentSlotsController ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');

@@ -45,5 +45,9 @@ class Doctor extends Model
     {
         return $this->hasMany('App\Models\AppointmentSlots');
     }
+    // public function doctors()
+    // {
+    //     return $this->morphTo();
+    // }
     
 }
