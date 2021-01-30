@@ -39,7 +39,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($data as $country)
+                            @foreach($countries as $country)
                             <tr>
                                 <td>{{$country->name}}</td>
                                 <td>{{$country->iso_alpha_2}}</td>

@@ -15,10 +15,10 @@
                             <form class="needs-validation" method="post" novalidate action="{{ url('doctor-lists') }}">
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
-                                        <select class="form-control" name="spacility" required>
+                                        <select class="form-control" name="resion" required>
                                             <option></option>
-                                            @foreach ($speciality as $value) 
-                                            <option value="{{$value->id}}">{{$value->spec_name}}</option>  
+                                            @foreach ($resion as $value) 
+                                            <option value="{{$value->id}}">{{$value->name}}</option>  
                                             @endforeach
                                         </select>
                                         {{-- <input type="text" name="search" class="form-control" placeholder="Condition, Procedur..."

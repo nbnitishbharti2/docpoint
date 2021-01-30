@@ -35,16 +35,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($data as $state)
+                            @foreach($states as $state)
                             <tr>
                                 <td>{{$state->name}}</td>
                                 <td>{{$state->alias}}</td> 
-                                <td><input type="checkbox" id="status_{{ $state->id }}" data-id = "{{ $state->id }}" class="state check" {{ ($state->active == '1')? 'checked': '' }}>
-                                            <label for="status_{{ $state->id }}" class="checktoggle">checkbox</label>
-                                        </div></td>
-                                <td><a href="{{route('cities',['countryid'=>$state->country_id,'stateid'=>$state->id])}}">Manage Cities</a>
-                                     <a class="btn-sm btn btn-info" title="Edit" href="{{route('state.edit',['id'=>$state->id])}}"><i class="fa fa-pencil"></i></a>
-                                    <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_state_delete({{ $state->id }})"><i class="fa fa-trash"></i></button></td>
+                                <td>
+                                    <input type="checkbox" id="status_{{ $state->id }}" data-id = "{{ $state->id }}" class="state check" {{ ($state->active == '1')? 'checked': '' }}>
+                                    <label for="status_{{ $state->id }}" class="checktoggle">checkbox</label>
+                                </td>
+                                <td>
+                                    <a href="{{route('cities',['countryid'=>$state->country_id,'stateid'=>$state->id])}}">Manage Cities</a>
+                                    <a class="btn-sm btn btn-info" title="Edit" href="{{route('state.edit',['id'=>$state->id])}}"><i class="fa fa-pencil"></i></a>
+                                    <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_state_delete({{ $state->id }})"><i class="fa fa-trash"></i></button>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -10,10 +10,11 @@
 			<div class="card-body">
 				<form method ="POST" enctype='multipart/form-data' id="doctor-form" action="{{route('doctor.store')}}">
 					@csrf
+					<input type="hidden" name="registered_id" value="{{ isset($doctor) ? $doctor->id :'' }}">
 					<div class="form-group row">
 						<label class="col-form-label col-md-2">Full Name*</label>
 						<div class="col-md-10">
-							<input name ="name" type="text" class="form-control" id="name" value="{{ old('name') }}">
+							<input name ="name" type="text" class="form-control" id="name" value="{{ (old('name')) ? old('name') : isset($doctor) ? $doctor->name :'' }}">
 							@error('name')
 							<span class="text-danger">{{ $message }}</span>
 							@enderror
@@ -22,7 +23,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-md-2">Email*</label>
 						<div class="col-md-10">
-							<input name ="email" type="email" class="form-control" value="{{ old('email') }}">
+							<input name ="email" type="email" class="form-control" value="{{ (old('email')) ? old('email') : isset($doctor) ? $doctor->email :'' }}">
 							@error('email')
 							<span class="text-danger">{{ $message }}</span>
 							@enderror
@@ -47,7 +48,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-md-2">Mobile Number*</label>
 						<div class="col-md-10">
-							<input name ="mobile" type="text" class="form-control" value="{{ old('mobile') }}">
+							<input name ="mobile" type="text" class="form-control" value="{{ (old('mobile')) ? old('mobile') : isset($doctor) ? $doctor->mobile :'' }}">
 							@error('mobile')
 								<span class="text-danger">{{ $message }}</span>
 							@enderror
@@ -155,7 +156,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-md-2">Address*</label>
 						<div class="col-md-10">
-							<textarea name ="address" rows="5" cols="5" class="form-control" placeholder="Enter text here">{{ old('address') }}</textarea>
+							<textarea name ="address" rows="5" cols="5" class="form-control" placeholder="Enter text here">{{ (old('address')) ? old('address') : isset($doctor) ? $doctor->address :'' }}</textarea>
 							@error('address')
 							<span class="text-danger">{{ $message }}</span>
 							@enderror

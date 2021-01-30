@@ -8,19 +8,19 @@
                 <h4 class="card-title">Edit State</h4>
             </div>
             <div class="card-body">
-                <form method ="POST" enctype='multipart/form-data' id="speciality-form" action="{{route('state.edit', ['state_id'=>$data->id])}}">
+                <form method ="POST" enctype='multipart/form-data' id="speciality-form" action="{{route('state.edit', ['state_id'=>$state->id])}}">
                     @csrf
                       <div class="form-group row">
                         <label class="col-form-label col-md-2">Country Name</label>
                         <div class="col-md-10">
-                            <input type="text" readonly="" class="form-control"   value="{{ $data->country->name }}"> 
+                            <input type="text" readonly="" class="form-control"   value="{{ $state->country->name }}"> 
                         </div> 
                      </div> 
                     <div class="form-group row">
                         <label class="col-form-label col-md-2">Name*</label>
                         <div class="col-md-10">
-                            <input type="hidden" name="id" value="{{ $data->id }}">
-                            <input name ="name" required type="text" class="form-control" id="name" value="{{ old('name', $data->name) }}">
+                            <input type="hidden" name="id" value="{{ $state->id }}">
+                            <input name ="name" required type="text" class="form-control" id="name" value="{{ old('name', $state->name) }}">
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

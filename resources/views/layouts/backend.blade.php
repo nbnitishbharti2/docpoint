@@ -134,7 +134,12 @@
 									<p class="text-muted mb-0">{{ Auth::user()->email }}</p>
 								</div>
 							</div>
-							<a class="dropdown-item" href="{{ route('doctor.profile', [Auth::user()->id]) }}">My Profile</a>
+							@if (Auth::user()->doctors == null)
+								<a class="dropdown-item" href="{{ route('admin.profile', [Auth::user()->id]) }}">My Profile</a>
+							@else
+								<a class="dropdown-item" href="{{ route('doctor.profile', [Auth::user()->doctors->id]) }}">My Profile</a>	
+							@endif
+							
 							<a class="dropdown-item" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
 						</div>
 					</li>
@@ -151,9 +156,9 @@
 			
 			<!-- Sidebar -->
 			@if(CommanHelper::userRole() == "Admin")
-				@component ('Backend.admin_left_nav') @endcomponent
+				@component ('Backend.admin_left_nav', ['active' => $active]) @endcomponent
 			@else
-				@component ('Backend.doc_left_nav') @endcomponent
+				@component ('Backend.doc_left_nav', ['active' => $active]) @endcomponent
 			@endif
 			<!-- /Sidebar -->
 			
@@ -197,6 +202,6 @@
 		<!-- Custom JS -->
 		<script  src="{{ URL::asset('public/admin/assets/js/script.js')}}"></script>
 		<script src="{{ asset('public/storage/frontend/js/bootstrap-datepicker.min.js') }}"></script>
-		
+		<script src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     </body>
 </html>

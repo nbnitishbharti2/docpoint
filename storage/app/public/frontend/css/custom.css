@@ -1179,3 +1179,17 @@ ul.multiselect-container.dropdown-menu.show{display: block;}
     font-size: 13px;
 }
 /* 26 jan 2021 end */
+
+
+.new-form {
+    display: flex;
+    margin: 30px 0;
+}
+
+.new-form .col-md-4 i {
+    color: var(--txt-blue);
+    position: absolute;
+    top: 15px;
+    left: 17px;
+    font-size: 18px;
+}

@@ -21,23 +21,24 @@ $location_blank = array();
 $doctor_id_list = array();
 @endphp
 <!-- search -->
+<form class="needs-validation" method="post" novalidate action="{{ url('doctor-lists') }}">
 <section class="p-0 bg-blue">
   <div class="banner innr-banner">
     <div class="container sml-container">
       <div class="row">
         <div class="col-lg-12">
           <!-- search content -->
-          <div class="banner-cont">
+          <div class="banner-cont new-form">
             <!-- search form -->
-           <form class="needs-validation" method="post" novalidate action="{{ url('doctor-lists') }}">
+           
               <div class="row no-gutters">
                 <!-- search item -->
                 <div class="col-md-4">
                   <i class="icofont-search-1"></i>
-                  <select class="form-control" name="spacility" required>
+                  <select class="form-control" name="resion" required>
                     <option></option>
-                    @foreach ($speciality as $value) 
-                    <option value="{{$value->id}}" <?php echo ($spacility==$value->id)?'selected':'' ?>>{{$value->spec_name}}</option>  
+                    @foreach ($resion_list as $value) 
+                    <option value="{{$value->id}}" <?php echo ($resion==$value->id)?'selected':'' ?>>{{$value->name}}</option>  
                     @endforeach
                 </select>
                   {{-- <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Condition, Procedur..." value="Dentist" required> --}}
@@ -51,7 +52,7 @@ $doctor_id_list = array();
                 <!-- search item end -->
 
                 <!-- search item -->
-                <div class="col-md-4">
+                <div class="col-md-4 px-2">
                   <i class="icofont-location-pin"></i>
                   <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Zip Code or city" value="New York, NY" required>
                   <div class="invalid-feedback">
@@ -76,7 +77,7 @@ $doctor_id_list = array();
                 <!-- search item end -->
               </div>
               <button class="search-btn" type="submit"><i class="icofont-search-1"></i></button>
-            </form>
+           
             <!-- search form end -->
           </div>
           <!-- search content end -->
@@ -136,8 +137,8 @@ $doctor_id_list = array();
                   </a></li>
                   <li class="mb-0">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                      <button type="button" class="btn btn-secondary">clear</button>
-                      <button type="button" class="btn btn-primary">Apply</button>
+                      {{-- <button type="button" class="btn btn-secondary">clear</button> --}}
+                      <button type="submit" class="btn btn-primary">Apply</button>
                     </div>
                   </li>
                   </ul>
@@ -171,7 +172,7 @@ $doctor_id_list = array();
                   <li class="mb-0">
                     <div class="btn-group" role="group" aria-label="Basic example">
                       <button type="button" class="btn btn-secondary">clear</button>
-                      <button type="button" class="btn btn-primary">Apply</button>
+                      <button type="submit" class="btn btn-primary">Apply</button>
                     </div>
                   </li>
                   </ul>
@@ -204,6 +205,7 @@ $doctor_id_list = array();
     </div>
   </div>
 </section>
+ </form>
 <!-- tab options end -->
 
 <!-- inner page content -->

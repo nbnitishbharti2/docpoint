@@ -28,7 +28,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($data as $value)
+                            @foreach($reviews as $value)
                                 <tr>
                                     <td>{{ $value->doctor->name }}</td>
                                     <td>{{ $value->user->name }}</td>

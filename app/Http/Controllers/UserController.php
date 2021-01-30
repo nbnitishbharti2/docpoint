@@ -157,6 +157,7 @@ class UserController extends Controller
     {
         try {
             $data['users'] = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')->select('users.*')->where('user_roles.role_id', 3)->get();
+            $data['active'] = 'users';
             return view('UserGroup.list_users', $data);
         } catch(\Exception $e) {
             Log::error("Error in listUsers on UserController ". $e->getMessage());
@@ -213,10 +214,32 @@ class UserController extends Controller
     {
         try {
             $data['logs'] = User::find($user_id)->authentications;
+            $data['active'] = 'doctors';
             return view('UserGroup.log-history', $data);
         } catch(\Exception $e) {
             Log::error("Error in logHistory on UserController ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to show profile of users
+     * @param int $docId
+     * @return array $data
+     */
+    public function profile()
+    {
+        try {
+            $data['user'] = User::find(Auth::user()->id);
+            if ($data['user'] == null) {
+                return redirect()->back()->with('error', 'Details not found');
+            }
+            $data['active'] = '';
+            return view('admin.profile', $data);
+        } catch (\Exception $e) {
+            Log::error("Error in myProfile on DoctorController " . $e->getMessage());
+            Session::flash('alert-danger', 'Oops! Something went wrong.');
+            return redirect('doctor-list');
         }
     }
 }

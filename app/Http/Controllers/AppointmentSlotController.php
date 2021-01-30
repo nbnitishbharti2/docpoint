@@ -21,8 +21,11 @@ class AppointmentSlotController extends Controller
     public function index()
     {
         try {
-            $data = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->orderBy('id', 'desc')->get();
-            return view('AppointmentSlots.index', ['data' => $data]);
+            $data['appointment_slots'] = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->orderBy('id', 'desc')->get();
+            $data['unique_appointment_dates'] = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->orderBy('id', 'desc')->groupBy('slot_date')->get();
+            $data['active'] = 'appointment_slots';
+            // /dd($data);
+            return view('AppointmentSlots.index', $data);
         } catch(\Exception $e) {
             Log::error("Error in index on AppointmentSlotsController ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
@@ -38,6 +41,7 @@ class AppointmentSlotController extends Controller
     {
         try {
             $data['doctor_id'] = Auth::user()->doctors->id;
+            $data['active'] = 'appointment_slots';
             return view('AppointmentSlots.add', $data); 
         } catch(\Exception $e) {
             Log::error("Error in add on AppointmentSlots ". $e->getMessage());
@@ -56,8 +60,10 @@ class AppointmentSlotController extends Controller
             $entry_counter = 0;
             $leaves = DoctorHoliday::where('doctor_id', Auth::user()->doctors->id)->pluck('date')->toArray();
             $days = isset($request->days) ? $request->days : array();
-            $start_date = $request->start_date . ' ' . $request->start_time;
-            $end_date = $request->end_date . ' ' . $request->end_time;
+            $start_date = strtr($request->start_date, '/', '-');
+            $end_date = strtr($request->end_date, '/', '-');
+            $start_date = date("Y-m-d", strtotime($start_date)) . ' ' . $request->start_time;
+            $end_date = date("Y-m-d", strtotime($end_date)) . ' ' . $request->end_time;
             //Calling the function
             $Data = CommanHelper::SplitTime($start_date, $end_date, $request->start_time, $request->end_time, $request->interval, $leaves, $days);
             

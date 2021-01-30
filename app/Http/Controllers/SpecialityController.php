@@ -17,8 +17,9 @@ class SpecialityController extends Controller
     public function index()
     {
         try {
-            $specilityData = Speciality::get();
-            return view('Speciality.index',['data' => $specilityData]);
+            $data['data'] = Speciality::get();
+            $data['active'] = 'speciality';
+            return view('Speciality.index', $data);
         } catch(\Exception $e) {
             Log::error("Error in index on SpecialityController ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
@@ -32,7 +33,8 @@ class SpecialityController extends Controller
     public function add()
     {
         try {
-            return view('Speciality.add');
+            $data['active'] = 'speciality';
+            return view('Speciality.add', $data);
         } catch(\Exception $e) {
             Log::error("Error in add on SpecialityController ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
@@ -87,11 +89,13 @@ class SpecialityController extends Controller
     public function show(int $specId = 0)
     {
         try{
-            $specialityDetails = Speciality::find($specId);
-            if($specialityDetails == null) {
+            $data['specialities'] = Speciality::find($specId);
+            if($data['specialities'] == null) {
                 return back()->with('error', 'Speciality details not found.');
             }
-            return view('Speciality.edit', ['specialities' => $specialityDetails, 'id' => $specId]);
+            $data['active'] = 'speciality';
+            $data['id'] = $specId;
+            return view('Speciality.edit', $data);
         } catch(\Exception $e) {
             Log::error("Error in show on SpecialityController ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');

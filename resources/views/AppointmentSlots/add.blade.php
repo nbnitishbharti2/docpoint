@@ -13,14 +13,14 @@
                     <div class="form-group row">
                         <label class="col-form-label col-md-2">Start Date*</label>
                         <div class="col-md-4"> 
-                            <input name ="start_date" required type="date" min="{{ date('Y-m-d') }}" class="form-control" id="start_date" value="">
+                            <input name ="start_date" required type="text" class="form-control" id="start_date" value="">
                             @error('start_date')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <label class="col-form-label col-md-2">End Date*</label>
                         <div class="col-md-4"> 
-                            <input name ="end_date" required type="date" min="{{ date('Y-m-d') }}" class="form-control" id="end_date" value="{{ old('end_date') }}">
+                            <input name ="end_date" required type="text" min="{{ date('Y-m-d') }}" class="form-control" id="end_date" value="{{ old('end_date') }}">
                             @error('end_date')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -93,4 +93,27 @@
 @endsection
 @section('script')
 <script  src="{{ asset('public/admin/assets/js/custom.js')}}"></script>
+<script>
+$(function(){
+    $("#start_date").datepicker({
+        todayBtn:  1,
+        autoclose: true,
+        format: 'dd/mm/yyyy',
+        orientation: 'auto bottom',
+        startDate: new Date(),
+    }).on('changeDate', function (selected) {
+        var minDate = new Date(selected.date.valueOf());
+        $('#end_date').datepicker('setStartDate', minDate);
+    });
+
+    $("#end_date").datepicker({
+        autoclose: true,
+        format: 'dd/mm/yyyy',
+        orientation: 'auto bottom',
+    }).on('changeDate', function (selected) {
+        var maxDate = new Date(selected.date.valueOf());
+        $('#start_date').datepicker('setEndDate', maxDate);
+    });
+});
+</script>
 @endsection

@@ -16,8 +16,9 @@ class ReviewController extends Controller
     public function index($doctor_id = 0)
     {
         $doctor_id = ($doctor_id == 0) ? Auth::user()->doctors->id : $doctor_id;
-        $data = Review::where('doctor_id', $doctor_id)->orderBy('id','desc')->get();
-    	return view('review.index',['data' => $data]);
+        $data['reviews'] = Review::where('doctor_id', $doctor_id)->orderBy('id','desc')->get();
+        $data['active'] = 'review';
+    	return view('review.index', $data);
     }
 
     public function changeStatus($id = 0, $newstatus = null)

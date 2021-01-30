@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Input;
 
 class AppoinmentSlot extends FormRequest
 {
@@ -24,8 +25,8 @@ class AppoinmentSlot extends FormRequest
     public function rules()
     {
         return [
-            'start_date' => 'required|date|min:'.date("Y-m-d"),
-            'end_date' => 'required|date|gte:start_date',
+            'start_date' => 'required|date_format:"d/m/Y"',
+            'end_date' => 'required|date_format:"d/m/Y"|gte:start_date',
             'start_time' => 'required|date_format:H:i|before:end_time',
             'end_time' => 'required|date_format:H:i',
             'interval' => 'required|integer|min:2|max:120',

@@ -17,6 +17,7 @@ class AppointmentController extends Controller
     {
         try {
             $data['appointments'] = Appointment::where('doctor_id', Auth::user()->doctors->id)->with('user', 'appointment_slot', 'reason')->get();
+            $data['active'] = 'manage_appointment';
             return view('appointments.index', $data);
         } catch(\Exception $e) {
             Log::error("Error in index on AppointmentController ". $e->getMessage());

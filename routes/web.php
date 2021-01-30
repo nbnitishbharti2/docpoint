@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth']], function () {
     //Change Password Routes
     Route::post('update-password/{user_id}', 'UserController@updatePassword')->name('update.password');
     Route::get('/user-delete/{user_id}', 'UserController@delete')->name('user.delete');
+    Route::get('/user-profile', 'UserController@profile')->name('admin.profile');
 
     // review 
     Route::post('/add-review', 'ReviewController@addReview')->name('add.review');
@@ -64,6 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/add-holiday', 'DoctorController@addHoliday')->name('add.holiday');
     Route::post('/store-holiday', 'DoctorController@storeHoliday')->name('store.holiday');
     Route::get('/delete-holiday/{holiday_id}', 'DoctorController@deleteHoliday')->name('delete.holiday');
+    Route::get('/registered-doctor', 'DoctorController@registeredDoctor')->name('registered.doctor');
 
     // Speciality route
     Route::get('/speciality-add/', 'SpecialityController@add')->name('Speciality.add');
@@ -146,6 +148,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('get-city', 'CityController@getCityOfState')->name('get.state.city');
 
     Route::post('change-doctor-status', 'DoctorController@changeStatus')->name('change.doctor.status');
+    Route::get('change-registered-doctor-status/{reg_doctor_id?}', 'DoctorController@changeRegisteredDoctorStatus')->name('change.registered.doctor.status');
+    Route::get('reject-registered-doctor/{reg_doctor_id?}', 'DoctorController@rejectRegisteredDoctor')->name('reject.registered.doctor');
     Route::post('change-doctor-sponsored-status', 'DoctorController@changeSponsoredStatus')->name('change.doctor.sponsored.status');
     Route::post('change-user-status', 'UserController@changeStatus')->name('change.user.status');
     Route::post('change-speciality-status', 'SpecialityController@changeStatus')->name('change.speciality.status');

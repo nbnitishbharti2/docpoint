@@ -8,13 +8,13 @@
                 <h4 class="card-title">Edit Country</h4>
             </div>
             <div class="card-body">
-                <form method ="POST" enctype='multipart/form-data' id="speciality-form" action="{{route('country.edit', ['country_id'=>$data->id])}}">
+                <form method ="POST" enctype='multipart/form-data' id="speciality-form" action="{{route('country.edit', ['country_id'=>$country->id])}}">
                     @csrf
                     <div class="form-group row">
                         <label class="col-form-label col-md-2">Name*</label>
                         <div class="col-md-10">
-                            <input type="hidden" name="id" value="{{ $data->id }}">
-                            <input name ="name" required type="text" class="form-control" id="name" value="{{ old('name', $data->name) }}">
+                            <input type="hidden" name="id" value="{{ $country->id }}">
+                            <input name ="name" required type="text" class="form-control" id="name" value="{{ old('name', $country->name) }}">
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -23,7 +23,7 @@
                      <div class="form-group row">
                         <label class="col-form-label col-md-2">IOS Alpha 2*</label>
                         <div class="col-md-4">
-                            <input name ="iso_alpha_2" required type="text" class="form-control" id="iso_alpha_2" value="{{ old('iso_alpha_2', $data->iso_alpha_2) }}">
+                            <input name ="iso_alpha_2" required type="text" class="form-control" id="iso_alpha_2" value="{{ old('iso_alpha_2', $country->iso_alpha_2) }}">
                             @error('iso_alpha_2')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -31,7 +31,7 @@
                       
                         <label class="col-form-label col-md-2">IOS Alpha 3*</label>
                         <div class="col-md-4">
-                            <input name ="iso_alpha_3" required type="text" class="form-control" id="iso_alpha_3" value="{{ old('iso_alpha_3', $data->iso_alpha_3) }}">
+                            <input name ="iso_alpha_3" required type="text" class="form-control" id="iso_alpha_3" value="{{ old('iso_alpha_3', $country->iso_alpha_3) }}">
                             @error('iso_alpha_3')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -40,7 +40,7 @@
                      <div class="form-group row">
                         <label class="col-form-label col-md-2">Currency Code*</label>
                         <div class="col-md-4">
-                            <input name ="currency_code" required type="text" class="form-control" id="currency_code" value="{{ old('currency_code', $data->currency_code) }}">
+                            <input name ="currency_code" required type="text" class="form-control" id="currency_code" value="{{ old('currency_code', $country->currency_code) }}">
                             @error('currency_code')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -48,7 +48,7 @@
                       
                         <label class="col-form-label col-md-2">Dailing Code*</label>
                         <div class="col-md-4">
-                            <input name ="dailing_code" required type="text" class="form-control" id="dailing_code" value="{{ old('dailing_code', $data->dailing_code) }}">
+                            <input name ="dailing_code" required type="text" class="form-control" id="dailing_code" value="{{ old('dailing_code', $country->dailing_code) }}">
                             @error('dailing_code')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

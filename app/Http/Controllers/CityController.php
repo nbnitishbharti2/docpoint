@@ -97,8 +97,11 @@ class CityController extends Controller{
          }
          
       } else{
-            return view('City.import',['countryid'=>$countryid,'stateid'=>$stateid]);
-        }
+         $data['active'] = 'locations';
+         $data['countryid'] = $countryid;
+         $data['stateid'] = $stateid;
+         return view('City.import', $data);
+      }
    }
 
    public function export($countryid,$stateid){
@@ -122,17 +125,22 @@ class CityController extends Controller{
 
    public function index($countryid,$stateid){
       $cityData = City::where([['country_id',$countryid],['state_id',$stateid]])->get();
-      return view('City.index',['data' => $cityData,'country_id'=>$countryid,'state_id'=>$stateid]);
+      $data['active'] = 'locations';
+      $data['country_id'] = $countryid;
+      $data['state_id'] = $stateid;
+      $data['data'] = $cityData;
+      return view('City.index', $data);
    }
 
  public function edit(int $city_id = 0)
     {
         try {
-            $city = City::find($city_id);
-            if($city == null) { // If details not found then return
-                return redirect()->back()->with('error', 'Details not found');
+            $data['data'] = City::find($city_id);
+            if($data['data'] == null) { // If details not found then return
+               return redirect()->back()->with('error', 'Details not found');
             }
-            return view('City.edit',['data' => $city]);
+            $data['active'] = 'locations';
+            return view('City.edit', $data);
         } catch(\Exception $e) {
             Log::error("Error in delete on CityController ". $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));

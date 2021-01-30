@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/icofont.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/slick.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css?v=2') }}">
+    <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/custom.css?v=3') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/media.css?v=2') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/viewer.css') }}">
     <link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker.min.css') }}"/>

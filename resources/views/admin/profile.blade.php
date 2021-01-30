@@ -7,18 +7,17 @@
                 <div class="row align-items-center">
                     <div class="col-auto profile-image">
                         <a href="#">
-                            <img class="rounded-circle" src="{{ ($doctor->pic && file_exists('public/storage/images/doctor/'.$doctor->pic)) ? asset('public/storage/images/doctor/'.$doctor->pic) : asset('public/files/doctor/profile/doctor-icon.png') }}" alt="Doctor Image">
+                            <img class="rounded-circle" src="{{ ($user->pic && file_exists('public/storage/images/doctor/'.$user->pic)) ? asset('public/storage/images/doctor/'.$user->pic) : asset('public/files/doctor/profile/doctor-icon.png') }}" alt="Doctor Image">
                         </a>
                     </div>
                     <div class="col ml-md-n2 profile-user-info">
-                        <h4 class="user-name mb-0">{{ $doctor->name }}</h4>
-                        <h6 class="text-muted">{{ $doctor->email }}</h6>
+                        <h4 class="user-name mb-0">{{ $user->name }}</h4>
+                        <h6 class="text-muted">{{ $user->email }}</h6>
                         <div class="user-Location"><i class="fa fa-map-marker"></i>
-                            {{ $doctor->city->name . ', ' . $doctor->state->name . ', ' . $doctor->country->name }}</div>
-                        <div class="about-text">{{ Str::ucfirst($doctor->about) }}</div>
+                            {{ ($user->city) ? $user->city->name . ',' : ''}} {{($user->state) ? $user->state->name. ',' :''}} {{ ($user->country) ? $user->country->name :'' }}</div>
                     </div>
                     <div class="col-auto profile-btn">
-                        <a href="{{ route('doctor.edit', ['id' => $doctor->id]) }}" class="btn btn-primary">
+                        <a href="{{ route('doctor.edit', ['id' => $user->id]) }}" class="btn btn-primary">
                             Edit
                         </a>
                     </div>
@@ -35,10 +34,8 @@
                 </ul>
             </div>
             <div class="tab-content profile-tab-cont">
-
                 <!-- Personal Details Tab -->
                 <div class="tab-pane fade show active" id="per_details_tab">
-
                     <!-- Personal Details -->
                     <div class="row">
                         <div class="col-lg-12">
@@ -49,19 +46,19 @@
                                     </h5>
                                     <div class="row">
                                         <p class="col-sm-2 text-muted text-sm-right mb-0 mb-sm-3">Name</p>
-                                        <p class="col-sm-10">{{ $doctor->name }}</p>
+                                        <p class="col-sm-10">{{ $user->name }}</p>
                                     </div>
                                     <div class="row">
                                         <p class="col-sm-2 text-muted text-sm-right mb-0 mb-sm-3">Date of Birth</p>
-                                        <p class="col-sm-10">{{ {{ ($doctor->dob != null) ? date("d-m-Y", strtotime($doctor->dob)) :'' }} }}</p>
+                                        <p class="col-sm-10">{{ ($user->dob != null) ? date("d-m-Y", strtotime($user->dob)) :'' }}</p>
                                     </div>
                                     <div class="row">
                                         <p class="col-sm-2 text-muted text-sm-right mb-0 mb-sm-3">Email ID</p>
-                                        <p class="col-sm-10">{{ $doctor->email }}</p>
+                                        <p class="col-sm-10">{{ $user->email }}</p>
                                     </div>
                                     <div class="row">
                                         <p class="col-sm-2 text-muted text-sm-right mb-0 mb-sm-3">Mobile</p>
-                                        <p class="col-sm-10">{{ $doctor->mobile }}</p>
+                                        <p class="col-sm-10">{{ $user->mobile }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -155,25 +152,20 @@
                                 </div>
                             </div>
                             <!-- /Edit Details Modal -->
-
                         </div>
-
-
                     </div>
                     <!-- /Personal Details -->
-
                 </div>
                 <!-- /Personal Details Tab -->
 
                 <!-- Change Password Tab -->
                 <div id="password_tab" class="tab-pane fade">
-
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Change Password</h5>
                             <div class="row">
                                 <div class="col-md-10 col-lg-6">
-									<form action="{{ route('update.password', [$doctor->user_id]) }}" id="password-update-form" method="POST">
+									<form action="{{ route('update.password', [$user->id]) }}" id="password-update-form" method="POST">
 										@csrf
 										<div class="form-group">
                                             <label>Old Password</label>
@@ -195,7 +187,6 @@
                     </div>
                 </div>
                 <!-- /Change Password Tab -->
-
             </div>
         </div>
     </div>

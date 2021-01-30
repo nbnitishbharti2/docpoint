@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Requests\DoctorRequest;
+use App\Models\DoctorRegistration;
 use App\Models\Doctor as Doctors;
 use App\Models\AppointmentSlots;
 use App\Models\Appointment;
 use App\Helpers\CommanHelper;
-use App\Http\Requests\AppoinmentSlot;
 use App\Models\DoctorHoliday;
 use App\Models\Speciality;
 use App\Models\Country;
@@ -41,6 +40,7 @@ class DoctorController extends Controller
     {
         try {
             $data['doctors'] = Doctors::with('speciality')->orderBy('id', 'desc')->get();
+            $data['active'] = 'doctors';
             return view('Doctor.index', $data);
         } catch (\Exception $e) {
             Log::error("Error in store on DoctorController " . $e->getMessage());
@@ -59,6 +59,7 @@ class DoctorController extends Controller
             $data['specialities'] = Speciality::get();
             $data['countries'] = Country::get();
             $data['genders'] = Gender::get();
+            $data['active'] = 'doctors';
             return view('Doctor.add', $data);
         } catch (\Exception $e) {
             Log::error("Error in store on DoctorController " . $e->getMessage());
@@ -87,6 +88,12 @@ class DoctorController extends Controller
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'mobile' => $input['mobile'],
+                'country_id' => $input['country'],
+                'state_id' => $input['state'],
+                'city_id' => $input['city'],
+                'gender_id' => $input['gender'],
+                'address' => $input['address'],
+                'zip' => $input['zip'],
                 'password' => Hash::make('12345678'),
                 'status' => ($request->has('status')) ? 'Active' : 'Inactive',
                 'pic' => $input['pic'] ?? '',
@@ -123,6 +130,10 @@ class DoctorController extends Controller
             if ($doctor_role != null) {
                 CommanHelper::attachRole($user, $doctor_role);
             }
+
+            if ($input['registered_id'] != '') {
+                DoctorRegistration::where('id', $input['registered_id'])->update(['status' => 'Approved']);
+            }
             return redirect('doctor-list')->with('message', 'Details added successfully');
         } catch (\Exception $e) {
             Log::error("Error in store on DoctorController " . $e->getMessage());
@@ -145,6 +156,7 @@ class DoctorController extends Controller
             $data['countries'] = Country::get();
             $data['states'] = State::where('country_id', $data['docDetails']->country_id)->get();
             $data['cities'] = City::where('state_id', $data['docDetails']->state_id)->get();
+            $data['active'] = 'doctors';
             return view('Doctor.edit', $data);
         } catch (\Exception $e) {
             Log::error("Error in edit on DoctorController " . $e->getMessage());
@@ -227,6 +239,7 @@ class DoctorController extends Controller
             if ($data['doctor'] == null) {
                 return redirect('doctor-list')->with('error', 'Details not found');
             }
+            $data['active'] = 'doctors';
             return view('Doctor.profile', $data);
         } catch (\Exception $e) {
             Log::error("Error in myProfile on DoctorController " . $e->getMessage());
@@ -308,14 +321,17 @@ class DoctorController extends Controller
      */
     public function list(Request $request)
     {
-        // dd($request->all());
+        // dd($request->all()); 
+        $resion=Reason::find($request->resion); 
         $data['doctors'] = Doctors::whereHas('country', function ($query) use ($request) {
             $query->where('name', $request->search);
         })->orwhereHas('city', function ($query) use ($request) {
             $query->where('name', $request->search);
         })->orwhereHas('state', function ($query) use ($request) {
             $query->where('name', $request->search);
-        })->orwhere('zip', $request->search)->orwhere('address', $request->search)->where('speciality_id', $request->spacility)->orderBy('sponsored','asc')->get();
+        })->with('doctorSpacilityMap.reason')->orwhere('zip', $request->search)->orwhere('address', $request->search)->whereHas('doctorSpacilityMap', function ($query) use ($resion) {
+            $query->where('speciality_id', $resion->speciality_id);
+        })->orderBy('sponsored','asc')->get();
         //  $data['doctors'] = Doctors::whereHasMorph(
         //     'doctors',
         //     [Country::class, State::class, City::class],
@@ -325,6 +341,19 @@ class DoctorController extends Controller
         // )->get();
         //  dd($data['doctors']);
         // $data['doctors'] = Doctors::get(); 
+            // $gender=$data['doctors'] = Doctors::whereHas('country', function ($query) use ($request) {
+            //     $query->where('name', $request->search);
+            // })->orwhereHas('city', function ($query) use ($request) {
+            //     $query->where('name', $request->search);
+            // })->orwhereHas('state', function ($query) use ($request) {
+            //     $query->where('name', $request->search);
+            // })->with('gender')->orwhere('zip', $request->search)->orwhere('address', $request->search)->whereHas('doctorSpacilityMap', function ($query) use ($resion) {
+            //     $query->where('speciality_id', $resion->speciality_id);
+            // })->groupBy('gender_id')->count();
+            // // $gender=Gender::whereHas('doctor', function ($query) use ($request) {
+            //     $query->where('zip', $request->search)->orwhere('address', $request->search);
+            // })->with('doctor')->groupBy('id')->count('genders.doctor');
+          //  dd($gender);
         if(count($data['doctors'])==0) {
             $data['doctors'] = Doctors::whereHas('city', function ($query) use ($request) {
                 $query->where('name', 'Delhi');
@@ -340,10 +369,10 @@ class DoctorController extends Controller
         // dd($request->date);
       //  $data['doctors'] = Doctors::get();
         $data['search'] = $request->search ?? 'Delhi';
-        $data['spacility'] = $request->spacility;
+        $data['resion'] = $request->resion;
         $data['zip'] = $request->zip;
         $data['date'] = $request->date;
-        $data['speciality'] = Speciality::get()->where('status', 'Active');
+        $data['resion_list'] = Reason::orderBy('name','asc')->get();
         return view('frontend.doctors', $data);
     }
 
@@ -391,6 +420,7 @@ class DoctorController extends Controller
     {
         try {
             $data['holidays'] = DoctorHoliday::where('doctor_id', $doctor_id)->orderBy('date', 'desc')->get();
+            $data['active'] = 'holiday';
             return view('holiday.index', $data);
         } catch (\Exception $e) {
             Log::error("Error in doctorDetails on DoctorController " . $e->getMessage());
@@ -701,7 +731,8 @@ class DoctorController extends Controller
     public function addHoliday()
     {
         try {
-            return view('holiday.add');
+            $data['active'] = 'holiday';
+            return view('holiday.add', $data);
         } catch (\Exception $e) {
             Log::error("Error in addHoliday on DoctorController " . $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
@@ -790,6 +821,62 @@ class DoctorController extends Controller
         } catch (\Exception $e) {
             Log::error("Error in savebooking on DoctorController " . $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+
+    /**
+     * Method to show listings of registered doctor
+     * 
+     * @return array $data
+     */
+    public function registeredDoctor()
+    {
+        try {
+            $data['doctors'] = DoctorRegistration::orderBy('id', 'desc')->get();
+            $data['active'] = 'doctors';
+            return view('Doctor.registered', $data);
+        } catch (\Exception $e) {
+            Log::error("Error in registeredDoctor on DoctorController " . $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to show registered doctor details to approve
+     * @param int $reg_doctor_id
+     * 
+     * @return view
+     */
+    public function changeRegisteredDoctorStatus($reg_doctor_id = 0)
+    {
+        try {
+            $data['doctor'] = DoctorRegistration::find($reg_doctor_id);
+            $data['specialities'] = Speciality::get();
+            $data['countries'] = Country::get();
+            $data['genders'] = Gender::get();
+            $data['active'] = 'doctors';
+            return view('Doctor.add', $data);
+        } catch (\Exception $e) {
+            Log::error("Error in changeRegisteredDoctorStatus on DoctorController " . $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to reject registered doctor
+     * @param int $reg_doctor_id
+     * 
+     * @return redirect
+     */
+    public function rejectRegisteredDoctor($reg_doctor_id = 0)
+    {
+        try {
+            $data['doctor'] = DoctorRegistration::find($reg_doctor_id)->update(['status' => 'Rejected']);
+            $data['active'] = 'doctors';
+            return redirect()->back()->with('message', 'Status updated successfully');
+        } catch (\Exception $e) {
+            Log::error("Error in changeRegisteredDoctorStatus on DoctorController " . $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
         }
     }
 }

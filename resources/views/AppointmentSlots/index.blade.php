@@ -16,7 +16,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="datatable table table-hover table-center mb-0">
+                    <table class="table table-hover table-center mb-0 display nowrap">
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -27,9 +27,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($data as $value)
+                            @foreach($appointment_slots as $key => $value)
+                            @php 
+                                if($key == 0) {
+                                    echo "hhhh";
+                                    $counter = 0;
+                                    $date = date("Y-m-d", strtotime($value->slot_date_time));
+                                }
+                                if($date != date("Y-m-d", strtotime($value->slot_date_time))) {
+                                    echo "2222";
+                                    $counter = 0;
+                                    $date = date("Y-m-d", strtotime($value->slot_date_time));
+                                }
+                            @endphp
                             <tr>
-                                <td>{{ date("Y-m-d", strtotime($value->slot_date_time))}}</td>
+                                @if ($date == date("Y-m-d", strtotime($value->slot_date_time)) && $counter == 0)
+                                    @php
+                                        ++$counter;   
+                                    @endphp
+                                    <td><i class="btn btn-xs fa fa-list-ul" data-toggle = "collapse" data-target = ".collapsed{{ $key }}">+</i>&nbsp;{{ date("Y-m-d", strtotime($value->slot_date_time))}}</td>
+                                @else 
+                                    <td class="collapse collapsed{{ $key }}">{{ date("Y-m-d", strtotime($value->slot_date_time))}}</td>
+                                @endif
+                                
                                 <td>{{ date("h:i a", strtotime($value->slot_date_time))}}</td>
                                 <td>{{ $value->status }}</td>
                                 <td>{{ $value->appointment_type }}</td>
@@ -69,5 +89,17 @@
 </div>
 <script>
     var change_appoinmrnt_slot_status = "{{ route('change.appointment.slots.status') }}";
+    $(document).ready( function () {
+        var table = $('.table').DataTable({
+            // "columnDefs": [
+            //     { targets: 0, visible: false }
+            // ],
+        
+            rowReorder: {
+                selector: 'td:last-child'
+            },
+        });
+    });
 </script>
+
 @endsection
