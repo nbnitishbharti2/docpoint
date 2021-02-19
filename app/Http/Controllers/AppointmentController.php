@@ -26,22 +26,43 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Method to change status of resource
-     * @param Illuminate\Http\Request $request
-     * @return Response
+     * Method to approve appointment
+     * @param int $appointment_id
+     * @return redirect
      */
-    public function changeStatus(Request $request)
+    public function approveAppointment($appointment_id = 0)
     {
         try {
-            $appoinment = Appointment::find($request->appointment_id);
+            $appoinment = Appointment::find($appointment_id);
             if($appoinment != null) {
-                $appoinment->status = ($request->status == "Active") ? 'Active' : 'Rejected';
+                $appoinment->status = 'Approved';
                 $appoinment->save();
-                return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
+                return redirect()->back()->with('message', 'Status Updated Successfully');
             }
-            return Response::json(array('status' => false, 'msg' => 'Appointment not found'));
+            return redirect()->back()->with('message', 'Oops! Something went wrong');
         } catch(\Exception $e) {
-            Log::error("Error in changeStatus on AppointmentSlotsController ". $e->getMessage());
+            Log::error("Error in approveAppointment on AppointmentSlotsController ". $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+
+    /**
+     * Method to reject appointment
+     * @param int $appointment_id
+     * @return redirect
+     */
+    public function rejectAppointment($appointment_id = 0)
+    {
+        try {
+            $appoinment = Appointment::find($appointment_id);
+            if($appoinment != null) {
+                $appoinment->status = 'Rejected';
+                $appoinment->save();
+                return redirect()->back()->with('message', 'Status Updated Successfully');
+            }
+            return redirect()->back()->with('message', 'Oops! Something went wrong');
+        } catch(\Exception $e) {
+            Log::error("Error in rejectAppointment on AppointmentSlotsController ". $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }

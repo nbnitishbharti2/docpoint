@@ -163,7 +163,7 @@ function more_desktop_date(type) {
 
 function more_desktop_change_type(type) {
 	var active=$("#sloat-doctor-details").val();
-	appoinment_type=type 
+	appoinment_type=type; 
 	if(type=='Physical'){
 		$("#inperson").prop("checked", true);
 	}else{
@@ -184,6 +184,60 @@ function more_desktop_change_type(type) {
 		});
 	}
 	$(".owl-next").removeClass('disabled');
+}
+function view_all_availability(id){ 
+	availity_date_start=availity_date;
+	get_view_all_availability(2,id);
+	 
+}
+function availity_more_data(div_id,doctor_id,date,sloat_type){
+	$.ajax({
+		url: availity_more_url,
+		type: 'POST', 
+		data: {"doctor_id":doctor_id,"date": date,"sloat_type":sloat_type}, 
+		success: function(data){ 
+			data=JSON.parse(data) 
+			$("#sloat-ul"+div_id).html(data.date_append);  
+		}
+	});
+}
+function get_view_all_availability(type,id){ 
+	if(availity_date_start>=min_date){
+	$.ajax({
+		url: availity_url,
+		type: 'POST', 
+		data: {"id":id,"availity_date": availity_date_start,"min_date":min_date,'sloattype':appoinment_type,'type':type}, 
+		success: function(data){ 
+			data=JSON.parse(data)
+			availity_date_start=data.date;
+			$("#availity-body").html(data.date_append); 
+			$(".exampleModalScrollable1").modal("show");
+			//new_date=data.date_list_start; 
+			if(type==1) {
+				// date_list_end=data.date_list_end;
+				// date_list_start=data.date_list_start;
+				 
+				// $(".owl-stage").html(data.date_append);
+				// $('.owl-prev').prop("disabled", false);
+				// $(".owl-prev").removeClass('disabled');
+			} else {
+				// if(min_date<data.date_list_start){
+				// 	date_list_start=data.date_list_start;
+				// 	$(".owl-stage").html(data.date_append);
+				// 	$('.owl-prev').prop("disabled", false);
+				//    $(".owl-prev").removeClass('disabled'); 
+				// }else{
+				// 	if(min_date>=new_date){
+				// 		$(".owl-prev").addClass('disabled');
+				// 		$(".owl-prev").attr( 'disabled', 'disabled' );
+				// 	}
+				// 	$(".owl-stage").html(data.date_append); 
+				// }
+			}
+			 
+		}
+	});
+}
 }
 
 $(document).ready(function() {

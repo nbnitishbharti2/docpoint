@@ -48,7 +48,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-md-2">Mobile Number*</label>
 						<div class="col-md-10">
-							<input name ="mobile" type="text" class="form-control" value="{{ (old('mobile')) ? old('mobile') : isset($doctor) ? $doctor->mobile :'' }}">
+							<input name ="mobile" type="text" maxlength="10" class="form-control" value="{{ (old('mobile')) ? old('mobile') : isset($doctor) ? $doctor->mobile :'' }}">
 							@error('mobile')
 								<span class="text-danger">{{ $message }}</span>
 							@enderror
@@ -59,17 +59,17 @@
 						<div class="col-md-10">
 							<input name ="phone" type="text" class="form-control" value="{{ old('phone') }}">
 							@error('phone')
-							<span class="text-danger">{{ $message }}</span>
+								<span class="text-danger">{{ $message }}</span>
 							@enderror
 						</div>
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-md-2">Alternate Number</label>
+						<label class="col-form-label col-md-2">Alternate Mobile</label>
 						<div class="col-md-10">
-							<input name ="alt_moblie" type="text" class="form-control" value="{{ old('alt_moblie') }}">
+							<input name ="alt_moblie" type="text" maxlength="10" class="form-control" value="{{ old('alt_moblie') }}">
 							@error('alt_moblie')
-							<span class="text-danger">{{ $message }}</span>
+								<span class="text-danger">{{ $message }}</span>
 							@enderror
 						</div>
 					</div>
@@ -208,7 +208,13 @@
 						<div class="col-md-10">
 							<div class="checkbox">
 								<label>
-									<input name="status" type="checkbox" {{ (old('status')) ? "checked" : '' }}>
+									<input name="status" type="checkbox" {{ (old('status') || old('status') == '') ? "checked" : '' }}>
+								</label>
+								<label>
+									<input name="physical" type="checkbox" {{ old('physical') ? "checked" : '' }}>&nbsp; Physical&nbsp;&nbsp;&nbsp;
+								</label>
+								<label>
+									<input name="video" type="checkbox" {{ old('video') ? "checked" : '' }}>&nbsp; Video&nbsp;&nbsp;&nbsp;
 								</label>
 							</div>
 						</div>

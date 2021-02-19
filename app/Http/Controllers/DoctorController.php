@@ -20,9 +20,11 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Reason;
 use App\Models\Review;
+use App\Models\Affiliation;
 use Response;
 use Log;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * DoctorCotroller responsible for all logical handeling of modules directly related to doctor.
@@ -123,6 +125,8 @@ class DoctorController extends Controller
                 'longitude' => $input['long'],
                 'website' => $input['website'],
                 'status' => ($request->has('status')) ? 'Active' : 'Inactive',
+                'physical' => ($request->has('physical')) ? 'Yes' : 'No',
+                'video' => ($request->has('video')) ? 'Yes' : 'No',
             );
             Doctors::create($doctorData);
             // Attach role to user
@@ -216,11 +220,15 @@ class DoctorController extends Controller
                 'longitude' => $input['long'],
                 'website' => $input['website'],
                 'status' => ($request->has('status')) ? 'Active' : 'Inactive',
+                'physical' => ($request->has('physical')) ? 'Yes' : 'No',
+                'video' => ($request->has('video')) ? 'Yes' : 'No',
             );
 
             Doctors::where('id', $id)->update($doctorData);
-
-            return redirect('doctor-list')->with('message', 'Doctor details edited successfully');
+            if(CommanHelper::userRole() == "Admin") {
+                return redirect('doctor-list')->with('message', 'Doctor details updated successfully');
+            }
+            return redirect('dashboard')->with('message', 'Profile updated successfully');
         } catch (\Exception $e) {
             Log::error("Error in update on DoctorController " . $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
@@ -322,16 +330,69 @@ class DoctorController extends Controller
     public function list(Request $request)
     {
         // dd($request->all()); 
+        $data['gender_list']=array();
+        $data['speciality_list']=array();
+        $data['sponsored_list']=array();
+        $data['affiliation_list']=array();
         $resion=Reason::find($request->resion); 
-        $data['doctors'] = Doctors::whereHas('country', function ($query) use ($request) {
+
+        // selectRaw('CAST(
+        //     6371 * ACOS(
+        //         COS(RADIANS(28.6172811))  COS(RADIANS(doctors.latitude))  COS(
+        //             RADIANS(doctors.longitude) - RADIANS(82.9739144)
+        //         ) + SIN(RADIANS(28.6172811)) * SIN(RADIANS(doctors.latitude))
+        //     ) AS DECIMAL(10, 2)
+        // ) AS distance')->
+        //select CAST(6371 * ACOS( COS(RADIANS(28.6172811))+COS(RADIANS(doctors.latitude)) + COS( RADIANS(doctors.longitude) - RADIANS(82.9739144) ) + SIN(RADIANS(28.6172811)) * SIN(RADIANS(doctors.latitude)) ) AS DECIMAL(10, 2)) AS distance from doctors
+         $q= Doctors::whereHas('country', function ($query) use ($request) {
             $query->where('name', $request->search);
         })->orwhereHas('city', function ($query) use ($request) {
             $query->where('name', $request->search);
         })->orwhereHas('state', function ($query) use ($request) {
             $query->where('name', $request->search);
-        })->with('doctorSpacilityMap.reason')->orwhere('zip', $request->search)->orwhere('address', $request->search)->whereHas('doctorSpacilityMap', function ($query) use ($resion) {
-            $query->where('speciality_id', $resion->speciality_id);
-        })->orderBy('sponsored','asc')->get();
+        })->withCount(['review as avg_rate' => function($query) {
+            $query->select(DB::raw('avg((rate+wating_rate))'));
+        }])->with(['doctorSpacilityMap.reason'])->orwhere('zip', $request->search)->orwhere('address', $request->search);
+        if(!empty($request->gender)){
+            $data['gender_list']=$request->gender;
+            $q->whereIn('gender_id',$request->gender);
+        }
+        if(!empty($request->sponsored)){
+            $data['sponsored_list']=$request->sponsored;
+            $q->whereIn('sponsored',$request->sponsored);
+        }
+        if(!empty($request->speciality)){
+            $specialitys=$request->speciality;
+            $data['speciality_list']=$request->speciality; 
+            if(!in_array($resion->speciality_id,$request->speciality)){
+                array_push($specialitys,$resion->speciality_id); 
+            }
+            $q->whereHas('doctorSpacilityMap', function ($query) use ($specialitys) {
+                $query->whereIn('speciality_id', $specialitys);
+            });
+        }else{
+            $q->whereHas('doctorSpacilityMap', function ($query) use ($resion) {
+                $query->where('speciality_id', $resion->speciality_id);
+            });
+        }
+        if(!empty($request->affiliation)){ 
+            $data['affiliation_list']=$request->affiliation; 
+            
+            $q->whereHas('doctorAffiliationMap', function ($query) use ($request) {
+                $query->whereIn('affiliation_id', $request->affiliation);
+            });
+        }
+        if($request->short==1){
+            $data['doctors']=$q->orderBy('id','asc')->get();
+        }else if($request->short==2){
+            $data['doctors']=$q->orderBy('avg_rate','desc')->get();
+        }else if($request->short==3){
+            $data['doctors']=$q->orderBy('avg_rate','desc')->get();
+        }else{
+            $data['doctors']=$q->orderBy('id','asc')->get();
+        }
+        // $data['doctors']=$q->orderBy('id','asc')->get();
+        // dd($data['doctors']);
         //  $data['doctors'] = Doctors::whereHasMorph(
         //     'doctors',
         //     [Country::class, State::class, City::class],
@@ -368,6 +429,9 @@ class DoctorController extends Controller
 
         // dd($request->date);
       //  $data['doctors'] = Doctors::get();
+        $data['affiliation']=Affiliation::get();
+        $data['gender']=Gender::get();
+        $data['speciality']=Speciality::get();
         $data['search'] = $request->search ?? 'Delhi';
         $data['resion'] = $request->resion;
         $data['zip'] = $request->zip;
@@ -475,21 +539,164 @@ class DoctorController extends Controller
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
- 
+     
+    public function getDoctorAvaility(Request $request)
+    {
+        try{
+            $doctorDetails=Doctors::find($request->id);
+            $sponser='';
+            if($doctorDetails->sponsored=='Yes'){
+                $sponser='<i class="icofont-check"></i>';
+            }
+           // dd($doctorDetails);
+            $image=($doctorDetails->pic && file_exists('public/storage/images/doctor/'.$doctorDetails->pic)) ? asset('public/storage/images/doctor/'.$doctorDetails->pic) : asset('public/storage/images/doctor/images.jpg');
+            $data['date_append']='<div class="modal-body p-0">
+            <div class="user-card col-dir">
+              <div class="row  px-4 m-0 no-gutters fx-top w-100">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="col-lg-2">
+                  <img class="user-img small-img d-desktop-for-phone" src="'.$image.'" alt="doctor">
+                </div>
+                <div class="col-lg-10 pl-md-4">
+                  <img class="user-img d-phone" src="'.$image.'" alt="doctor">
+                  <h5>'.$doctorDetails->name. $sponser.'<span class="distance">1.51 Km</span></h5>
+                  <h6>Dentist</h6>
+                  
+                  <div class="address">
+                    <h5>'.$doctorDetails->address.'</h5> 
+                  </div>
+                  
+                  <div class="rating">
+                    <span>★ ★ ★ ★ ★</span>
+                    <p class="total-rating">4</p>
+                    <p class="rating-count">(969)</p>
+                  </div>
+                 
+                </div>';
+            if ($request->type == 1) {
+                $date = date("Y-m-d", strtotime($request->availity_date . '+1 days'));
+                $data['date']=date("Ymd",strtotime($date . '+14 days'));
+            }else if ($request->type == 2) {
+                $date = date("Y-m-d", strtotime($request->availity_date)); 
+                $data['date']=date("Ymd",strtotime($date . '+15 days'));
+            }else{ 
+                $new_date = date("Ymd", strtotime($request->availity_date . '-14 days'));
+                if($new_date>$request->min_date){
+                    $date = date("Y-m-d", strtotime($new_date));
+                    $data['date']=date("Ymd",strtotime($new_date . '-13 days')); 
+                }else{
+                    $date = date("Y-m-d", strtotime($request->min_date));
+                    $data['date']=date("Ymd",strtotime($request->min_date));
+                }
+                
+            }
+            $data['date_append']=$data['date_append'].'<div class="col-lg-12"> 
+            <div class="popup-date">
+              <div class="one-line">
+                <h2>'.date('M d',strtotime($date)).' - '.date('M d',strtotime($date. '+14 days')).'</h2> 
+                <div class="slide-btns">
+                  <button><i class="icofont-rounded-left" onclick="get_view_all_availability(3,'.$request->id.')"></i></button>
+                  <button><i class="icofont-rounded-right" onclick="get_view_all_availability(1,'.$request->id.')"></i></button>
+                </div> 
+              </div>
+              <p>Choose a time with Dr. '.$doctorDetails->name.' that works for you</p>
+            </div> 
+          </div></div><div class="row px-4 m-0 ">
+          <div class="col-lg-12"> <div class="popup-dates">';
+            // loop 
+           
+            $j=0;
+            for($i=0; $i<=14; $i++){
+                
+                if($request->sloattype==''){
+                    $checkSloat = AppointmentSlots::where('doctor_id', $request->id)->where('appointment_type', 'Physical')->where('slot_date', date('Y-m-d',strtotime($date. '+'.$i.' days')))->where('status', 'Available')->orderBy('slot_time','asc')->get();
+                    if(count($checkSloat)>0){
+                        $sloattype='Physical';
+                    }else{
+                        $checkSloat = AppointmentSlots::where('doctor_id', $request->id)->where('appointment_type', 'Video')->where('slot_date', date('Y-m-d',strtotime($date. '+'.$i.' days')))->where('status', 'Available')->orderBy('slot_time','asc')->get();
+                        $sloattype='Video';
+                    }
+                   
+                }else{ 
+                    $sloattype=$request->sloattype;
+                    $checkSloat = AppointmentSlots::where('doctor_id', $request->id)->where('appointment_type', $request->sloattype)->whereDate('slot_date', date('Y-m-d',strtotime($date. '+'.$i.' days')))->where('status', 'Available')->orderBy('slot_time','asc')->get();
+                 } 
+                if(count($checkSloat)>0){
+                    $data['date_append']=$data['date_append'].'<div class="date-group">
+                    <h6>'.date('D, M d',strtotime($date. '+'.$j.' days')).'</h6>
+                    <ul class="time-btns" id="sloat-ul'.$j.'">';
+                    $k=0;
+                    foreach($checkSloat as $key => $value){
+                        $k++;
+                        if($k>10){
+                            $data['date_append']=$data['date_append'].'<li style="width: 57px;"><a href="javascript:void(0)" onclick="availity_more_data('.$j.','.$request->id.','.date("Ymd",strtotime($value->slot_date)).', '."'".$sloattype."'".')">More</a></li>';
+                            break;
+                        }
+                        if($sloattype=='Video'){
+                            $data['date_append']=$data['date_append'].'<li><a href="'. route('doctor.details', [$value->doctor_id,$value->id,date("Ymd",strtotime($value->slot_date))]).'"><i class="icofont-video"></i>'.date('h:i a',strtotime(strtotime($value->slot_time))).'</a></li>';
+                        }else{
+                            $data['date_append']=$data['date_append'].'<li><a href="'. route('doctor.details', [$value->doctor_id,$value->id,date("Ymd",strtotime($value->slot_date))]).'">'.date('h:i a',strtotime(strtotime($value->slot_time))).'</a></li>';
+                        } 
+                    }
+                    $data['date_append']=$data['date_append'].'</ul></div>'; 
+                }else{
+                    $data['date_append']=$data['date_append'].'<div class="date-group">
+                  <h6>'.date('D, M d',strtotime($date. '+'.$j.' days')).'<span>No availability</span></h6>
+                  </div>';
+                }
+                $j++;
+            }
+            
+            $data['date_append']=$data['date_append'].'</div></div>
+            <div class="col-lg-12">
+              <button class="full-btn" onclick="get_view_all_availability(1,'.$request->id.')">'.date('M d',strtotime($date. '+15 days')).' - '.date('M d',strtotime($date. '+29 days')).'</button>
+            </div>
+            </div></div></div>';
+           
+            echo json_encode($data);
+        } catch (\Exception $e) {
+            Log::error("Error in getDoctorAvaility on DoctorController " . $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+        
+    }
+
+    public function getDoctorAvailityMore(Request $request)
+    {
+        try{
+            $checkSloat = AppointmentSlots::where('doctor_id', $request->doctor_id)->where('appointment_type', $request->sloat_type)->where('slot_date', date('Y-m-d',strtotime($request->date)))->where('status', 'Available')->orderBy('slot_time','asc')->get();
+            $data['date_append']='';
+                foreach($checkSloat as $key => $value){ 
+                    if($request->sloat_type=='Video'){
+                        $data['date_append']=$data['date_append'].'<li><a href="'. route('doctor.details', [$value->doctor_id,$value->id,date("Ymd",strtotime($value->slot_date))]).'"><i class="icofont-video"></i>'.date('h:i a',strtotime(strtotime($value->slot_time))).'</a></li>';
+                    }else{
+                        $data['date_append']=$data['date_append'].'<li><a href="'. route('doctor.details', [$value->doctor_id,$value->id,date("Ymd",strtotime($value->slot_date))]).'">'.date('h:i a',strtotime(strtotime($value->slot_time))).'</a></li>';
+                    } 
+                } 
+            echo json_encode($data);
+        } catch (\Exception $e) {
+            Log::error("Error in getDoctorAvailityMore on DoctorController " . $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+
     public function getDoctorAppoinmentSlotByDate(Request $request)
     {
         try {
+           
             $width='62.25px';
             if($request->page_type){
                 $width='92.2px';
             } 
-           
-            if ($request->type == 1) {
-                $data['date_list_start'] = date("Ymd", strtotime($request->date_list_start . '+4 days'));
+            
+            if ($request->type == 1) { 
+               
+                $data['date_list_start'] = date("Ymd", strtotime($request->date_list_start . '+4 days')); 
                 $data['date_append'] ='<div class="owl-item" style="width: '.$width.'; margin-right: 10px;"><div class="date-item"><p>' . date("D", strtotime($request->date_list_start . '+4 days')) . '</p><h5>' . date("M d", strtotime($request->date_list_start . '+4 days')) . '</h5></div></div><div class="owl-item" style="width: '.$width.'; margin-right: 10px;"><div class="date-item"><p>' . date("D", strtotime($request->date_list_start . '+5 days')) . '</p><h5>' . date("M d", strtotime($request->date_list_start . '+5 days')) . '</h5></div></div><div class="owl-item" style="width: '.$width.'; margin-right: 10px;"><div class="date-item"><p>' . date("D", strtotime($request->date_list_start . '+6 days')) . '</p><h5>' . date("M d", strtotime($request->date_list_start . '+6 days')) . '</h5></div></div><div class="owl-item" style="width: '.$width.'; margin-right: 10px;"><div class="date-item"><p>' . date("D", strtotime($request->date_list_start . '+7 days')) . '</p><h5>' . date("M d", strtotime($request->date_list_start . '+7 days')) . '</h5></div></div>';
               //  $data['date_append'] = '<div class="owl-item" style="width: 92.2px; margin-right: 10px;"><div class="date-item"><p>' . date("D", strtotime($request->date_list_end . '+1 days')) . '</p><h5>' . date("M d", strtotime($request->date_list_end . '+1 days')) . '</h5></div></div>';
-
-                $date = date("Y-m-d", strtotime($request->date . '+4 days'));
+                   $date = date("Y-m-d", strtotime($request->date . '+4 days'));
             } else {
                 if ($request->min_date < $request->date_list_start) {
                     $data['date_list_start'] = date("Ymd", strtotime($request->date_list_start . '-4 days'));
@@ -507,14 +714,14 @@ class DoctorController extends Controller
                     $data['date_append'] ='<div class="owl-item" style="width: '.$width.'; margin-right: 10px;"><div class="date-item"><p>' . date("D", strtotime($date)) . '</p><h5>' . date("M d", strtotime($date)) . '</h5></div></div><div class="owl-item" style="width: '.$width.'; margin-right: 10px;"><div class="date-item"><p>' . date("D", strtotime($date . '+1 days')) . '</p><h5>' . date("M d", strtotime($date . '+1 days')) . '</h5></div></div><div class="owl-item" style="width: '.$width.'; margin-right: 10px;"><div class="date-item"><p>' . date("D", strtotime($date . '+2 days')) . '</p><h5>' . date("M d", strtotime($date . '+2 days')) . '</h5></div></div><div class="owl-item" style="width: '.$width.'; margin-right: 10px;"><div class="date-item"><p>' . date("D", strtotime($date . '+3 days')) . '</p><h5>' . date("M d", strtotime($date . '+3 days')) . '</h5></div></div>';
                 }
                 
-            }
+            } 
             // $date=date("Y-m-d",strtotime($request->date));
             // $did=json_decode($request->ids);
             $sloat = array();
             foreach ($request->ids as $key => $val) {
                 // echo $val;
                 $sloat[$val] = '';
-
+               
                 $sloattype=$request->sloattype;
                 if($sloattype==''){
                     $slot_count2 = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', 'Physical')->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d', strtotime($date . '+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->get();
@@ -525,13 +732,20 @@ class DoctorController extends Controller
                         $sloattype='Video';
                     }
                 }
+               
                 $video_class='icofont-video';
                 $slot_count2 = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', $sloattype)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d', strtotime($date . '+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->get();
-                 if(($slot_count2[0]->appointment_type=='Physical' && $slot_count2[0]->doctor->physical=="Yes") || ($slot_count2[0]->appointment_type=='Video' && $slot_count2[0]->doctor->video=="Yes")){
+                
+                if(count($slot_count2)>0){
+                if(($slot_count2[0]->appointment_type=='Physical' && $slot_count2[0]->doctor->physical=="Yes") || ($slot_count2[0]->appointment_type=='Video' && $slot_count2[0]->doctor->video=="Yes")){
                         $slot_count = count($slot_count2);
                     }else{
                         $slot_count = 0;
-                    } 
+                    }
+                }else{
+                    $slot_count = 0;
+                }
+                    
                 $limit = ($slot_count > 4) ? 3 : 4;
 
                 $unique_sloat = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', $sloattype)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d', strtotime($date . '+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->take($limit)->get();
@@ -651,8 +865,12 @@ class DoctorController extends Controller
                 }
 
                 $slot_count2 = AppointmentSlots::where('doctor_id', $val)->where('appointment_type', $sloattype)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d', strtotime($date . '+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->get();
-               if(($slot_count2[0]->appointment_type=='Physical' && $slot_count2[0]->doctor->physical=="Yes") || ($slot_count2[0]->appointment_type=='Video' && $slot_count2[0]->doctor->video=="Yes")){
-                        $slot_count = count($slot_count2);
+                if(count($slot_count2)>0){
+                    if(($slot_count2[0]->appointment_type=='Physical' && $slot_count2[0]->doctor->physical=="Yes") || ($slot_count2[0]->appointment_type=='Video' && $slot_count2[0]->doctor->video=="Yes")){
+                            $slot_count = count($slot_count2);
+                        }else{
+                            $slot_count = 0;
+                        }
                     }else{
                         $slot_count = 0;
                     }

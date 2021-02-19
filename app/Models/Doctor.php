@@ -49,10 +49,20 @@ class Doctor extends Model
     {
         return $this->hasMany('App\Models\DoctorSpacilityMap');
     }
+    public function doctorAffiliationMap()
+    {
+        return $this->hasMany('App\Models\DoctorAffiliationMap');
+    }
    
-    // public function doctors()
-    // {
-    //     return $this->morphTo();
-    // }
+    public function appointments()
+    {
+        return $this->hasMany('App\Models\Appointment');
+    }
+    public function review()
+    {
+        return $this->hasMany('App\Models\Review')->selectRaw('SUM(wating_rate) as total');
+    
+        return $this->hasMany('App\Models\Review');
+    }
     
 }

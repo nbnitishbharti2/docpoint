@@ -9,6 +9,7 @@ use App\Http\Requests\AppoinmentSlot;
 use App\Models\AppointmentSlotsData;
 use App\Models\DoctorHoliday;
 use App\Helpers\CommanHelper;
+use App\Models\Doctor;
 use Response;
 use Log;
 
@@ -21,10 +22,9 @@ class AppointmentSlotController extends Controller
     public function index()
     {
         try {
-            $data['appointment_slots'] = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->orderBy('id', 'desc')->get();
-            $data['unique_appointment_dates'] = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->orderBy('id', 'desc')->groupBy('slot_date')->get();
+            $data['appointment_slots'] = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->orderBy('id', 'desc')->groupBy('slot_date')->get();
+            //$data['unique_appointment_dates'] = AppointmentSlots::where('doctor_id', Auth::user()->doctors->id)->where('slot_date', '>', date("Y-m-d"))->orderBy('id', 'desc')->groupBy('slot_date')->paginate(10);
             $data['active'] = 'appointment_slots';
-            // /dd($data);
             return view('AppointmentSlots.index', $data);
         } catch(\Exception $e) {
             Log::error("Error in index on AppointmentSlotsController ". $e->getMessage());
@@ -105,6 +105,18 @@ class AppointmentSlotController extends Controller
                     'appointment_type' => $request->appointment_type,
                 ];
                 AppointmentSlotsData::create($appointment_slot_data);
+                // Update visit type
+                $check = Doctor::find(Auth::user()->doctors->id);
+                
+                if($check->physical == 'No' || $check->video == 'No') {
+                    if($request->appointment_type == "Physical") {
+                        $check->physical = 'Yes';
+                    } else {
+                        $check->video = 'Yes';
+                    }
+                    $check->save();
+                }
+                
                 return redirect()->back()->with('message', 'Record Added successfully');
             } else {
                 return redirect()->back()->with('error', 'Record not added. Appointment slot confliction.');
@@ -195,6 +207,25 @@ class AppointmentSlotController extends Controller
             return redirect()->back()->with('error', 'Record Not Updated successfully');
         } catch(\Exception $e) {
             Log::error("Error in update on AppointmentSlots ". $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    /**
+     * Method to get appointment slot by date for doctor
+     * @param string $date
+     * 
+     * @return view
+     */
+    public function getSlotsByDate($date = '')
+    {
+        try {
+            $data['appointment_slots'] = AppointmentSlots::where(['slot_date' => date("Y-m-d", strtotime($date)), 'doctor_id' => Auth::user()->doctors->id])->get();
+            $data['date'] = $date;
+            $data['active'] = 'appointment_slots';
+            return view('AppointmentSlots.index', $data); 
+        } catch(\Exception $e) {
+            Log::error("Error in getSlotsByDate on AppointmentSlots ". $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
         }
     }

@@ -1,12 +1,19 @@
 @extends('layouts.backend')
 @section('content')
 @include('layouts.message')
+<link rel="stylesheet" href="{{ asset('public/admin/assets/css/jquery.dataTables.css') }}"/>
 <div class="page-header">
     <div class="row">
         <div class="col-sm-12">
             <div class="user-grp-container">
-                <h3 class="page-title">Manage Appointment Slots</h3>
-                <a href="{{route('appointment.slots.add')}}">Add Appointment Slots</a>
+                @if (isset($date))
+                    <h3 class="page-title">Appointment Slots of {{ date("d-m-Y", strtotime($date)) }}</h3>
+                    <a href="{{ route('appointment.slots') }}">Back</a>
+                @else
+                    <h3 class="page-title">Manage Appointment Slots</h3>
+                    <a href="{{ route('appointment.slots.add') }}">Add</a>
+                @endif
+                
             </div>
         </div>
     </div>
@@ -19,6 +26,7 @@
                     <table class="table table-hover table-center mb-0 display nowrap">
                         <thead>
                             <tr>
+                                <th>Seq</th>
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Status</th>
@@ -28,32 +36,16 @@
                         </thead>
                         <tbody>
                             @foreach($appointment_slots as $key => $value)
-                            @php 
-                                if($key == 0) {
-                                    echo "hhhh";
-                                    $counter = 0;
-                                    $date = date("Y-m-d", strtotime($value->slot_date_time));
-                                }
-                                if($date != date("Y-m-d", strtotime($value->slot_date_time))) {
-                                    echo "2222";
-                                    $counter = 0;
-                                    $date = date("Y-m-d", strtotime($value->slot_date_time));
-                                }
-                            @endphp
                             <tr>
-                                @if ($date == date("Y-m-d", strtotime($value->slot_date_time)) && $counter == 0)
-                                    @php
-                                        ++$counter;   
-                                    @endphp
-                                    <td><i class="btn btn-xs fa fa-list-ul" data-toggle = "collapse" data-target = ".collapsed{{ $key }}">+</i>&nbsp;{{ date("Y-m-d", strtotime($value->slot_date_time))}}</td>
-                                @else 
-                                    <td class="collapse collapsed{{ $key }}">{{ date("Y-m-d", strtotime($value->slot_date_time))}}</td>
-                                @endif
-                                
-                                <td>{{ date("h:i a", strtotime($value->slot_date_time))}}</td>
+                                <td>{{ $key }}</td>
+                                <td>{{ date("d-m-Y", strtotime($value->slot_date_time))}}</td>
+                                <td>{{ date("h:i a", strtotime($value->slot_date_time))}} </td>
                                 <td>{{ $value->status }}</td>
                                 <td>{{ $value->appointment_type }}</td>
                                 <td>
+                                    @if (!isset($date))
+                                        <a href="{{ route('appointment.slots.by.date', [date("Y-m-d", strtotime($value->slot_date_time))]) }}" title = "View Appointment Slots" class="btn-sm btn btn-success"><i class = "fa fa-eye"></i></a>
+                                    @endif
                                     <button class="btn-sm btn btn-danger" title="Delete" onclick="confirm_appoinment_sloats_delete({{ $value->id }})"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -87,19 +79,23 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="{{ asset('public/admin/assets/js/jquery.dataTables.js') }}"></script>
 <script>
     var change_appoinmrnt_slot_status = "{{ route('change.appointment.slots.status') }}";
     $(document).ready( function () {
         var table = $('.table').DataTable({
-            // "columnDefs": [
-            //     { targets: 0, visible: false }
-            // ],
-        
+            "columnDefs": [
+                { targets: 0, visible: false }
+            ],
+            
+            
             rowReorder: {
-                selector: 'td:last-child'
+                selector: 'tr:nth-child'
             },
         });
     });
+    
 </script>
 
 @endsection

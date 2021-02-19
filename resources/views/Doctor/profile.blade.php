@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="row">
                                         <p class="col-sm-2 text-muted text-sm-right mb-0 mb-sm-3">Date of Birth</p>
-                                        <p class="col-sm-10">{{ {{ ($doctor->dob != null) ? date("d-m-Y", strtotime($doctor->dob)) :'' }} }}</p>
+                                        <p class="col-sm-10">{{ ($doctor->dob != null) ? date("d-m-Y", strtotime($doctor->dob)) :'' }}</p>
                                     </div>
                                     <div class="row">
                                         <p class="col-sm-2 text-muted text-sm-right mb-0 mb-sm-3">Email ID</p>

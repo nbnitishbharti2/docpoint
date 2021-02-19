@@ -48,7 +48,7 @@
 						<div class="form-group row">
 							<label class="col-form-label col-md-2">Mobile Number*</label>
 							<div class="col-md-10">
-								<input name="mobile" type="text" class="form-control" value="{{ old('mobile', $docDetails->mobile) }}">
+								<input name="mobile" type="text" maxlength="10" class="form-control" value="{{ old('mobile', $docDetails->mobile) }}">
 								@error('mobile')
 									<span class="text-danger">{{ $message }}</span>
 								@enderror
@@ -65,9 +65,9 @@
 						</div>
 
 						<div class="form-group row">
-							<label class="col-form-label col-md-2">Alternate Number</label>
+							<label class="col-form-label col-md-2">Alternate Mobile</label>
 							<div class="col-md-10">
-								<input name="alt_moblie" type="text" class="form-control" value="{{ old('alt_moblie', $docDetails->alt_moblie) }}">
+								<input name="alt_moblie" type="text" maxlength="10" class="form-control" value="{{ old('alt_moblie', $docDetails->alt_moblie) }}">
 								@error('alt_moblie')
 									<span class="text-danger">{{ $message }}</span>
 								@enderror
@@ -217,7 +217,13 @@
 							<div class="col-md-10">
 								<div class="checkbox">
 									<label>
-										<input name="status" type="checkbox" {{ ($docDetails->status === 'Active')?"checked":'' }}>
+										<input name="status" type="checkbox" {{ ($docDetails->status === 'Active')?"checked":'' }}>&nbsp;Status&nbsp;&nbsp;&nbsp;
+									</label>
+									<label>
+										<input name="physical" type="checkbox" {{ ($docDetails->physical === 'Yes')?"checked":'' }}>&nbsp; Physical&nbsp;&nbsp;&nbsp;
+									</label>
+									<label>
+										<input name="video" type="checkbox" {{ ($docDetails->video === 'Yes')?"checked":'' }}>&nbsp; Video&nbsp;&nbsp;&nbsp;
 									</label>
 								</div>
 							</div>

@@ -4,6 +4,8 @@
 <style>
   .morecontent span {
     display: none;
+    text-align: justify;
+    text-justify: inter-word;
   }
   .morelink {
       display: block;
@@ -21,7 +23,7 @@ $location_blank = array();
 $doctor_id_list = array();
 @endphp
 <!-- search -->
-<form class="needs-validation" method="post" novalidate action="{{ url('doctor-lists') }}">
+<form class="needs-validation" method="post" id="search-form" novalidate action="{{ url('doctor-lists') }}">
 <section class="p-0 bg-blue">
   <div class="banner innr-banner">
     <div class="container sml-container">
@@ -109,32 +111,46 @@ $doctor_id_list = array();
             <div class="sep"></div>
             <ul>
                
-              <li><a href="#">Availability</a></li>
-              
+              {{-- <li><a href="#">Availability</a></li> --}}
+              <li>
+                <div class="dropdown multiselect">
+                  <button class="select-btn" type="button" id="dropdownMenu11" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Sponsored
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu multidrop-off" aria-labelledby="dropdownMenu11">
+                  
+                  <li><a>
+                    <input type="checkbox" id="action1" name="sponsored[]" {{(in_array('Yes',$sponsored_list))?'checked':''}} value="Yes">
+                    <label for="action1">Yes</label>
+                  </a></li>
+                  <li><a>
+                    <input type="checkbox" id="action1" name="sponsored[]" {{(in_array('No',$sponsored_list))?'checked':''}} value="No">
+                    <label for="action1">No</label>
+                  </a></li>
+                  
+                  <li class="mb-0">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                      {{-- <button type="button" class="btn btn-secondary">clear</button> --}}
+                      <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                  </li>
+                  </ul>
+                </div>
+              </li>
                  <li>
                 <div class="dropdown multiselect">
                   <button class="select-btn" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Availability
+                    Speciality
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu multidrop-off" aria-labelledby="dropdownMenu1">
+                    @foreach($speciality as $key => $val)
                   <li><a>
-                    <input type="checkbox" id="action1">
-                    <label for="action1">Action</label>
+                    <input type="checkbox" id="action1" name="speciality[]" {{(in_array($val->id,$speciality_list))?'checked':''}} value="{{$val->id}}">
+                    <label for="action1">{{$val->spec_name}}</label>
                   </a></li>
-                  <li><a>
-                    <input type="checkbox" id="action2">
-                    <label for="action2">Action2</label>
-                  </a></li>
-                  <li><a>
-                    <input type="checkbox" id="action3">
-                    <label for="action3">Action</label>
-                  </a></li>
-                    <li role="separator" class="divider"></li>
-                  <li><a>
-                    <input type="checkbox" id="action4">
-                    <label for="action4">Action</label>
-                  </a></li>
+                  @endforeach 
                   <li class="mb-0">
                     <div class="btn-group" role="group" aria-label="Basic example">
                       {{-- <button type="button" class="btn btn-secondary">clear</button> --}}
@@ -148,27 +164,16 @@ $doctor_id_list = array();
                <li>
                 <div class="dropdown multiselect">
                   <button class="select-btn" type="button" id="dropdownMenu11" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Availability1
+                    Gender
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu multidrop-off" aria-labelledby="dropdownMenu11">
+                    @foreach($gender as $key => $val)
                   <li><a>
-                    <input type="checkbox" id="action1">
-                    <label for="action1">Action</label>
+                    <input type="checkbox" id="action1" name="gender[]" {{(in_array($val->id,$gender_list))?'checked':''}} value="{{$val->id}}">
+                    <label for="action1">{{$val->name}}</label>
                   </a></li>
-                  <li><a>
-                    <input type="checkbox" id="action2">
-                    <label for="action2">Action</label>
-                  </a></li>
-                  <li><a>
-                    <input type="checkbox" id="action3">
-                    <label for="action3">Action</label>
-                  </a></li>
-                    <li role="separator" class="divider"></li>
-                  <li><a>
-                    <input type="checkbox" id="action4">
-                    <label for="action4">Action</label>
-                  </a></li>
+                  @endforeach 
                   <li class="mb-0">
                     <div class="btn-group" role="group" aria-label="Basic example">
                       <button type="button" class="btn btn-secondary">clear</button>
@@ -178,7 +183,29 @@ $doctor_id_list = array();
                   </ul>
                 </div>
               </li>
-              <li><a href="#">Hospital affiliations</a></li>
+              <li>
+                <div class="dropdown multiselect">
+                  <button class="select-btn" type="button" id="dropdownMenu12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Hospital affiliations
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu multidrop-off" aria-labelledby="dropdownMenu12">
+                    @foreach($affiliation as $key => $val)
+                  <li><a>
+                    <input type="checkbox" id="action1" name="affiliation[]" {{(in_array($val->id,$affiliation_list))?'checked':''}} value="{{$val->id}}">
+                    <label for="action1">{{$val->name}}</label>
+                  </a></li>
+                  @endforeach 
+                  <li class="mb-0">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                      {{-- <button type="button" class="btn btn-secondary">clear</button> --}}
+                      <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                  </li>
+                  </ul>
+                </div>
+              </li>
+               
               <!-- short by -->
               <li class="short-by"><a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Sort
@@ -190,9 +217,10 @@ $doctor_id_list = array();
                     <!-- short icon end -->
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item active" href="#">Default Order</a>
-                    <a class="dropdown-item" href="#">Distance</a>
-                    <a class="dropdown-item" href="#">Wait Time Rating</a>
+                    <input name="short" type='text' id="short">
+                    <a class="dropdown-item" onclick="submitform(1);" href="javascript:void(0)">Default Order</a>
+                    <a class="dropdown-item" onclick="submitform(2);" href="javascript:void(0)">Distance</a>
+                    <a class="dropdown-item" onclick="submitform(3);" href="javascript:void(0)">Wait Time Rating</a>
                   </div>
               </li>
               <!-- short by end -->
@@ -274,12 +302,14 @@ $doctor_id_list = array();
                   </div>
                   <!-- address end -->
                   <div>
-                    <ul class="pills-wrap">
+                    <ul class="pills-wrap padding-5">
                       @if($value->physical == "Yes")
-                          <li class="pills"><a href="javascript:void(0)"><i class="icofont-user"></i></a></li>
+                          <li class="pills"><a href="javascript:void(0)"><i class="icofont-user"></i><p>In-person visits</p></a></li>
                       @endif
+                    </ul>
+                    <ul class="pills-wrap padding-5">
                       @if($value->video == "Yes")
-                          <li class="pills"><a href="javascript:void(0)"><i class="icofont-video"></i></a></li>
+                          <li class="pills"><a href="javascript:void(0)"><i class="icofont-video"></i><p>Video visits</p></a></li>
                       @endif
                     </ul>
                   </div>
@@ -337,7 +367,7 @@ $doctor_id_list = array();
                 </div>
                 <div class="col-lg-12 pl-md-4">
                   <div class="inr-line-btn">
-                    <a class="blue-anchor" href="#">
+                    <a class="blue-anchor" href="#" data-toggle="modal"  onclick="view_all_availability({{$value->id}})">
                       <!-- calendar icon -->
                       <svg id="Layer_1" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
                         <g>
@@ -383,22 +413,45 @@ $doctor_id_list = array();
     </div>
   </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade exampleModalScrollable1" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+  <div class="modal-dialog mb-0 mt-auto modal-dialog-scrollable modal-dialog-centered" role="document">
+    <div class="modal-content" id="availity-body">
+      
+    
+      
+    </div>
+  </div>
+</div>
+<!-- modal end -->
 <input type="hidden" name="sloat" id="sloat-doctor-details" value="0">
 <!-- inner page content end -->
 <script type="text/javascript">
+
+function submitform(type){ 
+  $("#short").val(type);
+  document.forms['search-form'].submit(); 
+}
+
+
   var slot_url = "{{ route('get.doctor.appoinment.slot') }}";
+  var availity_url = "{{ route('get.doctor.appoinment.availity') }}";
+  var availity_more_url = "{{ route('get.doctor.appoinment.availity.more') }}";
   var date_slot_url = "{{ route('get.doctor.appoinment.slot.by.date') }}";
   var change_type_slot_url = "{{ route('get.doctor.appoinment.slot.change.type') }}";
-  
+  var new_date = <?php echo date("Ymd",strtotime($date)); ?>;
+  var availity_date = <?php echo date("Ymd",strtotime($date)); ?>;
+  var availity_date_start = <?php echo date("Ymd",strtotime($date)); ?>;
   var locations = <?php echo json_encode($lact_new); ?>; 
   var blank = <?php echo json_encode($location_blank); ?>;
   var doctorlistid = <?php echo json_encode($doctor_id_list); ?>;
-  var new_date = <?php echo date("Ymd",strtotime($date)); ?>;
+  
   var min_date = <?php echo date("Ymd",strtotime(date("d-m-Y"))); ?>;
   var date_list_start = <?php echo date("Ymd",strtotime($date)); ?>;
   var date_list_end = <?php echo date("Ymd",strtotime($date.'+3 days')); ?>;
   var page_type=1;
-  var appoinment_type='Physical';
+  var appoinment_type='';
   
   function initMap() { 
     var bounds = new google.maps.LatLngBounds; 

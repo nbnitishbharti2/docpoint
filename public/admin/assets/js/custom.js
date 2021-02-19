@@ -98,13 +98,15 @@ $(document).ready(function(){
 			},
 			mobile : {
 				required: true,
-				phoneUS: true
+				minlength: 10,
+				maxlength: 10
 			},
-			phone : {
-				phoneUS: true
-			},
+			// phone : {
+			// 	phoneUS: true
+			// },
 			alt_moblie : {
-				phoneUS: true
+				minlength: 10,
+				maxlength: 10
 			},
 			gender : {
 				required: true
@@ -224,5 +226,19 @@ $(document).ready(function(){
 			// do other things for a valid form
 			form.submit();
 		}
+	});
+
+	$('#confirm').on('show.bs.modal', function(e) {
+		var url = $(e.relatedTarget).data('href');
+		if(url.includes('reject')) {
+			$(".header-text").text('Confirm Reject?');
+			$(".body-text").text('Are you sure! You want to Reject?');
+			$(".btn-ok").text('Reject');
+		} else {
+			$(".header-text").text('Confirm Approve?');
+			$(".body-text").text('Are you sure! You want to Approve?');
+			$(".btn-ok").text('Approve');
+		}
+		$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 	});
 });

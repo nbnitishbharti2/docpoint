@@ -20,6 +20,7 @@ class PremiumChargeController extends Controller
         try {
             $data['doctor_id'] = $doctor_id;
             $data['premium_charge'] = PremiumCharge::where('doctor_id', $doctor_id)->first();
+            $data['active'] = 'doctors';
             return view('Premium-charge.index', $data);
         } catch(\Exception $e) {
             Log::error("Error in index on PremiumChargeController ". $e->getMessage());

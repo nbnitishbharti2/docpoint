@@ -41,11 +41,9 @@
                                         {{ Str::ucfirst($value->status) }}
                                     </td>
                                     <td>
-                                        @if($value->status != 'Canceled')
-                                            <div class="status-toggle">
-                                                <input type="checkbox" title="Change Status" id="status_{{ $value->id }}" data-id = "{{ $value->id }}" class="appointment check" {{ ($value->status == 'Active')? 'checked': '' }}>
-                                                <label for="status_{{ $value->id }}" class="checktoggle">checkbox</label>
-                                            </div>
+                                        @if ($value->status == "Active")
+                                            <a href="#" data-href="{{ route('approve.appointment', [$value->id]) }}" class="btn btn-success" title="Approve" data-toggle="modal" data-target="#confirm"><i class="fa fa-check"></i></a>
+                                            <a href="#" data-href="{{ route('reject.appointment', [$value->id]) }}" class="btn btn-danger" title="Reject" data-toggle="modal" data-target="#confirm"><i class="fa fa-times"></i></a>        
                                         @endif
                                     </td>
                                 </tr>
@@ -57,7 +55,21 @@
         </div>
     </div>			
 </div>
-<script>
-    var change_appoinment_status = "{{ route('change.appointment.status') }}";
-</script>
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="header-text"></h4>
+            </div>
+            <div class="modal-body">
+                <p class="body-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <a class="btn btn-danger btn-ok"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<script  src="{{ asset('public/admin/assets/js/custom.js')}}"></script>
 @endsection

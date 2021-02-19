@@ -126,6 +126,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Appointment slots for admin
     Route::get('/appointment-slots', 'AppointmentSlotController@index')->name('appointment.slots');
+    Route::get('/appointment-slots-by-date/{date}', 'AppointmentSlotController@getSlotsByDate')->name('appointment.slots.by.date');
     Route::get('/appointment-slots-edit/{city_id}', 'AppointmentSlotController@edit')->name('appointment.slots.edit');
     Route::post('/appointment-slots-edit/{city_id}', 'AppointmentSlotController@update')->name('appointment.slots.update');
     Route::get('/appointment-slots-delete/{user_id}', 'AppointmentSlotController@delete')->name('appointment.slots.delete');
@@ -134,6 +135,8 @@ Route::group(['middleware' => ['auth']], function () {
    
     // Appointment management
     Route::get('/manage-appointment', 'AppointmentController@index')->name('manage.appointment');
+    Route::get('/approve-appointment/{appointment_id}', 'AppointmentController@approveAppointment')->name('approve.appointment');
+    Route::get('/reject-appointment/{appointment_id}', 'AppointmentController@rejectAppointment')->name('reject.appointment');
 
     // Appointment booking
 
@@ -163,6 +166,8 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
  // Ajax routeson site 
+ Route::post('get-doctor-appoinment-availity', 'DoctorController@getDoctorAvaility')->name('get.doctor.appoinment.availity');
+ Route::post('get-doctor-appoinment-availity-more', 'DoctorController@getDoctorAvailityMore')->name('get.doctor.appoinment.availity.more');
  Route::post('get-doctor-appoinment-slot', 'DoctorController@getDoctorAppoinmentSlot')->name('get.doctor.appoinment.slot');
  Route::post('get-doctor-appoinment-slot-by-date', 'DoctorController@getDoctorAppoinmentSlotByDate')->name('get.doctor.appoinment.slot.by.date');
  Route::post('get-doctor-appoinment-slot-change-type', 'DoctorController@getDoctorAppoinmentSlotChangeType')->name('get.doctor.appoinment.slot.change.type');

@@ -177,7 +177,7 @@
   <script src="{{ asset('public/storage/frontend/js/slick.js') }}"></script>
   <script src="{{ asset('public/admin/assets/plugins/validation/jquery.validate.min.js') }}"></script>
   <script src="{{ asset('public/admin/assets/plugins/validation/additional-methods.min.js') }}"></script>
-  <script src="{{ asset('public/storage/frontend/js/custom.js?v=5') }}"></script>
+  <script src="{{ asset('public/storage/frontend/js/custom.js?v=8') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/viewer.min.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/percent-rating.js') }}"></script>
   <script src="{{ asset('public/storage/frontend/js/bootstrap-tooltip.js') }}"></script>

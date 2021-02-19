@@ -34,11 +34,15 @@ class AppointmentSlots extends Model
 			$slot_count2=AppointmentSlots::where('doctor_id', $id)->where('appointment_type', $sloattype)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d',strtotime($date.'+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->get();
 			//dd($slot_count2[0]->doctor);
 			//dd($slot_count2[0]->appointment_type);
-			if(($slot_count2[0]->appointment_type=='Physical' && $slot_count2[0]->doctor->physical=="Yes") || ($slot_count2[0]->appointment_type=='Video' && $slot_count2[0]->doctor->video=="Yes")){
-				$slot_count = count($slot_count2);
-			}else{
-				$slot_count = 0;
-			}
+			if(count($slot_count2)>0){
+                if(($slot_count2[0]->appointment_type=='Physical' && $slot_count2[0]->doctor->physical=="Yes") || ($slot_count2[0]->appointment_type=='Video' && $slot_count2[0]->doctor->video=="Yes")){
+                        $slot_count = count($slot_count2);
+                    }else{
+                        $slot_count = 0;
+                    }
+                }else{
+                    $slot_count = 0;
+                }
 			
 			$limit=($slot_count>4)?3:4; 
 			$unique_sloat=AppointmentSlots::where('doctor_id', $id)->where('appointment_type', $sloattype)->where('status', 'Available')->whereBetween('slot_date', [$date, date('Y-m-d',strtotime($date.'+3 days'))])->orderBy('slot_time')->groupBy('slot_time')->take($limit)->get(); 

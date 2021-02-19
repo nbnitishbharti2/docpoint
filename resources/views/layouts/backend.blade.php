@@ -16,6 +16,7 @@
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/datatables/datatables.min.css')}}">
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/datatables/dataTables.jqueryui.min.css')}}"/>
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/toast/jquery.toast.css')}}">
+		<link rel="stylesheet" href="{{ asset('public/admin/assets/css/rowReorder.dataTables.css')}}">
 		<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker.min.css') }}"/>
     </head>
     <body>
@@ -203,5 +204,6 @@
 		<script  src="{{ URL::asset('public/admin/assets/js/script.js')}}"></script>
 		<script src="{{ asset('public/storage/frontend/js/bootstrap-datepicker.min.js') }}"></script>
 		<script src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
+		<script src="{{ asset('public/admin/assets/js/dataTables.rowReorder.js') }}"></script>
     </body>
 </html>

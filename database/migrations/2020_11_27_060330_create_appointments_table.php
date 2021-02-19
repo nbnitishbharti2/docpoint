@@ -22,7 +22,7 @@ class CreateAppointmentsTable extends Migration
             $table->enum('patient_type', ['New', 'Existing'])->default('New'); 
             $table->enum('appointment_type', ['In-Person', 'Video'])->default('In-Person');
             $table->date('appointment_date');
-            $table->enum('status', ['Active', 'Canceled', 'Rejected'])->default('Active');
+            $table->enum('status', ['Active', 'Approved', 'Canceled', 'Rejected'])->default('Active');
             $table->dateTime('canceled_at')->nullable();
             $table->dateTime('rejected_at')->nullable();  
             $table->timestamps();

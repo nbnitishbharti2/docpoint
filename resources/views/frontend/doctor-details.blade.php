@@ -15,20 +15,8 @@
                     <!-- doctor detail -->
                     <div class="doctor-detail">
                         <div class="doctor-img-wrap">
-                            <img src="{{ asset('public/storage/frontend/img/user-card.png') }}" alt="doctor image">
+                            <img class="user-img d-desktop-for-phone" src="{{ ($doctors->pic && file_exists('public/storage/images/doctor/'.$doctors->pic)) ? asset('public/storage/images/doctor/'.$doctors->pic) : asset('public/storage/images/doctor/images.jpg') }}" alt="doctor image">
                             <!-- image container -->
-                            <div class="image-container">
-                                <img src="{{ asset('public/storage/frontend/img/user-card.png') }}" alt="doctor image">
-                                <img src="{{ asset('public/storage/frontend/img/img1.jpg') }}" alt="doctor">
-                                <img src="{{ asset('public/storage/frontend/img/img2.jpg') }}" alt="doctor">
-                                <img src="{{ asset('public/storage/frontend/img/img3.jpg') }}" alt="doctor">
-                                <img src="{{ asset('public/storage/frontend/img/img4.jpg') }}" alt="doctor">
-                                <img src="{{ asset('public/storage/frontend/img/img5.jpg') }}" alt="doctor">
-                                <img src="{{ asset('public/storage/frontend/img/img6.jpg') }}" alt="doctor">
-                                <img src="{{ asset('public/storage/frontend/img/img7.jpg') }}" alt="doctor">
-                            </div>
-                            <!-- image container end -->
-                            <h4 class="img-count">8 images</h4>
                         </div>
                         <!-- doctor info -->
                         <div class="doctor-info">
@@ -789,7 +777,6 @@
                             <input type="hidden" name="sloat" id="sloat-doctor-details" value="{{$sloat_id}}">
                         </div>
                         <button class="continue-button" type="submit">Continue booking</button>
-                        <button class="continue-button" data-toggle="tooltip" title="Premium Booking &#013;Premium charge is included in this booking." type="submit">Premium booking</button>
                     </div>
                      </form>
                     <!-- side card end -->
@@ -802,21 +789,20 @@
 
 
 <script type="text/javascript">
-     var slot_url = "{{ route('get.doctor.appoinment.slot') }}";
-     var change_type_slot_url = "{{ route('get.doctor.appoinment.slot.change.type') }}";
-     var doctorlistid=<?php echo json_encode($doctor_id_list); ?>;
-  var new_date=<?php echo date("Ymd",strtotime($date)); ?>;
-   var date_slot_url = "{{ route('get.doctor.appoinment.slot.by.date') }}";
-   var min_date=<?php echo date("Ymd",strtotime(date("d-m-Y"))); ?>;
-   var date_list_start=<?php echo date("Ymd",strtotime($date)); ?>;
-  var date_list_end=<?php echo date("Ymd",strtotime($date.'+3 days')); ?>;
-  var page_type=0;
-  var appoinment_type='<?php echo $appointment_type ?>';
+    var slot_url = "{{ route('get.doctor.appoinment.slot') }}";
+    var change_type_slot_url = "{{ route('get.doctor.appoinment.slot.change.type') }}";
+    var doctorlistid=<?php echo json_encode($doctor_id_list); ?>;
+    var new_date=<?php echo date("Ymd",strtotime($date)); ?>;
+    var date_slot_url = "{{ route('get.doctor.appoinment.slot.by.date') }}";
+    var min_date=<?php echo date("Ymd",strtotime(date("d-m-Y"))); ?>;
+    var date_list_start=<?php echo date("Ymd",strtotime($date)); ?>;
+    var date_list_end=<?php echo date("Ymd",strtotime($date.'+3 days')); ?>;
+    var page_type=0;
+    var appoinment_type='<?php echo $appointment_type ?>';
 
-  function change_wait_rating()
-{
-    alert('hi');
-}
+    function change_wait_rating()
+    {
+        //alert('hi');
+    }
 </script>
-<!-- doctor main detail end -->
 @endsection
