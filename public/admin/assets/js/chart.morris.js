@@ -25,6 +25,34 @@ $(function(){
 	//     resize: true,
 	// 	redraw: true
 	// });
+	console.log(datas);
+	console.log([{ y: '19-02-2021', a: 0, b: 0},
+	{ y: '20-02-2021', a: 0,  b: 0}]);
+	window.mA = Morris.Area({
+	    element: 'morrisArea',
+	    // data: [{ y: '2021-02-19', a: 10, b: 20},
+		// { y: '2021-02-20', a: 30,  b: 20},
+		// { y: '2021-02-21', a: 10, b: 20},
+		// { y: '2021-02-22', a: 30,  b: 20},
+		// { y: '2021-02-23', a: 10, b: 20},
+		// { y: '2021-02-24', a: 30,  b: 20}],
+		data: datas,
+	    xkey: 'date',
+	    ykeys: ['doctor', 'patient'],
+		// xkey: 'y',
+	    // ykeys: ['a', 'b'],
+	    labels: ['Total Doctor', 'Total Patient'],
+	    lineColors:['gray','red'],
+	    lineWidth: 2,
+		behaveLikeLine: true, 
+		pointFillColors:['#ffffff'],
+		pointStrokeColors: ['black'],
+     	fillOpacity: 0.5,
+	    gridTextSize: 10,
+	    hideHover: 'auto',
+	    resize: true,
+		redraw: true
+	});
 	
 	// /* Morris Line Chart */
 	var data = [
@@ -53,8 +81,8 @@ $(function(){
 	// Morris.Area(config);
 	// config.element = 'line-chart';
 	// Morris.Line(config);
-	config.element = 'morrisArea';
-	Morris.Bar(config);
+	// config.element = 'morrisArea';
+	// Morris.Bar(config);
 	// config.element = 'stacked';
 	// config.stacked = true;
 	// Morris.Bar(config);

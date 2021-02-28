@@ -87,7 +87,7 @@ class HomeController extends Controller
                     $doctor = Doctor::whereDate('created_at', $dt->format("d-m-Y"))->count();
                     $patient = Appointment::where('status', 'Approved')->where('appointment_date', $dt->format("d-m-Y"))->count();
                     $data['doctor_patient'][] = [
-                        'date' => $dt->format("d-m-Y"),
+                        'date' => $dt->format("Y-m-d"),
                         'doctor' => $doctor,
                         'patient' => $patient,
                     ];

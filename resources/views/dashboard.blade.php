@@ -231,9 +231,7 @@
     </div>
     <script  src="{{ asset('public/admin/assets/js/custom.js')}}"></script>
     <script>
-        var datas = "{!! $doctor_patient !!}";
-        data = JSON.stringify(datas);
-        value = data.replace(/^"|"$/g, '');
-        console.log(value);
+        var datas = {!! $doctor_patient !!};
+        
     </script>
 @endsection
