@@ -1,6 +1,21 @@
 @extends('layouts.backend')
 @section('content')
 @include('layouts.message')
+ <form method="get" >
+    <div class="row">
+       
+            <div class="col-xl-4 col-sm-6 col-12">
+                <input type="date" id="from" value="{{ $from }}" name="from"  class="form-control">
+            </div>
+            <div class="col-xl-4 col-sm-6 col-12">
+                <input type="date" id="to" name="to" value="{{ $to }}" class="form-control">
+            </div>
+            <div class="col-xl-4 col-sm-6 col-12">
+                <button type="summit" class="btn btn-info">search</button>
+            </div>
+        
+    </div>
+    </form>
     <div class="row">
         <div class="col-xl-4 col-sm-6 col-12">
             <div class="card">
@@ -52,7 +67,7 @@
                             <i class="fe fe-folder"></i>
                         </span>
                         <div class="dash-count">
-                            <h3>$62523</h3>
+                            <h3>${{ $patient_count_revenue }}</h3>
                         </div>
                     </div>
                     <div class="dash-widget-info">
@@ -60,6 +75,69 @@
                         <h6 class="text-muted">Total Revenue</h6>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-warning w-50"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-6 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="dash-widget-header">
+                        <span class="dash-widget-icon text-success">
+                            <i class="fe fe-credit-card"></i>
+                        </span>
+                        <div class="dash-count">
+                            <h3>{{ $patient_count_accepted }}</h3>
+                        </div>
+                    </div>
+                    <div class="dash-widget-info">
+
+                        <h6 class="text-muted">Total Accepted</h6>
+                        <div class="progress progress-sm">
+                            <div class="progress-bar bg-success w-50"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-6 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="dash-widget-header">
+                        <span class="dash-widget-icon text-info">
+                            <i class="fe fe-credit-card"></i>
+                        </span>
+                        <div class="dash-count">
+                            <h3>{{ $patient_count_recected }}</h3>
+                        </div>
+                    </div>
+                    <div class="dash-widget-info">
+
+                        <h6 class="text-muted">Total Pending</h6>
+                        <div class="progress progress-sm">
+                            <div class="progress-bar bg-info w-50"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-6 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="dash-widget-header">
+                        <span class="dash-widget-icon text-danger">
+                            <i class="fe fe-credit-card"></i>
+                        </span>
+                        <div class="dash-count">
+                            <h3>{{ $patient_count }}</h3>
+                        </div>
+                    </div>
+                    <div class="dash-widget-info">
+
+                        <h6 class="text-muted">Total Rejected</h6>
+                        <div class="progress progress-sm">
+                            <div class="progress-bar bg-danger w-50"></div>
                         </div>
                     </div>
                 </div>
@@ -81,6 +159,7 @@
                             <thead>
                                 <tr>
                                     <th>Patient Name</th>
+                                    <th>Mobile No</th>
                                     <th>Purpose</th>
                                     <th>Patient Type</th>
                                     <th>Apointment Type</th>
@@ -93,6 +172,7 @@
                                 @foreach($appointments as $value)
                                     <tr>
                                         <td>{{ Str::ucfirst($value->user->name) }}</td>
+                                        <td>{{ ($value->user->mobile) }}</td>
                                         <td>{{ Str::ucfirst($value->reason->name) }}</td>
                                         <td>{{ Str::ucfirst($value->patient_type) }}</td>
                                         <td>{{ Str::ucfirst($value->appointment_type) }}</td>

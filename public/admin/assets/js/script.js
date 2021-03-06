@@ -106,10 +106,10 @@
     // Datatable
 
     if ($('.datatable').length > 0) {
-        $('.datatable').DataTable({
+        $('.datatable').DataTable({ 
 			"bFilter": true,
-			"sort":false,
-			"filter": true,
+			"sort":true,
+			"filter": true, 
         });
     }
 	

@@ -21,6 +21,7 @@
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Name</th>
+                                <th>Mobile</th>
                                 <th>Reason</th>
                                 <th>Patient Type</th>
                                 <th>Appointment Type</th>
@@ -34,7 +35,9 @@
                                     <td>{{ date("d-m-Y", strtotime($value->appointment_date)) }}</td>
                                     <td>{{ date("h:i A", strtotime($value->appointment_slot->slot_time)) }}</td>
                                     <td>{{ Str::ucfirst($value->user->name) }}</td>
+                                    <td>{{ ($value->user->mobile) }}</td>
                                     <td>{{ Str::ucfirst($value->reason->name) }}</td>
+
                                     <td>{{ Str::ucfirst($value->patient_type) }}</td>
                                     <td>{{ Str::ucfirst($value->appointment_type) }}</td>
                                     <td> 
@@ -72,4 +75,6 @@
     </div>
 </div>
 <script  src="{{ asset('public/admin/assets/js/custom.js')}}"></script>
+
+
 @endsection

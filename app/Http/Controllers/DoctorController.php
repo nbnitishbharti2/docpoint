@@ -343,7 +343,9 @@ class DoctorController extends Controller
         //         ) + SIN(RADIANS(28.6172811)) * SIN(RADIANS(doctors.latitude))
         //     ) AS DECIMAL(10, 2)
         // ) AS distance')->
-        //select CAST(6371 * ACOS( COS(RADIANS(28.6172811))+COS(RADIANS(doctors.latitude)) + COS( RADIANS(doctors.longitude) - RADIANS(82.9739144) ) + SIN(RADIANS(28.6172811)) * SIN(RADIANS(doctors.latitude)) ) AS DECIMAL(10, 2)) AS distance from doctors
+         //select CAST(6371 * ACOS( COS(RADIANS(28.6172811))+COS(RADIANS(doctors.latitude)) - COS( RADIANS(doctors.longitude) - RADIANS(82.9739144) ) + SIN(RADIANS(28.6172811)) * SIN(RADIANS(doctors.latitude)) ) AS DECIMAL(10, 2)) AS distance from doctors
+
+        
          $q= Doctors::whereHas('country', function ($query) use ($request) {
             $query->where('name', $request->search);
         })->orwhereHas('city', function ($query) use ($request) {
@@ -382,15 +384,19 @@ class DoctorController extends Controller
                 $query->whereIn('affiliation_id', $request->affiliation);
             });
         }
+        $q->selectRaw('CAST(6371 * ACOS( COS(RADIANS(28.6172811))+COS(RADIANS(doctors.latitude)) - COS( RADIANS(doctors.longitude) - RADIANS(82.9739144) ) + SIN(RADIANS(28.6172811)) * SIN(RADIANS(doctors.latitude)) ) AS DECIMAL(10, 2)
+        ) AS distance');
+        
         if($request->short==1){
             $data['doctors']=$q->orderBy('id','asc')->get();
         }else if($request->short==2){
-            $data['doctors']=$q->orderBy('avg_rate','desc')->get();
+            $data['doctors']=$q->orderBy('distance','desc')->get();
         }else if($request->short==3){
             $data['doctors']=$q->orderBy('avg_rate','desc')->get();
         }else{
             $data['doctors']=$q->orderBy('id','asc')->get();
         }
+        //dd($data['doctors']);
         // $data['doctors']=$q->orderBy('id','asc')->get();
         // dd($data['doctors']);
         //  $data['doctors'] = Doctors::whereHasMorph(
@@ -436,6 +442,7 @@ class DoctorController extends Controller
         $data['resion'] = $request->resion;
         $data['zip'] = $request->zip;
         $data['date'] = $request->date;
+        $data['short']=(isset($request->short))?$request->short:1;
         $data['resion_list'] = Reason::orderBy('name','asc')->get();
         return view('frontend.doctors', $data);
     }
@@ -580,7 +587,7 @@ class DoctorController extends Controller
                 $data['date']=date("Ymd",strtotime($date . '+14 days'));
             }else if ($request->type == 2) {
                 $date = date("Y-m-d", strtotime($request->availity_date)); 
-                $data['date']=date("Ymd",strtotime($date . '+15 days'));
+                $data['date']=date("Ymd",strtotime($date . '+14 days'));
             }else{ 
                 $new_date = date("Ymd", strtotime($request->availity_date . '-14 days'));
                 if($new_date>$request->min_date){

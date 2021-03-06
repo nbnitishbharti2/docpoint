@@ -41,9 +41,26 @@ class PremiumChargeController extends Controller
                 $premium_charge = new PremiumCharge();
                 $premium_charge->doctor_id = $doctor_id;
             }
-            $premium_charge->amount = $request->amount;
+
+            //$premium_charge->amount = $request->amount;
             $premium_charge->no_of_patient = $request->no_of_patient;
             $premium_charge->premium_patient = $request->premium_patient;
+
+            $premium_charge->physical_normal_charge = ($request->physical_normal_charge!=null)?$request->physical_normal_charge:0.00;
+            
+            $premium_charge->physical_normal_commission_cash = ($request->physical_normal_commission_cash!=null)?$request->physical_normal_commission_cash:0.00;
+            $premium_charge->physical_normal_commission_online = ($request->physical_normal_commission_online!=null)?$request->physical_normal_commission_online:0.00;
+            $premium_charge->physical_premium_charge = ($request->physical_premium_charge!=null)?$request->physical_premium_charge:0.00;
+            $premium_charge->physical_premium_commission_cash = ($request->physical_premium_commission_cash!=null)?$request->physical_premium_commission_cash:0.00;
+            $premium_charge->physical_premium_commission_online = ($request->physical_premium_commission_online!=null)?$request->physical_premium_commission_online:0.00;
+            $premium_charge->video_normal_charge = ($request->video_normal_charge!=null)?$request->video_normal_charge:0.00;
+            $premium_charge->video_normal_commission_cash = ($request->video_normal_commission_cash!=null)?$request->video_normal_commission_cash:0.00;
+            $premium_charge->video_normal_commission_online = ($request->video_normal_commission_online!=null)?$request->video_normal_commission_online:0.00;
+            $premium_charge->video_premium_charge = ($request->video_premium_charge!=null)?$request->video_premium_charge:0.00;
+            $premium_charge->video_premium_commission_cash = ($request->video_premium_commission_cash!=null)?$request->video_premium_commission_cash:0.00;
+            $premium_charge->video_premium_commission_online = ($request->video_premium_commission_online!=null)?$request->video_premium_commission_online:0.00;
+
+
             if($premium_charge->save()) {
                 return redirect()->back()->with('message', 'Premium charge updated successfully');
             }

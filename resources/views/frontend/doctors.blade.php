@@ -218,9 +218,9 @@ $doctor_id_list = array();
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <input name="short" type='text' id="short">
-                    <a class="dropdown-item" onclick="submitform(1);" href="javascript:void(0)">Default Order</a>
-                    <a class="dropdown-item" onclick="submitform(2);" href="javascript:void(0)">Distance</a>
-                    <a class="dropdown-item" onclick="submitform(3);" href="javascript:void(0)">Wait Time Rating</a>
+                    <a class="dropdown-item {{ ($short==1)?'active':'' }}" onclick="submitform(1);" href="javascript:void(0)">Default Order</a>
+                    <a class="dropdown-item {{ ($short==2)?'active':'' }}" onclick="submitform(2);" href="javascript:void(0)">Distance</a>
+                    <a class="dropdown-item {{ ($short==3)?'active':'' }}" onclick="submitform(3);" href="javascript:void(0)">Wait Time Rating</a>
                   </div>
               </li>
               <!-- short by end -->
