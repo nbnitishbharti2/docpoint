@@ -161,6 +161,14 @@ class DoctorController extends Controller
             $data['states'] = State::where('country_id', $data['docDetails']->country_id)->get();
             $data['cities'] = City::where('state_id', $data['docDetails']->state_id)->get();
             $data['active'] = 'doctors';
+            //dd($data);
+
+            $doctor_specialities = \App\Models\DoctorSpacilityMap::where('doctor_id', $id)->get('speciality_id');
+            $data['speciality'] = array();
+            foreach($doctor_specialities as $kay=>$value)
+            {
+              array_push($data['speciality'],$value->speciality_id);
+            }
             return view('Doctor.edit', $data);
         } catch (\Exception $e) {
             Log::error("Error in edit on DoctorController " . $e->getMessage());
@@ -179,6 +187,8 @@ class DoctorController extends Controller
         try {
             $input = $request->all();
             $doctor = Doctors::find($id);
+            // dd($doctor); 
+
             if ($request->has('pic')) { //If picture found
                 $image      = $request->file('pic');
                 $fileName   = time() . '.' . $image->getClientOriginalExtension();
@@ -190,44 +200,101 @@ class DoctorController extends Controller
                 unlink(storage_path('app/public/images/doctor/' . $doctor->pic));
             }
 
-            $userData = array(
-                'name' => $input['name'],
-                'email' => $input['email'],
-                'mobile' => $input['mobile'],
-                'pic' => $input['pic'] ?? '',
-                'status' => ($request->has('status')) ? 'Active' : 'Inactive',
-            );
+            // $userData = array(
+            //     'name' => $input['name'],
+            //     'email' => $input['email'],
+            //     'mobile' => $input['mobile'],
+            //     'pic' => $input['pic'] ?? '',
+            //     'dob' => $input['dob'], //ss
+            //     //'status' => ($request->has('status')) ? 'Active' : 'Inactive', //ss
+            //     'country_id' => $input['country'], //ss
+            //     'state_id' => $input['state'], //ss
+            //     'city_id' => $input['city'], //ss
+            //     'gender_id' => $input['gender'], //ss
+            //     'address' => $input['address'],  //ss
+            //     'zip' => $input['zip'],  //ss
+            // );
 
-            User::where('id', $doctor->user_id)->update($userData);
+            //User::where('id', $doctor->user_id)->update($userData);
+            $user =  User::findOrFail($doctor->user_id);
+            $user->name = $input['name'];
+            $user->email = $input['email'];
+            $user->mobile = $input['mobile'];
+            $user->pic = $input['pic'] ?? '';
+            $user->dob = $input['dob']; //ss
+            //'status' => ($request->has('status')) ? 'Active' : 'Inactive', //ss
+            $user->country_id = $input['country']; //ss
+            $user->state_id = $input['state']; //ss
+            $user->city_id = $input['city']; //ss
+            $user->gender_id = $input['gender']; //ss
+            $user->address = $input['address'];  //ss
+            $user->zip = $input['zip'];  //ss
+            $user->save();
 
-            $doctorData = array(
-                'country_id' => $input['country'],
-                'state_id' => $input['state'],
-                'city_id' => $input['city'],
-                'speciality_id' => $input['speciality'],
-                'gender_id' => $input['gender'],
-                'name' => $input['name'],
-                'about' => $input['about'],
-                'pic' => $input['pic'] ?? '',
-                'mobile' => $input['mobile'],
-                'phone' => $input['phone'],
-                'alt_moblie' => $input['alt_moblie'],
-                'fax' => $input['fax'],
-                'email' => $input['email'],
-                'address' => $input['address'],
-                'zip' => $input['zip'],
-                'latitude' => $input['lat'],
-                'longitude' => $input['long'],
-                'website' => $input['website'],
-                'status' => ($request->has('status')) ? 'Active' : 'Inactive',
-                'physical' => ($request->has('physical')) ? 'Yes' : 'No',
-                'video' => ($request->has('video')) ? 'Yes' : 'No',
-            );
-
-            Doctors::where('id', $id)->update($doctorData);
+            // $doctorData = array(
+            //     'country_id' => $input['country'],
+            //     'state_id' => $input['state'],
+            //     'city_id' => $input['city'],
+            //     //'speciality_id' => $input['speciality'],
+            //     'gender_id' => $input['gender'],
+            //     'name' => $input['name'],
+            //     'about' => $input['about'],
+            //     'pic' => $input['pic'] ?? '',
+            //     'mobile' => $input['mobile'],
+            //     'phone' => $input['phone'],
+            //     'alt_moblie' => $input['alt_moblie'],
+            //     'fax' => $input['fax'],
+            //     'email' => $input['email'],
+            //     'dob' => $input['dob'], //ss
+            //     'address' => $input['address'],
+            //     'zip' => $input['zip'],
+            //     'latitude' => $input['lat'],
+            //     'longitude' => $input['long'],
+            //     'website' => $input['website'],
+            //     //'status' => ($request->has('status')) ? 'Active' : 'Inactive', //ss
+            //     'physical' => ($request->has('physical')) ? 'Yes' : 'No',
+            //     'video' => ($request->has('video')) ? 'Yes' : 'No',
+            // );
+            //Doctors::where('id', $id)->update($doctorData); //ss
+            $doctor = Doctors::findOrFail($id);
+            $doctor->country_id = $input['country'];
+            $doctor->state_id = $input['state'];
+            $doctor->city_id = $input['city'];
+            //'speciality_id' => $input['speciality'],
+            $doctor->gender_id = $input['gender'];
+            $doctor->name = $input['name'];
+            $doctor->about = $input['about'];
+            $doctor->pic = $input['pic'] ?? '';
+            $doctor->mobile = $input['mobile'];
+            $doctor->phone = $input['phone'];
+            $doctor->alt_moblie = $input['alt_moblie'];
+            $doctor->fax = $input['fax'];
+            $doctor->email = $input['email'];
+            $doctor->dob = $input['dob']; //ss
+            $doctor->address = $input['address'];
+            $doctor->zip = $input['zip'];
+            $doctor->latitude = $input['lat'];
+            $doctor->longitude = $input['long'];
+            $doctor->website = $input['website'];
+            //'status' => ($request->has('status')) ? 'Active' : 'Inactive', //ss
+            $doctor->physical = ($request->has('physical')) ? 'Yes' : 'No';
+            $doctor->video = ($request->has('video')) ? 'Yes' : 'No';
+            $doctor->save();
+            $doctor_id = $doctor->id; //ss
             if(CommanHelper::userRole() == "Admin") {
                 return redirect('doctor-list')->with('message', 'Doctor details updated successfully');
             }
+
+            //update speciality
+            $doctor_specialities = \App\Models\DoctorSpacilityMap::where('doctor_id',$id)->delete();
+            $speciality_ids=$request->speciality_id;
+            $specialities_data=array();
+            foreach($speciality_ids as $speciality_id) {
+                $specialities_data[]= new \App\Models\DoctorSpacilityMap(array('doctor_id'=>$doctor_id,'speciality_id'=>$speciality_id));
+            }
+            //doctorSpacilityMap() is defined on doctor model
+            $doctor->doctorSpacilityMap()->saveMany($specialities_data);   
+
             return redirect('dashboard')->with('message', 'Profile updated successfully');
         } catch (\Exception $e) {
             Log::error("Error in update on DoctorController " . $e->getMessage());
@@ -292,6 +359,12 @@ class DoctorController extends Controller
                 return redirect('doctor-list')->with('error', 'Details not found');
             }
             $doctor->sponsored = $request->sponsored;
+            if($request->sponsored == 'Yes'){
+                $doctor->request_for_sponsored = Doctors::ACCEPTED;
+            }
+            if($request->sponsored == 'No'){
+                $doctor->request_for_sponsored = Doctors::CANCELLED;
+            }
             $doctor->save();
             return Response::json(array('status' => true, 'msg' => 'Status changed successfully.'));
         } catch (\Exception $e) {
@@ -1096,5 +1169,29 @@ class DoctorController extends Controller
             Log::error("Error in changeRegisteredDoctorStatus on DoctorController " . $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
         }
+    }
+
+    public function sponsoredRequest(Request $request)
+    {
+        try {
+            $doctor = Doctors::findOrFail($request->doctor_id);
+            $doctor->request_for_sponsored = $request->sponsored_request;
+            $doctor->save();
+            return redirect()->back()->with('message', 'Sponsored request sent successfully');
+        } catch (\Exception $e) {
+            Log::error("Error in sponsoredRequest on DoctorController " . $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+
+    public function SponsoredRequestListing()
+    {
+        try {
+            $data['sponsored_requests'] = Doctors::with('speciality')->where('request_for_sponsored',Doctors::SENT)->orderBy('id', 'desc')->get();
+            $data['active'] = 'sponsored_request';
+            return view('Doctor.sponsered_request_list', $data);;
+        } catch (\Exception $e) {
+            Log::error("Error in SponsoredRequestListing on DoctorController " . $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');        }
     }
 }

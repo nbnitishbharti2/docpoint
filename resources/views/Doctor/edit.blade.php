@@ -20,6 +20,7 @@
 								@enderror
 							</div>
 						</div>
+
 						<div class="form-group row">
 							<label class="col-form-label col-md-2">Email*</label>
 							<div class="col-md-10">
@@ -31,14 +32,34 @@
 						</div>
 
 						<div class="form-group row">
+							<label class="col-form-label col-md-2">DOB</label>
+							<div class="col-md-10">
+								<input name="dob" type="date" class="form-control" value="{{ old('dob', $docDetails->dob) }}">
+								@error('dob')
+									<span class="text-danger">{{ $message }}</span>
+								@enderror
+							</div>
+						</div>
+
+						<div class="form-group row">
 							<label class="col-form-label col-md-2">Specialty*</label>
 							<div class="col-md-10">
-								<select name ="speciality" class="form-control" value="{{ old('speciality') }}">
+								<!-- <select name ="speciality" class="form-control" value="{{-- old('speciality') --}}">
 									<option>Select Specialty</option>
-									@foreach ($specialities as $speciality)
-										<option value="{{ $speciality->id }}" {{ ($docDetails->speciality_id == $speciality->id ? "selected":"") }}> {{ $speciality->spec_name }}</option>
-									@endforeach
-								</select>
+									{{-- @foreach ($specialities as $speciality) --}}
+										<option value="{{-- $speciality->id --}}" {{-- ($docDetails->speciality_id == $speciality->id ? "selected":"") --}}> {{-- $speciality->spec_name --}}</option>
+									{{-- @endforeach --}}
+								</select> -->
+
+								 <br/>
+                                        @php 
+                                            $get_specialities = \App\Models\Speciality::getSpecialities(); 
+                                        @endphp
+
+                                        @foreach($get_specialities as $key=>$specialities)
+                                        <input type="checkbox" name="speciality_id[]" value="{{$key}}" {{in_array($key,$speciality)?'checked':''}} @php if(in_array($key,old('speciality_id',array()))){ echo "checked";}@endphp >
+                                        <label for="">{{$specialities}}</label><br/>
+                                        @endforeach 
 								@error('speciality')
 									<span class="text-danger">{{ $message }}</span>
 								@enderror
@@ -83,6 +104,7 @@
 								@enderror
 							</div>
 						</div>
+
 						<div class="form-group row">
 							<label class="col-form-label col-md-2">Gender*</label>
 							<div class="col-md-10">
@@ -216,9 +238,9 @@
 							<label class="col-form-label col-md-2">Status</label>
 							<div class="col-md-10">
 								<div class="checkbox">
-									<label>
-										<input name="status" type="checkbox" {{ ($docDetails->status === 'Active')?"checked":'' }}>&nbsp;Status&nbsp;&nbsp;&nbsp;
-									</label>
+									<!-- <label>
+										<input name="status" type="checkbox" {{-- ($docDetails->status === 'Active')?"checked":'' --}}>&nbsp;Status&nbsp;&nbsp;&nbsp;
+									</label> -->
 									<label>
 										<input name="physical" type="checkbox" {{ ($docDetails->physical === 'Yes')?"checked":'' }}>&nbsp; Physical&nbsp;&nbsp;&nbsp;
 									</label>

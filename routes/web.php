@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // review 
     Route::post('/add-review', 'ReviewController@addReview')->name('add.review');
+
     // Doctor Routes
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
     Route::get('/doctor-list', 'DoctorController@index')->name('doctor.index');
@@ -66,6 +67,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/store-holiday', 'DoctorController@storeHoliday')->name('store.holiday');
     Route::get('/delete-holiday/{holiday_id}', 'DoctorController@deleteHoliday')->name('delete.holiday');
     Route::get('/registered-doctor', 'DoctorController@registeredDoctor')->name('registered.doctor');
+    Route::get('/doctor-sponsoredRequest','DoctorController@sponsoredRequest')->name('doctor.sponsoredRequest');
 
     // Speciality route
     Route::get('/speciality-add/', 'SpecialityController@add')->name('Speciality.add');
@@ -74,6 +76,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/speciality-edit/{specId}', 'SpecialityController@edit');
     Route::get('/speciality-index', 'SpecialityController@index')->name('Speciality.index');
     Route::get('/speciality-delete/{speciality_id}', 'SpecialityController@delete')->name('speciality.delete');
+
+    //Sponsered Request route
+    Route::get('/doctor-sponsered-request-index', 'DoctorController@SponsoredRequestListing')->name('doctor.sponsored-request.listing');
 
     // Country route
     Route::get('/country-import', 'CountryController@import')->name('country.import');
@@ -138,6 +143,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/approve-appointment/{appointment_id}', 'AppointmentController@approveAppointment')->name('approve.appointment');
     Route::get('/reject-appointment/{appointment_id}', 'AppointmentController@rejectAppointment')->name('reject.appointment');
 
+    // Reason Routes
+    Route::get('/reason-list', 'ReasonController@index')->name('reason.index');
+    Route::get('/reason-add', 'ReasonController@add')->name('reason.add');
+    Route::post('/reason-add', 'ReasonController@store')->name('reason.store');
+    Route::get('reason-edit/{id}', 'ReasonController@edit')->name('reason.edit');
+    Route::post('/reason-edit/{id}', 'ReasonController@update')->name('reason.update');
+    Route::get('/reason-delete/{reason_id}', 'ReasonController@delete')->name('reason.delete');
+
     // Appointment booking
 
     Route::post('/doctor-booking', 'DoctorController@savebooking')->name('doctor.booking.save');
@@ -162,6 +175,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('change-location-status', 'LocalityController@changeStatus')->name('change.location.status');
     Route::post('change-appointment-slots-status', 'AppointmentSlotController@changeStatus')->name('change.appointment.slots.status');
     Route::post('change-appointment-status', 'AppointmentController@changeStatus')->name('change.appointment.status');
+    Route::post('change-reason-status', 'ReasonController@changeStatus')->name('change.reason.status');
+
+    
    
 });
 

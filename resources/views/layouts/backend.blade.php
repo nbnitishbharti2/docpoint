@@ -123,12 +123,15 @@
 					<!-- User Menu -->
 					<li class="nav-item dropdown has-arrow">
 						<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-							<span class="user-img"><img class="rounded-circle" src="{{ URL::asset('public/admin/assets/img/profiles/avatar-01.jpg')}}" width="31" alt="Ryan Taylor"></span>
+							<span class="user-img">
+								<!-- <img class="rounded-circle" src="{{-- URL::asset('public/admin/assets/img/profiles/avatar-01.jpg') --}}" width="31" alt="Ryan Taylor"> -->
+								<img src="{{ (Auth::user()->pic && file_exists('public/storage/images/doctor/'.Auth::user()->pic)) ? asset('public/storage/images/doctor/'.Auth::user()->pic) : asset('public/files/doctor/profile/doctor-icon.png') }}" alt="User Image" class="avatar-img rounded-circle" width="31" >
+							</span>
 						</a>
 						<div class="dropdown-menu">
 							<div class="user-header">
 								<div class="avatar avatar-sm">
-									<img src="{{ URL::asset('public/admin/assets/img/profiles/avatar-01.jpg')}}" alt="User Image" class="avatar-img rounded-circle">
+									<img src="{{ (Auth::user()->pic && file_exists('public/storage/images/doctor/'.Auth::user()->pic)) ? asset('public/storage/images/doctor/'.Auth::user()->pic) : asset('public/files/doctor/profile/doctor-icon.png') }}" alt="User Image" class="avatar-img rounded-circle">
 								</div>
 								<div class="user-text">
 									<h6>{{ Auth::user()->name }}</h6>
@@ -138,8 +141,21 @@
 							@if (Auth::user()->doctors == null)
 								<a class="dropdown-item" href="{{ route('admin.profile', [Auth::user()->id]) }}">My Profile</a>
 							@else
-								<a class="dropdown-item" href="{{ route('doctor.profile', [Auth::user()->doctors->id]) }}">My Profile</a>	
+								<a class="dropdown-item" href="{{ route('doctor.profile', [Auth::user()->doctors->id]) }}">My Profile</a>
+
+								@if(Auth::user()->doctors->request_for_sponsored == 'Not Sent')
+								<a class="dropdown-item" href="{{ route('doctor.sponsoredRequest', ['doctor_id'=>Auth::user()->doctors->id, 'sponsored_request'=>\App\Models\Doctor::SENT]) }}">Request For Sponsored</a>
+								@elseif(Auth::user()->doctors->request_for_sponsored == 'Sent')
+								<a class="dropdown-item" href="javascript:void(0);">Sponsored Request Sent</a>
+								@elseif(Auth::user()->doctors->request_for_sponsored == 'Accepted')
+								<a class="dropdown-item" href="javascript:void(0);">You are sponsered</a>
+								@else
+								<a class="dropdown-item" href="javascript:void(0);">Sponsered request cancelled</a>
+								@endif
+
 							@endif
+
+
 							
 							<a class="dropdown-item" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
 						</div>

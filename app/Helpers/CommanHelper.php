@@ -11,6 +11,10 @@ use Log;
 
 class CommanHelper
 {
+	const No      = 'No';
+	const Yes     = 'Yes';
+	
+
 	/**
 	* Method to check user permission
 	* @param string $permission
@@ -144,4 +148,20 @@ class CommanHelper
 			Log::error('error on sendSMS in CommanHelper '. $th->getMessage());
 		}
 	}
+
+	public static function getPhysicalOption(){
+        return [
+            self::YES => self::YES,
+            self::NO => self::NO,
+        ];
+    }
+
+    public static function getVideoOption(){
+        return [
+            self::YES => self::YES,
+            self::NO => self::NO,
+        ];
+    }
+
+    
 }

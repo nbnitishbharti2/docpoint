@@ -30,7 +30,8 @@ class DoctorRequest extends FormRequest
         return [
             'name' => 'required|min:4|max:40',
             'email' => 'required|email|unique:users,email,'.$user_id.'|unique:doctors,email,'.$doctor_id,
-            'speciality' => 'required',
+            // 'speciality' => 'required',
+            'speciality_id' => 'required',
             'mobile' => 'required|numeric|unique:users,mobile,'.$user_id,
             'gender' => 'required',
             'pic' => 'mimes:jpeg,jpg,png,gif|max:2048',
@@ -43,6 +44,7 @@ class DoctorRequest extends FormRequest
             'alt_moblie' => 'nullable|numeric',
             'fax' => 'nullable|numeric',
             'website' => 'nullable|url',
+            'dob' => 'required|date',
         ];
     }
 

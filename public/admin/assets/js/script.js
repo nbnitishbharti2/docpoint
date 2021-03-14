@@ -711,6 +711,54 @@
 			}
 		});
 	});
+
+	// Chnage Reason Status
+	$('.reason').on("change", function(){
+		var status = '';
+		var reason_id = $(this).attr("data-id");
+		if ($(this).prop('checked')==true){ 
+			status = "Active";
+		} else {
+			status = "New";
+		}
+		$.ajax({
+			url: change_reason_status,
+			method: 'POST',
+			cache: false,
+			data: {reason_id:reason_id,status:status},
+			success: function(data) {
+				if(data.status == true){
+					$.toast({
+						heading: 'Success',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'success',
+						position : 'top-right',
+						hideAfter : 3000,
+					});
+				} else {
+					$.toast({
+						heading: 'Error',
+						text: data.msg,
+						showHideTransition: 'slide',
+						icon: 'error',
+						position : 'top-right',
+						hideAfter : 3000,
+					});
+				}
+			},
+			error: function(error) {
+				$.toast({
+					heading: 'Error',
+					text: error,
+					showHideTransition: 'slide',
+					icon: 'error',
+					position : 'top-right',
+					hideAfter : 3000,
+				});
+			}
+		});
+	});
 })(jQuery);
 
 //Delete doctor show popup function
@@ -812,3 +860,6 @@ function confirm_appoinment_sloats_delete(location_id) {
 	$('#delete-appointment-sloat').attr('href', delete_url);
 	$('#modal-appointment-sloat-delete').modal('show');
 }
+
+
+

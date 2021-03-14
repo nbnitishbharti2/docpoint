@@ -9,7 +9,14 @@ class Doctor extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ["user_id", "country_id", "state_id", "city_id", "speciality_id", "gender_id", "name", "about", "dob", "pic", "mobile", "phone", "alt_moblie", "fax", "email", "address", "zip", "latitude", "longitude", "website", "status"];
+    const NOTSENT = 'Not Sent';    // Request for sponseered
+    const SENT = 'Sent';     // Sponsored request sent
+    const ACCEPTED = 'Accepted';     // You are sponsered
+    const CANCELLED = 'Cancelled';   // Sponsered request cancelled
+    const YES = 'Yes';
+    const NO = 'No';
+
+    protected $fillable = ["user_id", "country_id", "state_id", "city_id", "speciality_id", "gender_id", "name", "about", "dob", "pic", "mobile", "phone", "alt_moblie", "fax", "email", "address", "zip", "latitude", "longitude", "website", "status", "sponsored", "physical", "video", "auto_approved", "request_for_sponsored"];
 
     public function user()
     {
