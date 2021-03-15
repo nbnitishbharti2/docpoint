@@ -1,14 +1,13 @@
 @extends('layouts.backend')
 @section('content')
 @include('layouts.message')
- <form method="get" >
-    <div class="row">
-       
+ <form method="get" style="margin-bottom: 20px;">
+    <div class="row"> 
             <div class="col-xl-4 col-sm-6 col-12">
-                <input type="date" id="from" value="{{ $from }}" name="from"  class="form-control">
+                <input type="text" id="from" value="{{ $from }}" name="from"  class="form-control">
             </div>
             <div class="col-xl-4 col-sm-6 col-12">
-                <input type="date" id="to" name="to" value="{{ $to }}" class="form-control">
+                <input type="text" id="to" name="to" value="{{ $to }}" class="form-control">
             </div>
             <div class="col-xl-4 col-sm-6 col-12">
                 <button type="summit" class="btn btn-info">search</button>
@@ -51,7 +50,7 @@
                     </div>
                     <div class="dash-widget-info">
 
-                        <h6 class="text-muted">Today Appointment</h6>
+                        <h6 class="text-muted">Total Appointment</h6>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-danger w-50"></div>
                         </div>
@@ -67,7 +66,7 @@
                             <i class="fe fe-folder"></i>
                         </span>
                         <div class="dash-count">
-                            <h3>${{ $patient_count_revenue }}</h3>
+                            <h3>₹{{ $patient_count_revenue }}</h3>
                         </div>
                     </div>
                     <div class="dash-widget-info">
@@ -151,7 +150,11 @@
             <!-- Recent Orders -->
             <div class="card card-table">
                 <div class="card-header">
-                    <h4 class="card-title">Today's Appointment</h4>
+                    <h4 class="card-title">@if($today==1)
+                    Today's Appointment
+                @else  
+                {{ date('d-M-Y', strtotime($from)).' To '.date('d-M-Y',strtotime($to)).' Appointment' }}
+            @endif</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive" id="today_appointments">
@@ -241,4 +244,27 @@
 	});
         });
     </script>
+    <script>
+$(function(){
+    $("#from").datepicker({
+        todayBtn:  1,
+        autoclose: true,
+        format: 'dd-mm-yyyy',
+        orientation: 'auto bottom',
+       // startDate: new Date(),
+    }).on('changeDate', function (selected) {
+        var minDate = new Date(selected.date.valueOf());
+        $('#to').datepicker('setStartDate', minDate);
+    });
+
+    $("#to").datepicker({
+        autoclose: true,
+        format: 'dd-mm-yyyy',
+        orientation: 'auto bottom',
+    }).on('changeDate', function (selected) {
+        var maxDate = new Date(selected.date.valueOf());
+        $('#from').datepicker('setEndDate', maxDate);
+    });
+});
+</script>
 @endsection

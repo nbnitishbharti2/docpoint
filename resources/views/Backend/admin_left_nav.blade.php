@@ -26,6 +26,9 @@
                 <li class="{{ ( $active == 'users') ? 'active' : ''}}">
                     <a href="{{ route('users') }}"><i class="fe fe-layout"></i> <span>Manage Users</span></a>
                 </li>
+                <li class="{{ ( $active == 'default-charge') ? 'active' : ''}}">
+                    <a href="{{ route('default.charge') }}"><i class="fe fe-layout"></i> <span>Default cgarge</span></a>
+                </li>
             </ul>
         </div>
     </div>

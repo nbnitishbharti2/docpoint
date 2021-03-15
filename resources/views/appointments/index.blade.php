@@ -1,6 +1,7 @@
 @extends('layouts.backend')
 @section('content')
 @include('layouts.message')
+
 <div class="page-header">
     <div class="row">
         <div class="col-sm-12">

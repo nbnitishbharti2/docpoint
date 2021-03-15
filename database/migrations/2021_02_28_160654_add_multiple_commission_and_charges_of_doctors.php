@@ -14,7 +14,7 @@ class AddMultipleCommissionAndChargesOfDoctors extends Migration
     public function up()
     {
         Schema::table('premium_charge', function (Blueprint $table) {
-           // $table->dropColumn('amount');
+            $table->dropColumn('amount');
            $table->double('physical_normal_charge', 8, 2)->default(0.00)->after('premium_patient');
            $table->double('physical_normal_commission_cash', 8, 2)->default(0.00)->after('premium_patient');
            $table->double('physical_normal_commission_online', 8, 2)->default(0.00)->after('premium_patient');

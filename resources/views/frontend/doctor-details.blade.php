@@ -745,12 +745,14 @@
                                     Normal 
                                 </label>
                             </div> 
+                            @if($premium==1)
                                 <div class="form-check">
                                     <input class="form-check-input" onclick="check_premium()" type="radio" name="booking_type" id="premium_booking" value="Video">
                                     <label class="form-check-label" for="premium_booking">
                                         Premium
                                     </label>
                                 </div> 
+                                @endif
                         </div>
 
                         <h5>Select an available time</h5>

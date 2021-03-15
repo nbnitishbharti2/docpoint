@@ -21,6 +21,8 @@ use App\Models\Role;
 use App\Models\Reason;
 use App\Models\Review;
 use App\Models\Affiliation;
+use App\Models\PremiumCharge;
+use App\Models\DefaultCharge;
 use Response;
 use Log;
 use Auth;
@@ -455,6 +457,7 @@ class DoctorController extends Controller
     public function doctorDetails(int $doctor_id = 0, $sloat_id = '', $date = '')
     {
         try {
+            $data['premium']=$this->checkPremiumAvalibility($sloat_id);
             $data['doctors'] = Doctors::find($doctor_id);
             $data['reason'] = Reason::get();
             $data['popular_reason'] = Appointment::groupBy('reason_id')->orderBy('id', 'desc')->take(5)->get();
@@ -1010,14 +1013,82 @@ class DoctorController extends Controller
     {
 
         try {
-            $data['sloat'] = AppointmentSlots::find($sloat_id);
+            $data['sloat'] = AppointmentSlots::find($sloat_id); 
             if ($data['sloat'] == null) { // If details not found then return
                 return redirect()->back()->with('error', 'Details not found');
-            }
-
+            } 
             return view('frontend.booking', $data);
         } catch (\Exception $e) {
             Log::error("Error in doctorDetails on DoctorController " . $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function paymentOption($id)
+    {
+        try {
+            $data['booking'] = Appointment::find($id);
+             $data['id'] = $id;
+            $data['charge'] = $this->CalculateCharge($data['booking']); 
+            if ($data['booking'] == null) { // If details not found then return 
+                return redirect('/')->with('error', 'Details not found'); 
+            } 
+            return view('frontend.payment-option', $data);
+        } catch (\Exception $e) {
+            Log::error("Error in paymentOption on DoctorController " . $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function paymentOptionsave(Request $request, $id)
+    {
+         try {
+           
+            $data['booking'] = Appointment::find($id); 
+            $data['charge'] = $this->CalculateCharge($data['booking'],$request->payment_type); 
+            if ($data['booking'] == null) { // If details not found then return 
+                return redirect('/')->with('error', 'Details not found'); 
+            } 
+            $data['booking']->total=$data['charge']['charge'];
+            $data['booking']->admin_com=number_format((float)(($data['charge']['charge']*$data['charge']['comm'])/100), 2, '.', '');
+            $data['booking']->doctor_com=$data['booking']->total-$data['booking']->admin_com;
+            if($request->payment_type=='cash'){
+                if($data['booking']->doctors->gender_id==1){
+                    $data['booking']->status='Approved';
+                }
+                $data['booking']->payment_mode='Cash';
+                $data['booking']->payment_status='Done';
+                $data['booking']->admin_due=$data['booking']->admin_com;
+            }
+            $data['booking']->save();
+            if($request->payment_type=='cash'){
+                return redirect('/')->with('message', 'Appontment boocked successfully');
+            }else{
+                $this->paymentOptionOnline($id);
+               return redirect('/')->with('message', 'Appontment boocked successfully'); 
+            }
+           // return view('frontend.payment-option', $data);
+        } catch (\Exception $e) {
+            Log::error("Error in paymentOptionsave on DoctorController " . $e->getMessage());
+            return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
+        }
+    }
+    public function paymentOptionOnline($id)
+    {
+        try { 
+            $data['booking'] = Appointment::find($id);
+            $data['charge'] = $this->CalculateCharge($data['booking'],'online');
+            if ($data['booking'] == null) { // If details not found then return 
+                return redirect('/')->with('error', 'Details not found'); 
+            }   
+            if($data['booking']->doctors->gender_id==1){
+                    $data['booking']->status='Approved';
+            }
+            $data['booking']->payment_mode='Online';
+            $data['booking']->payment_status='Done';
+            $data['booking']->doctor_due=$data['booking']->doctor_com; 
+            $data['booking']->save(); 
+            return redirect('/')->with('message', 'Appontment boocked successfully'); 
+        } catch (\Exception $e) {
+            Log::error("Error in paymentOptionOnline on DoctorController " . $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
         }
     }
@@ -1037,12 +1108,20 @@ class DoctorController extends Controller
                     'appointment_type' => $request->appointment_type,
                     'appointment_date' => $appontment_sloat->slot_date,
                 );
-                if (Appointment::create($apponment)) {
+                $apponment= new Appointment();
+                $apponment->user_id= Auth::user()->id;
+                $apponment->doctor_id= $appontment_sloat->doctor_id;
+                $apponment->appointment_slot_id= $appontment_sloat->id;
+                $apponment->reason_id= $request->resion;
+                $apponment->patient_type= $request->patient_type;
+                $apponment->appointment_type= $request->appointment_type;
+                $apponment->appointment_date= $appontment_sloat->slot_date;
+                if ($apponment->save()) {
                     $appontment_sloat->status = 'Booked';
                     $appontment_sloat->save();
                 }
             }
-            return redirect('/')->with('message', 'Appontment boocked successfully');
+            return redirect()->route('doctor.payment.option', [$apponment->id]); 
         } catch (\Exception $e) {
             Log::error("Error in savebooking on DoctorController " . $e->getMessage());
             return Response::json(array('status' => false, 'msg' => 'Oops! Something went wrong.'));
@@ -1101,6 +1180,85 @@ class DoctorController extends Controller
             return redirect()->back()->with('message', 'Status updated successfully');
         } catch (\Exception $e) {
             Log::error("Error in changeRegisteredDoctorStatus on DoctorController " . $e->getMessage());
+            return back()->with('error', 'Oops! Something went wrong.');
+        }
+    }
+    public function CalculateCharge($booking, $type='')
+    {
+        $data=PremiumCharge::where('doctor_id',$booking->doctor_id)->first();
+        $amt_name='';
+        $amt=array();
+        if($booking->appointment_type=='In-Person'){
+             $amt_name='physical_';
+        }else{
+            $amt_name='video_';
+        }
+        if($booking->booking_type=='Normal'){
+             $amt_name .='normal_';
+        }else{
+            $amt_name .='premium_';
+        }
+        $comm='';
+        if($type!=''){
+            $comm=$amt_name.'commission_';
+            if($type=='online'){
+                $comm .='online';
+            }else{
+                $comm .='cash';
+            }
+        }
+        $status_online=$amt_name.'commission_online_status';
+        $status_cash=$amt_name.'commission_cash_status';
+         $amt_name .='charge';
+        if($data==null){
+            $data=DefaultCharge::find(1);
+             if($comm!=''){
+                $amt['comm']=$data->$comm;
+            }
+            $amt['charge']=$data->$amt_name;
+            $amt['status_cash']=$data->$status_cash;
+            $amt['status_online']=$data->$status_online;
+        }else{
+            if($comm!=''){
+                $amt['comm']=$data->$comm;
+            }
+            $amt['charge']=$data->$amt_name;
+            $amt['status_cash']=$data->$status_cash;
+            $amt['status_online']=$data->$status_online;
+        }
+       return $amt; 
+    }
+    public function checkPremiumAvalibility($sloat_id='')
+    {
+       try {
+            if($sloat_id==''){
+                return 0;
+            }else{
+                $sloat_data=AppointmentSlots::find($sloat_id);
+                if($sloat_data==null){
+                   return 0; 
+                }else{
+                    $premum_data=PremiumCharge::where('doctor_id',$sloat_data->doctor_id)->first();
+                    if($premum_data==null){
+                       return 0; 
+                    }else{
+                        $no_of_patient=$premum_data->no_of_patient;
+                        $premium_patient=$premum_data->premium_patient;
+                        $normal_total=Appointment::where('doctor_id',$sloat_data->doctor_id)->where('payment_status','Done')->where('booking_type','Normal')->where('payment_status','Done')->where('appointment_date',$sloat_data->slot_date)->count();
+                        $premium_total=Appointment::where('doctor_id',$sloat_data->doctor_id)->where('payment_status','Done')->where('booking_type','Premium')->where('payment_status','Done')->where('appointment_date',$sloat_data->slot_date)->count(); 
+
+                       $premium_allowed= (((int) ($normal_total/$no_of_patient))+1)* $premium_patient;
+                        if($premium_allowed>$premium_total){
+                            return 1;
+                        }else{
+                            return 0;
+                        } 
+                    }
+                }  
+            }
+            
+        } catch (\Exception $e) {
+            Log::error("Error in checkPremiumAvalibility on DoctorController " . $e->getMessage());
             return back()->with('error', 'Oops! Something went wrong.');
         }
     }

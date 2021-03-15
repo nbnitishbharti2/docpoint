@@ -1293,3 +1293,8 @@ ul.multiselect-container.dropdown-menu.show{display: block;}
 .modal.show#exampleModalScrollable1 {
     display: flex!important;
 }
+.buttons-html5{
+    background: #1b5a90;
+    border-radius: 15px;
+    margin-right: 3px;
+}

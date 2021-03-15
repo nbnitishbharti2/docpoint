@@ -56,14 +56,17 @@ class HomeController extends Controller
         try {
             $from_date=date("Y-m-d");
             $to_date=date("Y-m-d");
+            $data['today']=1;
             if(isset($request->from)){
-                $from_date=$request->from;
+               $data['today']=0;
+                $from_date=date("Y-m-d", strtotime($request->from)); 
             }
             if(isset($request->to)){
-                $to_date=$request->to;
+                $data['today']=0;
+                $to_date=date("Y-m-d", strtotime($request->to));
             }
-            $data['from']=$from_date;
-            $data['to']=$to_date;
+            $data['from']=date("d-m-Y", strtotime($from_date));
+            $data['to']=date("d-m-Y", strtotime($to_date));
             $docData = Doctor::get()->where('status', 'Active');
             $data['doc_count'] = count($docData);
             $data['total_appointment_count'] = Appointment::where('status', 'Approved')->orWhere('status', 'Active')->count();
@@ -74,7 +77,7 @@ class HomeController extends Controller
             $data['active'] = "dashboard";
             if (Auth::user()->doctors) {
                 // /where('appointment_date', now())->
-                $data['appointments'] = Appointment::where('doctor_id', Auth::user()->doctors->id)->with('user', 'appointment_slot', 'reason')->whereBetween('appointment_date', [$from_date, $to_date])->get();
+                $data['appointments'] = Appointment::where('doctor_id', Auth::user()->doctors->id)->with('user', 'appointment_slot', 'reason')->whereBetween('appointment_date', [$from_date, $to_date])->orderBy('id','desc')->take(15)->get();
                 $data['patient_count'] = Appointment::where('doctor_id', Auth::user()->doctors->id)->where('status', 'Approved')->whereBetween('appointment_date', [$from_date, $to_date])->groupBy('user_id')->get();
                 $data['patient_count_revenue'] = Appointment::where('doctor_id', Auth::user()->doctors->id)->where('status', 'Approved')->whereBetween('appointment_date', [$from_date, $to_date])->sum('appointment_slot_id'); 
                 $data['patient_count_accepted'] = Appointment::where('doctor_id', Auth::user()->doctors->id)->where('status', 'Approved')->whereBetween('appointment_date', [$from_date, $to_date])->count();

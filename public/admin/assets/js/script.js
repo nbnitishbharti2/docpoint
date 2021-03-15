@@ -105,13 +105,27 @@
 	
     // Datatable
 
-    if ($('.datatable').length > 0) {
-        $('.datatable').DataTable({ 
-			"bFilter": true,
-			"sort":true,
-			"filter": true, 
-        });
-    }
+   //  if ($('.datatable').length > 0) {
+   //      $('.datatable').DataTable({ 
+			// "bFilter": true,
+			// "sort":false,
+			// "filter": true, 
+   //      });
+   //  }
+  	$.extend($.fn.dataTable.defaults, {
+	  dom: 'Bfrtip',
+	  buttons: [ 'pdf','csv']
+	});
+
+	$(".datatable").DataTable();
+  // 	$('.datatable').DataTable();
+  //   $('.datatable').DataTable( {
+  //      	dom: 'Bfrtip',
+	 //  	buttons: [
+  //   'copy', 'excel', 'pdf'
+  // ]
+  //   });
+ 
 	
 	// Email Inbox
 
