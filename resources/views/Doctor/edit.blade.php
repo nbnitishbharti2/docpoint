@@ -60,7 +60,7 @@
                                         <input type="checkbox" name="speciality_id[]" value="{{$key}}" {{in_array($key,$speciality)?'checked':''}} @php if(in_array($key,old('speciality_id',array()))){ echo "checked";}@endphp >
                                         <label for="">{{$specialities}}</label><br/>
                                         @endforeach 
-								@error('speciality')
+								@error('speciality_id')
 									<span class="text-danger">{{ $message }}</span>
 								@enderror
 							</div>
@@ -225,6 +225,26 @@
 						</div>
 
 						<div class="form-group row">
+                            <label class="col-form-label col-md-2">New Password</label>
+                            <div class="col-md-10">
+                            	<input type="password" id="password" name="password" class="form-control">
+                            	@error('password')
+									<span class="text-danger">{{ $message }}</span>
+								@enderror
+							</div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-form-label col-md-2">Confirm Password</label>
+                            <div class="col-md-10">
+                            	<input type="password" name="password_confirmation" class="form-control">
+                            	@error('password_confirmation')
+									<span class="text-danger">{{ $message }}</span>
+								@enderror
+							</div>
+                        </div>
+                                   
+						<div class="form-group row">
 							<label class="col-form-label col-md-2">Website</label>
 							<div class="col-md-10">
 								<input name="website" type="text" class="form-control"
@@ -242,10 +262,10 @@
 										<input name="status" type="checkbox" {{-- ($docDetails->status === 'Active')?"checked":'' --}}>&nbsp;Status&nbsp;&nbsp;&nbsp;
 									</label> -->
 									<label>
-										<input name="physical" type="checkbox" {{ ($docDetails->physical === 'Yes')?"checked":'' }}>&nbsp; Physical&nbsp;&nbsp;&nbsp;
+										<input name="physical" type="checkbox" value="{{ old('physical', $docDetails->physical) }}" {{ old('physical', $docDetails->physical === 'Yes')?"checked":'' }} >&nbsp; Physical&nbsp;&nbsp;&nbsp;
 									</label>
 									<label>
-										<input name="video" type="checkbox" {{ ($docDetails->video === 'Yes')?"checked":'' }}>&nbsp; Video&nbsp;&nbsp;&nbsp;
+										<input name="video" type="checkbox" value="{{ old('video', $docDetails->video) }}" {{ old('video', $docDetails->video === 'Yes')?"checked":'' }}>&nbsp; Video&nbsp;&nbsp;&nbsp;
 									</label>
 								</div>
 							</div>

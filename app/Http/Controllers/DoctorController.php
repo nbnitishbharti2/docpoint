@@ -229,6 +229,9 @@ class DoctorController extends Controller
             $user->gender_id = $input['gender']; //ss
             $user->address = $input['address'];  //ss
             $user->zip = $input['zip'];  //ss
+            if($request->has('password')){
+                $user->password = Hash::make($request->password);  //ss
+            }
             $user->save();
 
             // $doctorData = array(
@@ -281,9 +284,6 @@ class DoctorController extends Controller
             $doctor->video = ($request->has('video')) ? 'Yes' : 'No';
             $doctor->save();
             $doctor_id = $doctor->id; //ss
-            if(CommanHelper::userRole() == "Admin") {
-                return redirect('doctor-list')->with('message', 'Doctor details updated successfully');
-            }
 
             //update speciality
             $doctor_specialities = \App\Models\DoctorSpacilityMap::where('doctor_id',$id)->delete();
@@ -293,7 +293,11 @@ class DoctorController extends Controller
                 $specialities_data[]= new \App\Models\DoctorSpacilityMap(array('doctor_id'=>$doctor_id,'speciality_id'=>$speciality_id));
             }
             //doctorSpacilityMap() is defined on doctor model
-            $doctor->doctorSpacilityMap()->saveMany($specialities_data);   
+            $doctor->doctorSpacilityMap()->saveMany($specialities_data); 
+
+            if(CommanHelper::userRole() == "Admin") {
+                return redirect('doctor-list')->with('message', 'Doctor details updated successfully');
+            }  
 
             return redirect('dashboard')->with('message', 'Profile updated successfully');
         } catch (\Exception $e) {

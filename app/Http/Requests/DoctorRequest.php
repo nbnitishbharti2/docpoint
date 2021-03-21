@@ -32,7 +32,7 @@ class DoctorRequest extends FormRequest
             'email' => 'required|email|unique:users,email,'.$user_id.'|unique:doctors,email,'.$doctor_id,
             // 'speciality' => 'required',
             'speciality_id' => 'required',
-            'mobile' => 'required|numeric|unique:users,mobile,'.$user_id,
+            'mobile' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|digits:10|unique:users,mobile,'.$user_id,
             'gender' => 'required',
             'pic' => 'mimes:jpeg,jpg,png,gif|max:2048',
             'country' => 'required',
@@ -40,12 +40,14 @@ class DoctorRequest extends FormRequest
             'city' => 'required',
             'address' => 'required|min:5|max:200',
             'zip' => 'numeric',
-            'phone' => 'nullable|numeric',
+            'phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|digits:10|unique:doctors,phone,'.$doctor_id,
             'alt_moblie' => 'nullable|numeric',
             'fax' => 'nullable|numeric',
             'website' => 'nullable|url',
             'dob' => 'required|date',
+            'password' => 'nullable|confirmed|min:6',
         ];
+
     }
 
     public function messages()
