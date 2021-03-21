@@ -10,14 +10,21 @@
         <link rel="stylesheet" href="{{ URL::asset('public/admin/assets/css/feathericon.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('public/admin/assets/plugins/morris/morris.css') }}">
 		<link rel="stylesheet" href="{{ URL::asset('public/admin/assets/css/style.css') }}">
-		<link rel="stylesheet" href="{{ URL::asset('public/admin/assets/css/custom.css?v=1') }}">
+		<link rel="stylesheet" href="{{ URL::asset('public/admin/assets/css/custom.css?v=2') }}">
 		<meta name="csrf-token" content="{{ csrf_token() }}" />
 		<script src="{{ URL::asset('public/admin/assets/js/jquery-3.2.1.min.js') }}"></script>
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/datatables/datatables.min.css')}}">
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/datatables/dataTables.jqueryui.min.css')}}"/>
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/toast/jquery.toast.css')}}">
 		<link rel="stylesheet" href="{{ asset('public/admin/assets/css/rowReorder.dataTables.css')}}">
-		<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker.min.css') }}"/>
+		<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker.min.css') }}" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous"/>
+		 
+		<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker.standalone.min.css') }}" integrity="sha512-TQQ3J4WkE/rwojNFo6OJdyu6G8Xe9z8rMrlF9y7xpFbQfW5g8aSWcygCQ4vqRiJqFsDsE1T6MoAOMJkFXlrI9A==" crossorigin="anonymous" />
+
+		<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker3.min.css') }}" integrity="sha512-rxThY3LYIfYsVCWPCW9dB0k+e3RZB39f23ylUYTEuZMDrN/vRqLdaCBo/FbvVT6uC2r0ObfPzotsfKF9Qc5W5g==" crossorigin="anonymous" />
+
+		<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker3.standalone.min.css') }}" integrity="sha512-p4vIrJ1mDmOVghNMM4YsWxm0ELMJ/T0IkdEvrkNHIcgFsSzDi/fV7YxzTzb3mnMvFPawuIyIrHcpxClauEfpQg==" crossorigin="anonymous" />
+	 
     </head>
     <body>
         <div class="main-wrapper">
@@ -199,7 +206,18 @@
 				}
 			});
 		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+		<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+		<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 		<script  src="{{ URL::asset('public/admin/assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+		<script type="text/javascript"></script>
+		<script  src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.bootstrap.min.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.1.0/js/buttons.html5.min.js"></script>
+		
+		
+		
+
 		<!-- Bootstrap Core JS -->
 		<script src="{{ URL::asset('public/admin/assets/js/popper.min.js')}}"></script>
 		<script src="{{ URL::asset('public/admin/assets/js/bootstrap.min.js')}}"></script>
@@ -217,9 +235,12 @@
 		<script src="{{ asset('public/admin/assets/plugins/validation/additional-methods.min.js') }}"></script>
 		<script src="{{ asset('public/admin/assets/plugins/toast/jquery.toast.js') }}"></script>
 		<!-- Custom JS -->
-		<script  src="{{ URL::asset('public/admin/assets/js/script.js')}}"></script>
+		<script  src="{{ URL::asset('public/admin/assets/js/script.js?v=2')}}"></script>
 		<script src="{{ asset('public/storage/frontend/js/bootstrap-datepicker.min.js') }}"></script>
 		<script src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
-		<script src="{{ asset('public/admin/assets/js/dataTables.rowReorder.js') }}"></script>
+		{{-- <script src="{{ asset('public/admin/assets/js/dataTables.rowReorder.js') }}"></script> --}}
+
+	 
+
     </body>
 </html>

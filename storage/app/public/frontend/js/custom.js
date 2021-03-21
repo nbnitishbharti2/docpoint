@@ -106,9 +106,9 @@ function more_desktop(id, date, slottype) {
 }
 function setsloat2(id) { 
 	var old_val=$("#sloat-doctor-details").val();
-	 $("#sloat-doctor-details").val(id); 
-	 $("#li_"+id).addClass("active");
+	 $("#sloat-doctor-details").val(id);  
 	 $("#li_"+old_val).removeClass("active");
+	  $("#li_"+id).addClass("active");
 }
 
 function more_desktop_date(type) {

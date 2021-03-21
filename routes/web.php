@@ -154,11 +154,16 @@ Route::group(['middleware' => ['auth']], function () {
     // Appointment booking
 
     Route::post('/doctor-booking', 'DoctorController@savebooking')->name('doctor.booking.save');
+    Route::get('/payment-option/{id}', 'DoctorController@paymentOption')->name('doctor.payment.option');
+    Route::post('/payment-option-save/{id}', 'DoctorController@paymentOptionsave')->name('doctor.payment.option.save');
+    Route::get('/payment-option-online/{id}', 'DoctorController@paymentOptionOnline')->name('doctor.payment.option.online');
 
     // Premium Charges Routes
     Route::get('/premium-charge/{doctor_id}', 'PremiumChargeController@index')->name('premium.charge');
     Route::post('/update-premium-charge/{doctor_id}', 'PremiumChargeController@update')->name('update.premium.charge');
     Route::get('/premium-charge-delete/{doctor_id}', 'PremiumChargeController@delete')->name('premium.charge.delete');
+     Route::get('/default-charge', 'PremiumChargeController@default')->name('default.charge');
+     Route::post('/update-default-charge', 'PremiumChargeController@updateDefault')->name('update.default.charge');
     // Ajax Routes
     Route::post('get-state', 'StateController@getStateOfCountry')->name('get.country.state');
     Route::post('get-city', 'CityController@getCityOfState')->name('get.state.city');

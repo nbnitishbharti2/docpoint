@@ -26,11 +26,16 @@
                 <li class="{{ ( $active == 'users') ? 'active' : ''}}">
                     <a href="{{ route('users') }}"><i class="fe fe-layout"></i> <span>Manage Users</span></a>
                 </li>
+
                 <li class="{{ ( $active == 'reason') ? 'active' : ''}}">
                     <a href="{{ route('reason.index') }}"><i class="fe fe-calendar"></i> <span>Manage Reasons</span></a>
                 </li>
                 <li class="{{ ( $active == 'sponsored_requests') ? 'active' : ''}}">
                     <a href="{{ route('doctor.sponsored-request.listing') }}"><i class="fe fe-calendar"></i> <span>Manage Sponsored Requests</span></a>
+
+                <li class="{{ ( $active == 'default-charge') ? 'active' : ''}}">
+                    <a href="{{ route('default.charge') }}"><i class="fe fe-layout"></i> <span>Default Charge</span></a>
+
                 </li>
             </ul>
         </div>

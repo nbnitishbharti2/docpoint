@@ -704,13 +704,13 @@
                         <h5>Has the patient seen this doctor before?</h5>
                         <div class="seen-check">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="patient_type" id="yes" value="New" checked>
+                                <input class="form-check-input" type="radio" name="patient_type" id="yes"  value="Existing"  checked>
                                 <label class="form-check-label" for="yes">
                                     Yes
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="patient_type" id="no" value="Existing">
+                                <input class="form-check-input" type="radio" name="patient_type" id="no" value="New">
                                 <label class="form-check-label" for="no">
                                     No
                                 </label>
@@ -745,12 +745,14 @@
                                     Normal 
                                 </label>
                             </div> 
+                            @if($premium==1)
                                 <div class="form-check">
                                     <input class="form-check-input" onclick="check_premium()" type="radio" name="booking_type" id="premium_booking" value="Video">
                                     <label class="form-check-label" for="premium_booking">
                                         Premium
                                     </label>
                                 </div> 
+                                @endif
                         </div>
 
                         <h5>Select an available time</h5>

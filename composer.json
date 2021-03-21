@@ -19,6 +19,7 @@
         "php-http/guzzle6-adapter": "^2.0",
         "php-http/httplug-bundle": "^1.19",
         "pulkitjalan/geoip": "^5.1",
+        "razorpay/razorpay": "^2.5",
         "yadahan/laravel-authentication-log": "^1.3"
     },
     "require-dev": {

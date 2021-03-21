@@ -24,7 +24,7 @@ class PremiumChargeRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount' => 'required',
+            
             'no_of_patient' => 'required|numeric',
             'premium_patient' => 'required|numeric|lt:no_of_patient'
         ];
