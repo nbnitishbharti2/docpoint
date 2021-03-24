@@ -24,6 +24,10 @@
 		<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker3.min.css') }}" integrity="sha512-rxThY3LYIfYsVCWPCW9dB0k+e3RZB39f23ylUYTEuZMDrN/vRqLdaCBo/FbvVT6uC2r0ObfPzotsfKF9Qc5W5g==" crossorigin="anonymous" />
 
 		<link rel="stylesheet" href="{{ asset('public/storage/frontend/css/bootstrap-datepicker3.standalone.min.css') }}" integrity="sha512-p4vIrJ1mDmOVghNMM4YsWxm0ELMJ/T0IkdEvrkNHIcgFsSzDi/fV7YxzTzb3mnMvFPawuIyIrHcpxClauEfpQg==" crossorigin="anonymous" />
+
+		<!-- multiselect -->
+		<link href="{{ asset('public/storage/frontend/css/jquery.multiselect.css') }}" rel="stylesheet" />
+    	<script src="{{ asset('public/storage/frontend/js/jquery.multiselect.js') }}"></script>
 	 
     </head>
     <body>

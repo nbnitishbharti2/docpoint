@@ -8,7 +8,7 @@
                     <h4 class="card-title">Edit Doctor</h4>
                 </div>
                 <div class="card-body">
-					<form method="POST" enctype='multipart/form-data' id="doctor-form" action="{{ route('doctor.update', ['id' => $id]) }}">
+					<form method="POST" enctype='multipart/form-data' id="doctor-form" action="{{ route('doctor.update', ['id' => $id]) }}" autocomplete="off">
 						@csrf
 						<div class="form-group row">
 							<label class="col-form-label col-md-2">Full Name*</label>
@@ -51,15 +51,35 @@
 									{{-- @endforeach --}}
 								</select> -->
 
-								 <br/>
+								
+								 @php 
+                                    $get_specialities = \App\Models\Speciality::getSpecialities(); 
+                                @endphp
+	                            <select id="speciality_id" name="speciality_id[]" multiple="multiple" class="3col active ">
+								  	@foreach($get_specialities as $key=>$value)
+	                                	<option value="{{ $key}}" {{ (in_array($key, $speciality)) ? "selected" : "" }}  @php if(in_array($key,old('speciality_id',array()))){ echo "selected";}@endphp>{{ $value }}</option>
+	                                @endforeach
+								</select>
+
+								<script>
+									$(function () {
+									    $('select[multiple].active.3col').multiselect({
+									        columns: 1, //3
+									        placeholder: 'Select Specility', //States
+									    });
+									});
+								</script>
+
+								 <!-- <br/> -->
+                                        {{--
                                         @php 
                                             $get_specialities = \App\Models\Speciality::getSpecialities(); 
                                         @endphp
 
-                                        @foreach($get_specialities as $key=>$specialities)
-                                        <input type="checkbox" name="speciality_id[]" value="{{$key}}" {{in_array($key,$speciality)?'checked':''}} @php if(in_array($key,old('speciality_id',array()))){ echo "checked";}@endphp >
-                                        <label for="">{{$specialities}}</label><br/>
-                                        @endforeach 
+                                        @foreach($get_specialities as $key=>$specialities) --}}
+                                        <!-- <input type="checkbox" name="speciality_id[]" value="{{$key}}" {{-- in_array($key,$speciality)?'checked':'' --}} @php if(in_array($key,old('speciality_id',array()))){ echo "checked";}@endphp > -->
+                                        <label for="">{{-- $specialities --}}</label><br/>
+                                        {{-- @endforeach --}}
 								@error('speciality_id')
 									<span class="text-danger">{{ $message }}</span>
 								@enderror
@@ -224,25 +244,25 @@
 							</div>
 						</div>
 
-						<div class="form-group row">
+						<!-- <div class="form-group row">
                             <label class="col-form-label col-md-2">New Password</label>
                             <div class="col-md-10">
-                            	<input type="password" id="password" name="password" class="form-control">
-                            	@error('password')
-									<span class="text-danger">{{ $message }}</span>
-								@enderror
+                            	<input type="password" id="password" name="password" class="form-control"autocomplete="off">
+                            	{{-- @error('password') --}}
+									<span class="text-danger">{{-- $message --}}</span>
+								{{-- @enderror --}}
 							</div>
-                        </div>
+                        </div> -->
 
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label class="col-form-label col-md-2">Confirm Password</label>
                             <div class="col-md-10">
                             	<input type="password" name="password_confirmation" class="form-control">
-                            	@error('password_confirmation')
-									<span class="text-danger">{{ $message }}</span>
-								@enderror
+                            	{{-- @error('password_confirmation') --}}
+									<span class="text-danger">{{-- $message --}}</span>
+								{{-- @enderror --}}
 							</div>
-                        </div>
+                        </div> -->
                                    
 						<div class="form-group row">
 							<label class="col-form-label col-md-2">Website</label>

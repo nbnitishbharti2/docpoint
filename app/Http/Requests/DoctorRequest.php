@@ -45,7 +45,7 @@ class DoctorRequest extends FormRequest
             'fax' => 'nullable|numeric',
             'website' => 'nullable|url',
             'dob' => 'required|date',
-            'password' => 'nullable|confirmed|min:6',
+            //'password' => 'nullable|confirmed|min:6',
         ];
 
     }

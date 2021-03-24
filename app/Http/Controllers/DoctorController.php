@@ -231,9 +231,9 @@ class DoctorController extends Controller
             $user->gender_id = $input['gender']; //ss
             $user->address = $input['address'];  //ss
             $user->zip = $input['zip'];  //ss
-            if($request->has('password')){
-                $user->password = Hash::make($request->password);  //ss
-            }
+            // if($request->has('password')){
+            //     $user->password = Hash::make($request->password);  //ss
+            // }
             $user->save();
 
             // $doctorData = array(
